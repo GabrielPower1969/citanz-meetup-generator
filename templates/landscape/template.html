@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{title_plain}} — CITANZ poster</title>
+<style>
+  @font-face { font-family: "Arimo"; font-weight: 400; src: url("{{font:Arimo-Regular.ttf}}") format("truetype"); }
+  @font-face { font-family: "Arimo"; font-weight: 700; src: url("{{font:Arimo-Bold.ttf}}") format("truetype"); }
+
+  html, body { margin: 0; padding: 0; background: #222; }
+  /* Canvas: 1200x628, everything absolutely positioned in that space (see specs/poster_landscape_spec.json) */
+  .poster {
+    position: relative; width: 1200px; height: 628px; overflow: hidden;
+    background: #008FFE; color: #fff; font-family: "Arimo", Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .poster > * { position: absolute; }
+  img { display: block; }
+
+  .watermark { left: 966px; top: -36px; width: 211px; height: 211px; opacity: .2; }
+  .circuit   { left: 633px; top: 138px; width: 694px; height: 243px; opacity: .2; }
+
+  .title {
+    left: 50px; top: 51px; width: 880px;
+    font-size: 42.4px; font-weight: 700; line-height: 55px; letter-spacing: 1.27px;
+    white-space: pre-line; overflow-wrap: break-word;
+    /* Canva "Glow" intensity 50 approximated */
+    text-shadow: 0 0 6px rgba(255,255,255,.35);
+  }
+
+  .ring   { left: 468px; top: 190px; width: 216px; height: 211px; }
+  .avatar { left: 485px; top: 203px; width: 184px; height: 184px; border-radius: 50%; object-fit: cover; }
+
+  .pill {
+    height: 24px; padding: 0 7px; border-radius: 5px; box-sizing: border-box;
+    font-size: 16px; line-height: 24px; letter-spacing: -0.16px; text-transform: uppercase;
+    background: rgba(169,217,254,.5); white-space: nowrap;
+  }
+  .pill.grey { background: rgba(217,217,217,.5); }
+  .pill-speaker   { left: 61px;  top: 259px; }
+  .pill-venue     { left: 64px;  top: 450px; }
+  .pill-sponsors  { left: 520px; top: 460px; }
+  .pill-organiser { left: 904px; top: 460px; }
+
+  .name { left: 63px; top: 297px; font-size: 25.3px; line-height: 32px; letter-spacing: .66px; white-space: nowrap; }
+  .org  { left: 63px; top: 329px; font-size: 18.7px; line-height: 23px;   letter-spacing: .49px; white-space: nowrap; }
+  .date { left: 63px; top: 370px; font-size: 25.3px; line-height: 32px; letter-spacing: -.25px; font-weight: 700; white-space: nowrap; }
+  .time { left: 63px; top: 402px; font-size: 25.3px; line-height: 32px; letter-spacing: -.25px; font-weight: 700; white-space: nowrap; }
+  .venue { left: 63px; top: 478px; width: 300px; font-size: 18.7px; line-height: 24px; letter-spacing: .56px; overflow-wrap: break-word; white-space: pre-line; }
+
+  .sponsors { left: 520px; top: 499px; height: 102px; display: flex; gap: 9px; align-items: center; }
+  .sponsors img { height: 102px; width: auto; max-width: 260px; object-fit: contain; }
+
+  .organiser-logo { left: 904px; top: 499px; width: 102px; height: 102px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .organiser-logo img { width: 101px; height: 66px; object-fit: contain; }
+  .qr { left: 1022px; top: 499px; width: 102px; height: 102px; background: #fff; }
+  .qr img { width: 102px; height: 102px; }
+</style>
+</head>
+<body>
+<div class="poster" id="poster">
+  <img class="watermark" src="{{asset:brand/citanz-watermark.png}}" alt="">
+  <img class="circuit"   src="{{asset:brand/circuit-lines.png}}" alt="">
+
+  <div class="title" id="title" data-block data-max-lines="2">{{title}}</div>
+
+  <img class="ring"   src="{{asset:brand/avatar-ring.png}}" alt="">
+  <img class="avatar" src="{{speaker_photo}}" alt="{{speaker_name}}">
+
+  <div class="pill pill-speaker">Speaker</div>
+  <div class="name" id="name" data-block>{{speaker_name}}</div>
+  <div class="org"  id="org" data-block>{{speaker_org}}</div>
+  <div class="date" id="date" data-block>{{date}}</div>
+  <div class="time" id="time" data-block>{{time}}</div>
+
+  <div class="pill pill-venue">Venue</div>
+  <div class="venue" id="venue" data-block data-max-lines="2">{{venue}}</div>
+
+  <div class="pill pill-sponsors">Sponsors</div>
+  <div class="sponsors" id="sponsors">{{sponsors_html}}</div>
+
+  <div class="pill pill-organiser grey">Organised by</div>
+  <div class="organiser-logo"><img src="{{asset:brand/citanz-logo.png}}" alt="CITANZ"></div>
+  <div class="qr"><img src="{{qr_src}}" alt="QR code"></div>
+</div>
+<script src="{{shared_js}}"></script>
+</body>
+</html>

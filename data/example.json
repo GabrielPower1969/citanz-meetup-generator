@@ -1,0 +1,91 @@
+{
+  "slug": "2026-08-26-blockchain",
+  "title": "Why We Need Blockchain,\nand What It Actually Is",
+  "speaker": {
+    "name": "Scott",
+    "org": "Koala Technology",
+    "photo": "assets/speakers/scott.png"
+  },
+  "date": "Wednesday, 26 August 2026",
+  "time": "6 PM – 8 PM NZDT",
+  "venue": "Halswell Library – Hao Room\n341 Halswell Road, Christchurch",
+  "sponsors": [
+    {
+      "name": "Koala Tech",
+      "logo": "assets/sponsors/koala-tech.png",
+      "legal_name": "Koala Technology Ltd",
+      "thank": true
+    },
+    {
+      "name": "JetBrains",
+      "logo": "assets/sponsors/jetbrains.png"
+    }
+  ],
+  "qr": "assets/brand/citanz-qr.png",
+  "zh": {
+    "title": "区块链到底是什么？\n只讲技术，不聊币价 🔗",
+    "date_time": "8 月 26 日（周三）18:00 – 20:00",
+    "venue": "Halswell Library – Hao Room\n341 Halswell Road, Christchurch",
+    "date_time_short": "8.26（周三）"
+  },
+  "venue_short": "Halswell Library HAO Room - Christchurch",
+  "time_long": "6:00 pm – 8:00 pm (presentation starts at 6:30 pm)",
+  "online_url": "https://events.teams.microsoft.com/event/22cb80fa-f442-4da5-a9ab-6ba7ab6b51f2@81198091-f840-42a8-b132-9cdaf2b12073?source=copyLinkOneEventsShareDialog",
+  "rsvp_url": "[预留]",
+  "publish_date": "2026-08-13",
+  "organiser_name": "Gabriel",
+  "sponsor_tier_zh": "金牌",
+  "hashtags_en": [
+    "Blockchain",
+    "Bitcoin",
+    "Ethereum",
+    "DistributedSystems",
+    "Cryptography"
+  ],
+  "hashtags_zh": [
+    "区块链",
+    "Web3"
+  ],
+  "copy": {
+    "linkedin": {
+      "intro": "Blockchain is one of the most talked-about technologies of the past decade, and one of the least understood. Most public conversations about it start with prices. This one will not.",
+      "session_line": "a strictly technical session with **Scott**, a software engineer at **Koala Technology Ltd**, and a long-time contributor to open-source blockchain communities.",
+      "speaker_para": "Scott has spent several years working with blockchain protocols and building systems around them, from compliance and reporting tools for the New Zealand market to current work on how autonomous AI agents can transact without handing over credentials. In this session he steps back from applications entirely and rebuilds the technology from first principles, starting with the 2008 Bitcoin whitepaper.",
+      "bullets": [
+        "Why digital value can always be copied, and what problem Bitcoin was actually trying to solve",
+        "How hashing and digital signatures make tampering visible without making data secret",
+        "How a transaction travels across a peer-to-peer network with no central server",
+        "What proof of work actually buys, and why competing versions of history resolve themselves",
+        "How Ethereum turns a shared ledger into a shared state machine that runs code",
+        "When a blockchain is the wrong tool for the job, and what to use instead"
+      ],
+      "closing": "The session opens with a live experiment. Everyone in the room joins a small chain from their phone, submits a transaction, and watches a block form before a single slide is presented. The talk then explains what everyone just did.\n\nTwo things worth noting. First, this is a technology session only. There will be no discussion of prices, investments, or specific projects, and no recommendations of any kind. Second, no prior blockchain knowledge is assumed. The session is designed for engineers and IT professionals who are entirely new to the subject, with a host asking beginner questions throughout to keep the discussion accessible."
+    },
+    "xiaohongshu": {
+      "hook": "8 月 26 日（周三）傍晚，CITA 基督城请到了一位在区块链领域深耕多年的工程师 Scott，来跟大家从头拆一遍：这东西到底是怎么运作的 ✨\n\n说实话，这个话题太容易被讲歪了。一开口就是涨跌、就是项目、就是\"现在还能不能上车\"。所以这次我们提前说清楚——**全程只讲技术原理，不谈价格，不推荐任何项目，也不给任何投资建议。**",
+      "body": "🎯 这场分享有什么不一样：\n\n**先玩，再讲**\n开场不放 PPT，先让全场掏出手机，一起在一条小链上发一笔交易、看着一个区块生成。等大家手上有了动作，再回头讲刚才到底发生了什么 📱\n\n**从 2008 年那份白皮书开始**\n中本聪其实没有发明任何新算法，他只是把已有的技术拼成了一个系统。那为什么之前没人做成？缺的那一块到底是什么 🤔\n\n**一页一问**\n哈希和加密到底哪不一样？我的币到底存在哪？私钥丢了有没有\"忘记密码\"？挖矿那些电到底买来了什么？\n\n**最后一段最重要：什么时候千万别用区块链**\n这可能是全场最有价值的部分。区块链本质上是一个非常昂贵的数据库，绝大多数场景根本不需要它。我们会一起拿本地的例子试一试——农产品溯源、房产登记、学历认证，哪个能过关，哪个不能 🧐\n\n👥 适合谁来：\n\n有 IT 或 CS 背景，但对区块链完全零起点的朋友；听过很多年却始终没搞懂它到底在解决什么问题的人；以及所有对\"技术怎么变成基础设施\"感兴趣的人。**不需要任何区块链基础。**",
+      "signoff": "基督城的朋友们，周三傍晚见！🚀"
+    },
+    "meetup": {
+      "notice": "this is a technology session only. There will be no discussion of prices, investments, or specific projects, and no recommendations of any kind. The speaker has deliberately excluded all project content in order to keep the session focused on how the technology works.",
+      "abstract": "Blockchain has been in the public conversation for over a decade, and most of that conversation has been about money. Very little of it has been about how the thing actually works.\n\nThis session takes the opposite approach. Starting from the 2008 Bitcoin whitepaper, we rebuild the technology from first principles — cryptography, data structures, networking, and consensus — and then look at how Ethereum extended a shared ledger into a shared state machine capable of running code.\n\nThe session opens with a live experiment rather than a slide. Everyone joins a small chain from their phone, submits a transaction, and watches a block form. The rest of the talk explains what just happened.\n\nNo prior blockchain knowledge is assumed. A host will ask beginner-level questions throughout the session to keep the discussion accessible, so you are never more than a few minutes away from someone asking the question you were too polite to ask.",
+      "cover": [
+        "**The problem:** why digital value can always be copied, and why solving it without a central administrator was the hard part",
+        "**Proof:** how hashing and digital signatures make tampering visible — and why hashing is not encryption",
+        "**Records:** blocks, hash pointers, Merkle trees, and Bitcoin's unspent-output model",
+        "**Agreement:** how transactions propagate with no master node, what proof of work actually buys, and why competing chains resolve themselves",
+        "**Programmability:** how Ethereum turns a ledger into a state machine, and what a smart contract really is",
+        "**Judgement:** a three-condition test for when a blockchain is genuinely the right tool — and four common cases where it is definitively the wrong one"
+      ],
+      "audience": "Whether you are an engineer who has never touched the space, someone who has heard about blockchain for years without ever getting a straight technical answer, or simply curious about how a system with no administrator manages to agree on anything, this session is for you.",
+      "bio": "**Scott** is a software engineer at Koala Technology Ltd, where he works across the company's web and platform products. He has spent several years working with blockchain protocols and contributing to open-source communities in the space, and has been involved in building systems around them — including compliance and reporting tools for the New Zealand market.\n\nHis current interest is in how autonomous AI agents can transact directly on-chain without being handed credentials or card details, an area where much of the ongoing work is open source and community-driven.\n\nScott is presenting in a personal capacity and has chosen to focus this session purely on the underlying technology."
+    },
+    "wechat": {
+      "headline": "CITANZ ✖️考拉科技：区块链介绍",
+      "body": "这次只讲技术——不谈币价，不推荐项目。\n\n从一个问题开始：没有银行，怎样防止一个币被花两次？\n\n工程师用 90 分钟讲清楚：\n- 为什么这么难\n- 中本聪的解决方案\n- 交易在链上经历什么\n- 为什么挖矿费电\n- 什么时候千万别用区块链？\n\n开场先玩小链，然后讲解刚才发生了什么。"
+    },
+    "teams": {
+      "title": "CITANZ Webinar - 考拉科技：区块链分享"
+    }
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CITANZ meetup event",
+  "type": "object",
+  "required": [
+    "slug",
+    "title",
+    "speaker",
+    "date",
+    "time",
+    "venue"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Output file name stem, e.g. 2026-08-26-blockchain"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 90,
+      "description": "Talk title. 2 lines max on the landscape poster; use \\n to force a line break."
+    },
+    "speaker": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "org": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string",
+          "description": "Path relative to repo root. Square image works best; it is cropped to a circle."
+        }
+      }
+    },
+    "date": {
+      "type": "string",
+      "description": "Display string, e.g. 'Wednesday, 26 August 2026'"
+    },
+    "time": {
+      "type": "string",
+      "description": "Display string, e.g. '6 PM – 8 PM NZDT'"
+    },
+    "venue": {
+      "type": "string",
+      "description": "Full venue line; wraps to 2 lines"
+    },
+    "sponsors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "logo"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string"
+          },
+          "legal_name": {
+            "type": "string",
+            "description": "Used in thank-you lines, e.g. Koala Technology Ltd"
+          },
+          "thank": {
+            "type": "boolean",
+            "description": "true = include in the 'we would like to thank …' line"
+          }
+        }
+      }
+    },
+    "zh": {
+      "type": "object",
+      "description": "Chinese variants used by the portrait (小红书) template; each falls back to the English field.",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "date_time": {
+          "type": "string",
+          "description": "e.g. 8 月 26 日（周三）18:00 – 20:00"
+        },
+        "venue": {
+          "type": "string"
+        },
+        "date_time_short": {
+          "type": "string",
+          "description": "WeChat one-liner, e.g. 8.26（周三）18:00"
+        },
+        "start_note": {
+          "type": "string",
+          "description": "e.g. 18:30 正式开讲"
+        }
+      }
+    },
+    "qr_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "If set, the QR code is generated from this URL; otherwise assets/brand/citanz-qr.png is used."
+    },
+    "qr": {
+      "type": "string",
+      "description": "Static QR image path (fallback)."
+    },
+    "venue_short": {
+      "type": "string",
+      "description": "One-liner for WeChat, e.g. Halswell Library HAO Room - Christchurch"
+    },
+    "time_long": {
+      "type": "string",
+      "description": "LinkedIn time line, e.g. 6:00 pm – 8:00 pm (presentation starts at 6:30 pm)"
+    },
+    "online_url": {
+      "type": "string",
+      "description": "Teams/Zoom link; presence switches copy to hybrid wording"
+    },
+    "rsvp_url": {
+      "type": "string",
+      "description": "meetup.com event link; '[预留]' until created"
+    },
+    "publish_date": {
+      "type": "string",
+      "description": "YYYY-MM-DD suggested LinkedIn post date"
+    },
+    "organiser_name": {
+      "type": "string"
+    },
+    "sponsor_tier_zh": {
+      "type": "string",
+      "description": "e.g. 金牌 → 感谢金牌赞助商 …"
+    },
+    "hashtags_en": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Topic hashtags added to the org base set"
+    },
+    "hashtags_zh": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agenda": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Override the default 18:00/18:30/19:30 agenda lines"
+    },
+    "copy": {
+      "type": "object",
+      "description": "LLM-written prose; see .claude/skills/meetup-copy/SKILL.md for the voice rules",
+      "properties": {
+        "linkedin": {
+          "type": "object",
+          "required": [
+            "intro",
+            "session_line",
+            "speaker_para",
+            "bullets",
+            "closing"
+          ],
+          "properties": {
+            "intro": {
+              "type": "string"
+            },
+            "session_line": {
+              "type": "string"
+            },
+            "speaker_para": {
+              "type": "string"
+            },
+            "bullets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 4,
+              "maxItems": 7
+            },
+            "closing": {
+              "type": "string"
+            }
+          }
+        },
+        "xiaohongshu": {
+          "type": "object",
+          "required": [
+            "hook",
+            "body",
+            "signoff"
+          ],
+          "properties": {
+            "hook": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            },
+            "signoff": {
+              "type": "string"
+            }
+          }
+        },
+        "meetup": {
+          "type": "object",
+          "required": [
+            "abstract",
+            "cover",
+            "audience",
+            "bio"
+          ],
+          "properties": {
+            "notice": {
+              "type": "string"
+            },
+            "abstract": {
+              "type": "string"
+            },
+            "cover": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "audience": {
+              "type": "string"
+            },
+            "bio": {
+              "type": "string"
+            }
+          }
+        },
+        "wechat": {
+          "type": "object",
+          "required": [
+            "headline",
+            "body"
+          ],
+          "properties": {
+            "headline": {
+              "type": "string"
+            },
+            "body": {
+              "type": "string"
+            }
+          }
+        },
+        "teams": {
+          "type": "object",
+          "required": [
+            "title"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "CITANZ Webinar - <合作方>：<主题>"
+            },
+            "description": {
+              "type": "string",
+              "description": "defaults to copy.wechat.body"
+            }
+          }
+        }
+      }
+    },
+    "venue_full": {
+      "type": "string",
+      "description": "Full postal address for meetup.com / LinkedIn / 小红书; `venue` is the shorter poster version (2 lines of ~28 chars)"
+    }
+  }
+}

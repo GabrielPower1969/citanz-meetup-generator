@@ -1,0 +1,47 @@
+{
+  "$comment": "Extracted 2026-09-14 from Canva design DAHVGU6iS7o (CITANZ-automation-poster-横版, 'Facebook Ad' preset). Coordinates are px in a 1200x628 canvas, measured from the Canva editor DOM at 72% zoom and scaled by 1.3925 (positions/sizes from bounding rects). Font sizes are the design-space values (Canva pt x 1.333; NOT scaled, because Canva renders text at design size and CSS-transforms it). Values marked ~ are estimated from screenshots.",
+  "canvas": { "width": 1200, "height": 628, "orientation": "landscape" },
+  "background": { "type": "solid", "color": "#008FFE" },
+  "design_tokens": {
+    "colors": {
+      "background": "#008FFE",
+      "text": "#FFFFFF",
+      "pill_blue": "rgba(169,217,254,0.5)",
+      "pill_grey": "rgba(217,217,217,0.5)",
+      "organiser_frame": "#FFFFFF"
+    },
+    "font_family": "Arimo",
+    "font_license": "Apache-2.0 (Google Fonts) - safe to embed and self-host",
+    "type_scale": {
+      "title":   { "size": 42.4, "weight": 700, "line_height": 55, "letter_spacing": 1.27, "effect": "glow intensity 50 (Canva)" },
+      "name":    { "size": 25.3, "weight": 400, "line_height": 32, "letter_spacing": 0.66 },
+      "date":    { "size": 25.3, "weight": 700, "line_height": 32, "letter_spacing": -0.25 },
+      "body":    { "size": 18.7, "weight": 400, "line_height": 24,   "letter_spacing": 0.5 },
+      "label":   { "size": 16,   "weight": 400, "line_height": 20, "letter_spacing": -0.16, "transform": "uppercase" }
+    },
+    "pill": { "height": 24, "radius": 5, "padding_x": 7 },
+    "outer_margin_left": 63
+  },
+  "elements": [
+    { "id": "watermark",   "type": "image", "source": "assets/brand/citanz-watermark.png", "x": 966, "y": -36, "width": 211, "height": 211, "opacity": 0.2, "locked": true },
+    { "id": "circuit",     "type": "image", "source": "assets/brand/circuit-lines.png",    "x": 633, "y": 138, "width": 694, "height": 243, "opacity": 0.2, "locked": true },
+    { "id": "title",       "type": "text",  "content_key": "title", "x": 50, "y": 51, "width": 880, "max_lines": 2, "style": "title", "locked": false },
+    { "id": "avatar_ring", "type": "image", "source": "assets/brand/avatar-ring.png", "x": 468, "y": 190, "width": 216, "height": 211, "locked": true },
+    { "id": "avatar",      "type": "image", "source_key": "speaker.photo", "x": 485, "y": 203, "width": 184, "height": 184, "fit": "cover", "shape": "circle" },
+    { "id": "label_speaker", "type": "pill", "content": "SPEAKER", "x": 61, "y": 259, "width": 87, "fill": "pill_blue" },
+    { "id": "speaker_name", "type": "text", "content_key": "speaker.name", "x": 63, "y": 297, "style": "name" },
+    { "id": "speaker_org",  "type": "text", "content_key": "speaker.org",  "x": 63, "y": 329, "style": "body" },
+    { "id": "date",         "type": "text", "content_key": "date", "x": 63, "y": 370, "style": "date" },
+    { "id": "time",         "type": "text", "content_key": "time", "x": 63, "y": 402, "style": "date" },
+    { "id": "label_venue",  "type": "pill", "content": "VENUE", "x": 64, "y": 450, "width": 67, "fill": "pill_blue" },
+    { "id": "venue",        "type": "text", "content_key": "venue", "x": 63, "y": 478, "width": 300, "max_lines": 2, "style": "body" },
+    { "id": "label_sponsors", "type": "pill", "content": "SPONSORS", "x": 520, "y": 460, "width": 102, "fill": "pill_blue" },
+    { "id": "sponsors",     "type": "image_row", "source_key": "sponsors[].logo", "x": 520, "y": 499, "height": 102, "gap": 9, "fit": "contain", "$note": "Koala Tech 208x102 at x=520, JetBrains 102x102 at x=737" },
+    { "id": "label_organiser", "type": "pill", "content": "ORGANISED BY", "x": 904, "y": 460, "width": 133, "fill": "pill_grey" },
+    { "id": "organiser_logo", "type": "image", "source": "assets/brand/citanz-logo.png", "x": 904, "y": 499, "width": 102, "height": 102, "frame": "white square, logo 101x66 centred", "locked": true },
+    { "id": "organiser_qr",   "type": "image", "source_key": "qr", "x": 1022, "y": 499, "width": 102, "height": 102, "$note": "static assets/brand/citanz-qr.png by default; regenerated from qr_url when given" }
+  ],
+  "unused_canva_layers": [
+    "1438x560 landscape stock image hidden behind the avatar frame (not visible) - ignored"
+  ]
+}

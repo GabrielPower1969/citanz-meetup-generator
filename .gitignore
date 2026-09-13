@@ -1,0 +1,13 @@
+node_modules/
+output/*
+!output/.gitkeep
+reference/elements/
+reference/elements-portrait/
+.DS_Store
+
+# Real events and speaker photos stay local — only the example is shared
+data/*.json
+!data/example.json
+!data/schema.json
+assets/speakers/*
+!assets/speakers/scott.png

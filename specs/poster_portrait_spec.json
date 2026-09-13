@@ -1,0 +1,38 @@
+{
+  "$comment": "Extracted 2026-09-14 from Canva design DAHVGvP64E8 (CITANZ-automation-poster-竖版, 'Poster' preset 42x59.4cm = 1587x2244 px). Positions from Canva editor DOM bounding rects scaled by 1587/page_width (4.427 at 23% zoom). Font sizes = computed size x accumulated CSS transform scale (text boxes in this design are group-scaled), cross-checked with toolbar pt x 1.333.",
+  "canvas": { "width": 1587, "height": 2244, "orientation": "portrait" },
+  "background": { "type": "solid", "color": "#008FFF" },
+  "design_tokens": {
+    "colors": { "background": "#008FFF", "text": "#FFFFFF", "pill_blue": "rgba(169,217,254,0.5)", "pill_grey": "rgba(217,217,217,0.5)", "pill_grey_text": "#F9F7E8" },
+    "font_family": { "latin": "Arimo", "cjk": "Noto Sans SC (Canva falls back to a CJK sans for Chinese glyphs; exact fallback not exposed)" },
+    "type_scale": {
+      "title": { "size": 84.6, "weight": 700, "line_height": 109, "letter_spacing": 2.5, "max_lines": 3, "wrap": "break-all (Canva breaks CJK mid-word, 12 chars/line)" },
+      "name":  { "size": 91.3, "weight": 400, "line_height": 115, "letter_spacing": 2.37 },
+      "org":   { "size": 72,   "weight": 400, "line_height": 90.8, "letter_spacing": 1.87 },
+      "venue": { "size": 42,   "weight": 400, "line_height": 54, "letter_spacing": 1.26 },
+      "date":  { "size": 53.3, "weight": 700, "line_height": 69, "letter_spacing": -0.53 },
+      "label_zh_speaker": { "size": 39.9, "pill": [150, 61] },
+      "label_zh_venue":   { "size": 57.3, "pill": [159, 87] },
+      "label_en":         { "size": 37.1, "pill_height": 57, "transform": "uppercase" }
+    }
+  },
+  "elements": [
+    { "id": "circuit",    "type": "image", "source": "assets/brand/circuit-corner.png", "x": 0, "y": 0, "width": 645, "height": 718, "opacity": 0.3, "locked": true },
+    { "id": "watermark",  "type": "image", "source": "assets/brand/citanz-watermark.png", "x": 1123, "y": 45, "width": 453, "height": 453, "opacity": 0.3, "locked": true },
+    { "id": "big_circle", "type": "image", "source": "assets/brand/big-circle.png", "x": -254, "y": 1426, "width": 1025, "height": 1025, "opacity": 0.3, "locked": true },
+    { "id": "title", "type": "text", "content_key": "zh.title", "x": 91, "y": 203, "width": 1060, "style": "title" },
+    { "id": "avatar_ring", "type": "image", "source": "assets/brand/avatar-ring-portrait.png", "x": 86, "y": 718, "width": 551, "height": 540, "locked": true },
+    { "id": "avatar", "type": "image", "source_key": "speaker.photo", "x": 133, "y": 758, "width": 447, "height": 447, "shape": "circle" },
+    { "id": "label_speaker", "type": "pill", "content": "演讲者", "x": 695, "y": 770, "width": 150, "height": 61 },
+    { "id": "speaker_name", "type": "text", "content_key": "speaker.name", "x": 691, "y": 859, "style": "name" },
+    { "id": "speaker_org",  "type": "text", "content_key": "speaker.org", "x": 697, "y": 981, "width": 840, "style": "org" },
+    { "id": "label_venue", "type": "pill", "content": "地点", "x": 80, "y": 1453, "width": 159, "height": 87 },
+    { "id": "venue", "type": "text", "content_key": "zh.venue|venue", "x": 91, "y": 1581, "width": 1100, "style": "venue", "max_lines": 3 },
+    { "id": "date_time", "type": "text", "content_key": "zh.date_time", "x": 91, "y": 1773, "style": "date" },
+    { "id": "label_organiser", "type": "pill", "content": "ORGANISED BY", "x": 98, "y": 1952, "width": 307, "height": 56, "fill": "pill_grey" },
+    { "id": "organiser_logo", "type": "image", "source": "assets/brand/citanz-logo.png", "x": 91, "y": 2036, "width": 142, "height": 142, "frame": "white square, logo ~126x84 centred (Canva: 140x92 at 104,2058)", "locked": true },
+    { "id": "label_sponsors", "type": "pill", "content": "SPONSORS", "x": 1009, "y": 1951, "width": 237, "height": 57 },
+    { "id": "sponsors", "type": "image_row", "source_key": "sponsors[].logo", "x": 1007, "y": 2033, "height": 142, "gap": 32, "$note": "Koala Tech 290x142 at x=1007, JetBrains 142x142 at x=1329" }
+  ],
+  "not_on_this_poster": ["QR code", "English date/time"]
+}

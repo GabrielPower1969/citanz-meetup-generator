@@ -1,0 +1,85 @@
+{
+  "$comment": "Organisation-level constants shared by every event. Edit here, not in event files.",
+  "org_name_en": "CITANZ",
+  "org_name_zh": "CITA 基督城",
+  "city": "Christchurch",
+  "fee": {
+    "en": "Free for CITANZ members, with a $5 donation for non-members.",
+    "zh": "CITA 会员免费，非会员 $5 捐赠",
+    "meetup_block": "Free for CITA members\n$5 donation for non-members\nAccount Number: 06-0513-0847960-00\nAccount Name: CHINESE IT ASSOCIATION NZ"
+  },
+  "refreshments": {
+    "en": "Light refreshments and drinks will be provided.",
+    "zh": "现场提供茶点"
+  },
+  "online_note_en": "An online joining link will be shared with registered attendees before the event. The online session will include slides and audio only.",
+  "hashtags": {
+    "linkedin_base": [
+      "CITANZ",
+      "NZTech",
+      "Christchurch",
+      "TechCommunity",
+      "SoftwareEngineering"
+    ],
+    "xiaohongshu_base": [
+      "基督城",
+      "新西兰华人",
+      "新西兰基督城",
+      "技术分享",
+      "CITA",
+      "IT互助社区",
+      "程序员日常",
+      "新西兰生活",
+      "基督城活动",
+      "技术社区"
+    ]
+  },
+  "linkedin_outro": "Follow CITANZ for more technology talks and career events across New Zealand.",
+  "wechat_groups": {
+    "member": {
+      "label": "CITANZ 会员群",
+      "fee_line": ""
+    },
+    "public": {
+      "label": "非会员群 / 朋友圈",
+      "fee_line": "🎫 CITA 会员免费，非会员 $5（非营利组织，用于场地和茶点）"
+    }
+  },
+  "handoff": {
+    "linkedin": {
+      "owner": "CITANZ marketing (LinkedIn)",
+      "poster": "landscape"
+    },
+    "xiaohongshu": {
+      "owner": "CITANZ marketing (小红书)",
+      "poster": "portrait"
+    },
+    "meetup": {
+      "owner": "organiser (meetup.com)",
+      "poster": "landscape"
+    },
+    "wechat": {
+      "owner": "organiser (WeChat groups)",
+      "poster": "portrait"
+    },
+    "teams": {
+      "owner": "organiser (Teams webinar)",
+      "poster": "landscape"
+    }
+  },
+  "schedule": {
+    "$comment": "House rule for every meetup: doors + networking from `doors`, talk (and the online stream) starts at `start`.",
+    "doors": "18:00",
+    "start": "18:30",
+    "end": "20:00",
+    "en_time_long": "6:00 pm – 8:00 pm (presentation starts at 6:30 pm)",
+    "agenda_en": [
+      "18:00 – 18:30 Registration, light refreshments and networking",
+      "18:30 – 19:30 Presentation, with interactive Q&A throughout",
+      "19:30 – 20:00 Open Q&A and networking"
+    ],
+    "zh_start_note": "18:30 正式开讲（线上同步 18:30 开始）",
+    "wechat_time_suffix": "18:00 签到 · 18:30 开讲",
+    "wechat_online_line": "💻 线上 18:30 开始，Teams 链接："
+  }
+}

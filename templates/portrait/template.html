@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>{{title_plain}} — CITANZ 竖版海报</title>
+<style>
+  @font-face { font-family: "Arimo"; font-weight: 400; src: url("{{font:Arimo-Regular.ttf}}") format("truetype"); }
+  @font-face { font-family: "Arimo"; font-weight: 700; src: url("{{font:Arimo-Bold.ttf}}") format("truetype"); }
+  @font-face { font-family: "Noto Sans SC"; font-weight: 400; src: url("{{font:NotoSansSC-Regular.otf}}") format("opentype"); }
+  @font-face { font-family: "Noto Sans SC"; font-weight: 700; src: url("{{font:NotoSansSC-Bold.otf}}") format("opentype"); }
+
+  html, body { margin: 0; padding: 0; background: #222; }
+  /* Canvas: 1587x2244 (Canva "Poster" 42x59.4cm). Geometry: specs/poster_portrait_spec.json */
+  .poster {
+    position: relative; width: 1587px; height: 2244px; overflow: hidden;
+    background: #008FFF; color: #fff;
+    font-family: "Arimo", "Noto Sans SC", Arial, sans-serif; -webkit-font-smoothing: antialiased;
+  }
+  .poster > * { position: absolute; }
+  img { display: block; }
+
+  .circuit    { left: 0;      top: 0;      width: 645px;  height: 718px;  opacity: .3; }
+  .watermark  { left: 1123px; top: 45px;   width: 453px;  height: 453px;  opacity: .3; }
+  .big-circle { left: -254px; top: 1426px; width: 1025px; height: 1025px; opacity: .3; }
+
+  .title {
+    left: 91px; top: 203px; width: 1060px; word-break: break-all;
+    font-size: 84.6px; font-weight: 700; line-height: 109px; letter-spacing: 2.5px;
+    white-space: pre-line; overflow-wrap: break-word;
+    text-shadow: 0 0 10px rgba(255,255,255,.35);
+  }
+
+  .ring   { left: 86px;  top: 718px; width: 551px; height: 540px; }
+  .avatar { left: 133px; top: 758px; width: 447px; height: 447px; border-radius: 50%; object-fit: cover; }
+
+  .pill {
+    padding: 0 16px; border-radius: 12px; box-sizing: border-box; white-space: nowrap;
+    background: rgba(169,217,254,.5);
+  }
+  .pill.grey { background: rgba(217,217,217,.5); color: #F9F7E8; }
+  .pill-speaker   { left: 695px;  top: 770px;  height: 61px; line-height: 61px; font-size: 39.9px; letter-spacing: -.4px; }
+  .pill-venue     { left: 80px;   top: 1453px; height: 87px; line-height: 87px; font-size: 57.3px; letter-spacing: -.57px; padding: 0 23px; }
+  .pill-organiser { left: 98px;   top: 1952px; height: 56px; line-height: 56px; font-size: 37.1px; letter-spacing: -.37px; text-transform: uppercase; }
+  .pill-sponsors  { left: 1009px; top: 1951px; height: 57px; line-height: 57px; font-size: 37.1px; letter-spacing: -.37px; text-transform: uppercase; }
+
+  .name  { left: 691px; top: 859px; font-size: 91.3px; line-height: 115px; letter-spacing: 2.37px; white-space: nowrap; }
+  .org   { left: 697px; top: 981px; width: 840px; font-size: 72px; line-height: 90.8px; letter-spacing: 1.87px; }
+  .venue { left: 91px; top: 1581px; width: 1100px; font-size: 42px; line-height: 54px; letter-spacing: 1.26px; white-space: pre-line; }
+  .date  { left: 91px; top: 1773px; width: 1100px; font-size: 53.3px; line-height: 69px; letter-spacing: -.53px; font-weight: 700; white-space: nowrap; }
+
+  .organiser-logo { left: 91px; top: 2036px; width: 142px; height: 142px; background: #fff; display: flex; align-items: center; justify-content: center; }
+  .organiser-logo img { width: 126px; height: 84px; object-fit: contain; }
+
+  .sponsors { left: 1007px; top: 2033px; height: 142px; display: flex; gap: 32px; align-items: center; }
+  .sponsors img { height: 142px; width: auto; max-width: 360px; object-fit: contain; }
+</style>
+</head>
+<body>
+<div class="poster" id="poster">
+  <img class="circuit"    src="{{asset:brand/circuit-corner.png}}" alt="">
+  <img class="watermark"  src="{{asset:brand/citanz-watermark.png}}" alt="">
+  <img class="big-circle" src="{{asset:brand/big-circle.png}}" alt="">
+
+  <div class="title" id="title" data-block data-max-lines="3">{{title}}</div>
+
+  <img class="ring"   src="{{asset:brand/avatar-ring-portrait.png}}" alt="">
+  <img class="avatar" src="{{speaker_photo}}" alt="{{speaker_name}}">
+
+  <div class="pill pill-speaker">演讲者</div>
+  <div class="name" id="name" data-block>{{speaker_name}}</div>
+  <div class="org"  id="org"  data-block data-max-lines="2">{{speaker_org}}</div>
+
+  <div class="pill pill-venue">地点</div>
+  <div class="venue" id="venue" data-block data-max-lines="3">{{venue}}</div>
+  <div class="date"  id="date"  data-block>{{date_time}}</div>
+
+  <div class="pill pill-organiser grey">Organised by</div>
+  <div class="organiser-logo"><img src="{{asset:brand/citanz-logo.png}}" alt="CITANZ"></div>
+
+  <div class="pill pill-sponsors">Sponsors</div>
+  <div class="sponsors" id="sponsors">{{sponsors_html}}</div>
+</div>
+<script src="{{shared_js}}"></script>
+</body>
+</html>

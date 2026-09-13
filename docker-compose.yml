@@ -1,0 +1,10 @@
+services:
+  build:
+    build: .
+    user: "${AC_UID:-1000}:${AC_GID:-1000}"
+    volumes:
+      - ./data:/app/data
+      - ./assets:/app/assets
+      - ./config:/app/config
+      - ./output:/app/output
+    # usage: docker compose run --rm build data/<event>.json
