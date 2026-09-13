@@ -277,6 +277,11 @@
     "venue_full": {
       "type": "string",
       "description": "Full postal address for meetup.com / LinkedIn / 小红书; `venue` is the shorter poster version (2 lines of ~28 chars)"
+    },
+    "topic": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Short topic slug used in output file names (<channel>-post-<topic>-<date>.md), e.g. agent-security"
     }
   }
 }

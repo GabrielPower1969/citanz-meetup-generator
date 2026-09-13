@@ -21,7 +21,7 @@ Fill in one file (`data/<event>.json`), run one command, and you get:
 | WeChat 接龙 text, member + public versions (ZH) | organiser | `output/<event>/wechat/` |
 | Teams webinar title + description | organiser | `output/<event>/teams/` |
 
-Each folder already contains the right poster, so you can forward a folder to a person and they have everything.
+Each folder already contains the right poster, so you can forward a folder to a person and they have everything. Copy files follow one naming rule: `<channel>-post-<topic>-<date>.md`, e.g. `小红书-post-agent-security-2026-09-17.md`.
 
 ## Quick start
 
@@ -176,7 +176,7 @@ MIT for the code. CITANZ and sponsor logos remain the property of their owners. 
 | 微信接龙文案，会员群 / 非会员群两版（中） | 组织者 | `output/<活动>/wechat/` |
 | Teams 网络研讨会标题 + 描述 | 组织者 | `output/<活动>/teams/` |
 
-每个文件夹里已经放好对应的海报，整个文件夹转发给对应的人就行。
+每个文件夹里已经放好对应的海报，整个文件夹转发给对应的人就行。文案文件统一命名：`<渠道>-post-<主题>-<日期>.md`，例如 `小红书-post-agent-security-2026-09-17.md`。
 
 ## 快速开始
 

@@ -52,6 +52,7 @@ output/          generated files, git-ignored; output/<slug>/ is the hand-off pa
 - `assets/brand/*` are locked design elements — do not swap or restyle without a design decision.
 - QR: if `qr_url` is present it is generated at render time; otherwise the static `assets/brand/citanz-qr.png` is used.
 - Copy: prose is authored in the event JSON (`copy.*`), never in `output/`. Fixed wording (fee, bank account, agenda, thanks) comes from `config/` + `templates/copy/`; a missing field renders as `[TODO field]` and fails the build.
+- Public copy file naming (global rule): `<channel>-post-<topic>-<date>.md` — e.g. `小红书-post-agent-security-2026-09-17.md`, `领英-post-…`, `微信-会员群-post-…`, `微信-非会员群-post-…`, `meetup-post-…` (+ `.txt`), `Teams-post-…`. Labels live in `config/citanz.json` `handoff_naming`; `topic` comes from the event JSON.
 - Hand-off ownership: LinkedIn and 小红书 are posted by CITANZ marketing (they receive `output/<slug>/linkedin|xiaohongshu/`); meetup.com and WeChat are posted by the organiser.
 
 ## How to verify a change

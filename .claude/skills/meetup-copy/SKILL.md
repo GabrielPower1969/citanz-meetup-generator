@@ -12,10 +12,10 @@ Fixed parts (date, venue, fee, bank account, agenda, sponsor thanks, hashtags, o
 2. From the speaker conversation, write the `copy` block (fields and limits below). Keep speaker facts to what they actually said — never invent credentials.
 3. `npm run build data/<event>.json` (self-installing; also renders + validates the posters) → `output/<slug>/` with one folder per recipient; `[TODO …]` in a file = a field you forgot. Fix the JSON, rebuild; don't hand-edit outputs.
 4. Show the user the four texts for approval, then point them at the hand-off folders:
-   - `linkedin/` (post.md + landscape PNG) → marketing colleague who posts on LinkedIn
-   - `xiaohongshu/` (post.md + portrait PNG) → marketing colleague who posts on 小红书
-   - `meetup/` (event.md + landscape PNG) → the organiser publishes on meetup.com
-   - `wechat/` (member.md, public.md + portrait PNG) → the organiser's 接龙 posts
+   - `linkedin/` (`领英-post-<topic>-<date>.md` + landscape PNG) → marketing colleague who posts on LinkedIn
+   - `xiaohongshu/` (`小红书-post-<topic>-<date>.md` + portrait PNG) → marketing colleague who posts on 小红书
+   - `meetup/` (`meetup-post-<topic>-<date>.md` / `.txt` + landscape PNG) → the organiser publishes on meetup.com
+   - `wechat/` (`微信-会员群-post-…`, `微信-非会员群-post-…` + portrait PNG) → the organiser's 接龙 posts
 
 ## Voice per channel
 **LinkedIn (`copy.linkedin`)** — professional, no hype, third person. `intro` = 2 sentences framing the topic; `session_line` = who the speaker is, ends with a full stop; `speaker_para` = career facts + what this talk does differently; `bullets` = 4–7 "how/why/when" outcomes, no trailing period; `closing` = what happens in the room + any caveats (e.g. "technology only, no prices"). Sentence case, British spelling.

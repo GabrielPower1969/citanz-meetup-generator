@@ -75,6 +75,12 @@ const ctx = {
 
 // ---------- write hand-off folders ----------
 const outRoot = path.join(ROOT, 'output', ev.slug);
+// Global naming rule for public copy: <channel>-post-<topic>-<date>.md (config/citanz.json handoff_naming)
+const evDate = ev.slug.slice(0, 10);
+const topic = ev.topic || ev.slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+const nameFor = (channelKey, ext = 'md') => cfg.handoff_naming.pattern
+  .replace('{channel}', cfg.handoff_naming.channel_labels[channelKey])
+  .replace('{topic}', topic).replace('{date}', evDate).replace(/\.md$/, '.' + ext);
 const tpl = (n) => fs.readFileSync(path.join(ROOT, 'templates/copy', n), 'utf8');
 const poster = (kind) => path.join(outRoot, `${ev.slug}.${kind}.png`);
 const write = (channel, file, text) => {
@@ -87,21 +93,21 @@ const attach = (channel) => {
   else missing.add(`${channel}: poster ${path.relative(ROOT, src)} not found — run render.js first`);
 };
 
-write('linkedin', 'post.md', fill(tpl('linkedin.md'), ctx, 'linkedin')); attach('linkedin');
-write('xiaohongshu', 'post.md', fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu')); attach('xiaohongshu');
+write('linkedin', nameFor('linkedin'), fill(tpl('linkedin.md'), ctx, 'linkedin')); attach('linkedin');
+write('xiaohongshu', nameFor('xiaohongshu'), fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu')); attach('xiaohongshu');
 const meetupMd = fill(tpl('meetup.md'), ctx, 'meetup');
-write('meetup', 'event.md', meetupMd); attach('meetup');
+write('meetup', nameFor('meetup'), meetupMd); attach('meetup');
 // meetup.com's editor is plain text: strip markdown so the file can be pasted as-is
-write('meetup', 'event.txt', meetupMd
+write('meetup', nameFor('meetup', 'txt'), meetupMd
   .replace(/^### Presentation Title\n\n\*\*(.+)\*\*\n/m, '')          // title goes in its own field
   .replace(/^### (.+)$/gm, (_, h) => h.toUpperCase())
   .replace(/\*\*(.+?)\*\*/g, '$1')
   .replace(/^\* /gm, '• '));
 for (const [g, spec] of Object.entries(cfg.wechat_groups)) {
-  write('wechat', `${g}.md`, fill(tpl('wechat.md'), { ...ctx, fee_line: spec.fee_line }, `wechat/${g}`));
+  write('wechat', nameFor(`wechat_${g}`), fill(tpl('wechat.md'), { ...ctx, fee_line: spec.fee_line }, `wechat/${g}`));
 }
 attach('wechat');
-write('teams', 'webinar.md', fill(tpl('teams.md'), ctx, 'teams')); attach('teams');
+write('teams', nameFor('teams'), fill(tpl('teams.md'), ctx, 'teams')); attach('teams');
 
 const readme = `# ${ctx.title_plain} — hand-off pack
 

@@ -81,5 +81,17 @@
     "zh_start_note": "18:30 正式开讲（线上同步 18:30 开始）",
     "wechat_time_suffix": "18:00 签到 · 18:30 开讲",
     "wechat_online_line": "💻 线上 18:30 开始，Teams 链接："
+  },
+  "handoff_naming": {
+    "$comment": "Global rule: every public copy file is named <channel>-post-<topic>-<date>.md. channel labels below; topic = event.topic (falls back to slug minus date); date = YYYY-MM-DD from the slug.",
+    "pattern": "{channel}-post-{topic}-{date}.md",
+    "channel_labels": {
+      "linkedin": "领英",
+      "xiaohongshu": "小红书",
+      "meetup": "meetup",
+      "wechat_member": "微信-会员群",
+      "wechat_public": "微信-非会员群",
+      "teams": "Teams"
+    }
   }
 }
