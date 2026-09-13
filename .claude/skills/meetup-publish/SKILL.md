@@ -16,7 +16,7 @@ Precondition: `npm run build data/<event>.json` has produced `output/<slug>/meet
 6. Photo: click the pencil button on the featured image → **Replace** → a `input[type=file]` appears → `file_upload` the landscape PNG → **Save** in the crop dialog.
 7. Location: keep **In person** (Hybrid is a Meetup Pro feature and shows an upsell). The Teams link stays out of the description; the template already says the link is sent to registrants.
 8. Scroll through once and confirm: title, Thu date, 18:00, new photo, venue, topics. Then click **Publish**.
-9. On "Your event is live — Announce it now": click **Do it later**. Announcing emails every member; ask the user before ever clicking it.
+9. On "Your event is live — Announce it now": click **Do it later**. Announcing emails every member; ask the user before ever clicking it. When they say yes: open the event page → organizer toolbar → **Announce** (one click, no confirmation dialog; the button then turns into "Attendees" and a toast says "Email notifications are being sent").
 10. Read the new event URL from the tab (`/events/<id>/`), write it into `rsvp_url` in the event JSON, rerun `npm run build`, and tell the user the link.
 
 ## Don'ts
