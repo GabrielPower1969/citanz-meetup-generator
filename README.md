@@ -57,7 +57,7 @@ Docker instead: `docker compose run --rm build events/example.json`.
 ## 3. Make a real event
 
 ```mermaid
-flowchart LR
+flowchart TD
   a["① copy events/example.json<br/>→ events/2026-10-15-topic-speaker.json"] --> b["② drop the speaker photo<br/>in assets/speakers/"]
   b --> c["③ fill the facts<br/>title · date · venue · sponsors · links"]
   c --> d["④ write the prose<br/>copy.* (or let an AI write it)"]

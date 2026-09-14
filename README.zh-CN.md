@@ -57,7 +57,7 @@ open output/2026-08-26-blockchain/
 ## 3. 做一场真实活动
 
 ```mermaid
-flowchart LR
+flowchart TD
   a["① 复制 events/example.json<br/>→ events/2026-10-15-主题-讲者.json"] --> b["② 讲者照片放进<br/>assets/speakers/"]
   b --> c["③ 填事实<br/>标题 · 日期 · 地点 · 赞助商 · 链接"]
   c --> d["④ 写文案正文<br/>copy.*（或让 AI 写）"]
