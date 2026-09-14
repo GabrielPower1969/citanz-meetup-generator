@@ -4,11 +4,11 @@
   "description": "Generate CITANZ meetup posters (and, later, copy + schedule) from a single JSON event file.",
   "type": "module",
   "scripts": {
-    "render": "node src/render.js",
-    "validate": "node src/validate.js",
-    "copy": "node src/copy.js",
-    "build": "node scripts/build.js",
-    "example": "node scripts/build.js data/example.json"
+    "build": "node src/build.js",
+    "example": "node src/build.js events/example.json",
+    "render": "node src/steps/1-render-posters.js",
+    "validate": "node src/steps/2-validate-posters.js",
+    "copy": "node src/steps/3-write-copy.js"
   },
   "license": "MIT",
   "dependencies": {

@@ -1,18 +1,18 @@
-// Render one event JSON -> output/<slug>/<slug>.<template>.html + .png
-// Usage: node src/render.js data/example.json [--template landscape|portrait|all] [--scale 2]
+// STEP 1 — Render one event JSON -> output/<slug>/<slug>.<template>.html + .png
+// Usage: node src/steps/1-render-posters.js events/example.json [--template landscape|portrait|all] [--scale 2]
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import QRCode from 'qrcode';
-import { ROOT, loadEvent, dataUri, esc, readJson } from './lib.js';
+import { ROOT, loadEvent, dataUri, esc, readJson } from '../lib/event.js';
 
 const args = process.argv.slice(2);
 const eventPath = args.find(a => !a.startsWith('--'));
 const opt = (name, dflt) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : dflt; };
 
 export function listTemplates() {
-  return fs.readdirSync(path.join(ROOT, 'templates'), { withFileTypes: true })
-    .filter(d => d.isDirectory() && fs.existsSync(path.join(ROOT, 'templates', d.name, 'meta.json'))).map(d => d.name);
+  return fs.readdirSync(path.join(ROOT, 'templates/posters'), { withFileTypes: true })
+    .filter(d => d.isDirectory() && fs.existsSync(path.join(ROOT, 'templates/posters', d.name, 'meta.json'))).map(d => d.name);
 }
 
 /** Field values a template may reference as {{var}}. Chinese templates read ev.zh.* first. */
@@ -37,12 +37,12 @@ async function templateVars(ev, meta) {
     venue: esc(isZh ? (zh.venue || ev.venue) : ev.venue),
     sponsors_html: sponsorsHtml,
     qr_src: qrSrc,
-    shared_js: 'data:text/javascript;base64,' + fs.readFileSync(path.join(ROOT, 'templates/fit.js')).toString('base64'),
+    shared_js: 'data:text/javascript;base64,' + fs.readFileSync(path.join(ROOT, 'templates/posters/fit.js')).toString('base64'),
   };
 }
 
 export async function buildHtml(ev, templateName) {
-  const dir = path.join(ROOT, 'templates', templateName);
+  const dir = path.join(ROOT, 'templates/posters', templateName);
   const meta = readJson(path.join(dir, 'meta.json'));
   let html = fs.readFileSync(path.join(dir, 'template.html'), 'utf8');
   const vars = await templateVars(ev, meta);

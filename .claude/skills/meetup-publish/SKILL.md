@@ -5,7 +5,7 @@ description: Publish a CITANZ event on meetup.com from the built hand-off pack, 
 
 # Publish on meetup.com
 
-Precondition: `npm run build data/<event>.json` has produced `output/<slug>/meetup/meetup-post-<topic>-<date>.txt` and `output/<slug>/<slug>.landscape.png`. The user must be logged in to meetup.com in the Chrome that claude-in-chrome controls. Publishing is public and irreversible — do it only when the user asked for it in chat.
+Precondition: `npm run build events/<event>.json` has produced `output/<slug>/meetup/meetup-post-<topic>-<date>.txt` and `output/<slug>/<slug>.landscape.png`. The user must be logged in to meetup.com in the Chrome that claude-in-chrome controls. Publishing is public and irreversible — do it only when the user asked for it in chat.
 
 ## Recipe (verified 2026-09-14)
 1. Open `https://www.meetup.com/home/` → left sidebar → **Create event** under the CITANZ group. Group slug: `wellington-chinese-it-professionals`.

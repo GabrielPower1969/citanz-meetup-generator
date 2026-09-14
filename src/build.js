@@ -1,6 +1,6 @@
 // One command for everything: make sure the environment exists, then render both posters,
 // validate, and build the per-channel hand-off pack. Deterministic — no LLM involvement.
-//   node scripts/build.js data/<event>.json
+//   node src/build.js events/<event>.json
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ev = process.argv[2];
-if (!ev) { console.error('Usage: npm run build data/<event>.json'); process.exit(2); }
+if (!ev) { console.error('Usage: npm run build events/<event>.json'); process.exit(2); }
 
 const run = (cmd, args) => { const r = spawnSync(cmd, args, { stdio: 'inherit', cwd: ROOT, shell: process.platform === 'win32' }); if (r.status) process.exit(r.status); };
 
@@ -27,4 +27,4 @@ for (const f of ['Arimo-Regular.ttf', 'Arimo-Bold.ttf', 'NotoSansSC-Regular.otf'
 }
 
 // ---- pipeline ----
-for (const step of ['src/render.js', 'src/validate.js', 'src/copy.js']) run('node', [step, ev]);
+for (const step of ['src/steps/1-render-posters.js', 'src/steps/2-validate-posters.js', 'src/steps/3-write-copy.js']) run('node', [step, ev]);

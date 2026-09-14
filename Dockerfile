@@ -5,4 +5,4 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npx playwright install chromium
 COPY . .
 ENTRYPOINT ["npm", "run", "build", "--"]
-CMD ["data/example.json"]
+CMD ["events/example.json"]

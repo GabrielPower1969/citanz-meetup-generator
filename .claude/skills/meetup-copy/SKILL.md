@@ -5,12 +5,12 @@ description: Write the four CITANZ meetup announcements (LinkedIn EN, meetup.com
 
 # Meetup copy
 
-Fixed parts (date, venue, fee, bank account, agenda, sponsor thanks, hashtags, online-link wording) are filled by `src/copy.js` from `config/citanz.json` + the event JSON. **You write only the prose** into `copy.*` of `data/<event>.json`, then run the build. Reference example: `data/example.json` (blockchain talk, Aug 2026) — match its length and voice.
+Fixed parts (date, venue, fee, bank account, agenda, sponsor thanks, hashtags, online-link wording) are filled by `src/steps/3-write-copy.js` from `config/citanz.json` + the event JSON. **You write only the prose** into `copy.*` of `events/<event>.json`, then run the build. Reference example: `events/example.json` (blockchain talk, Aug 2026) — match its length and voice.
 
 ## Workflow
 1. Make sure the event JSON exists with title / speaker / date / time / venue / sponsors (see `meetup-poster`). Add `online_url`, `rsvp_url` (`"[预留]"` if the meetup.com event isn't created yet), `time_long`, `venue_short`, `publish_date`, `hashtags_en/zh`.
 2. From the speaker conversation, write the `copy` block (fields and limits below). Keep speaker facts to what they actually said — never invent credentials.
-3. `npm run build data/<event>.json` (self-installing; also renders + validates the posters) → `output/<slug>/` with one folder per recipient; `[TODO …]` in a file = a field you forgot. Fix the JSON, rebuild; don't hand-edit outputs.
+3. `npm run build events/<event>.json` (self-installing; also renders + validates the posters) → `output/<slug>/` with one folder per recipient; `[TODO …]` in a file = a field you forgot. Fix the JSON, rebuild; don't hand-edit outputs.
 4. Show the user the four texts for approval, then point them at the hand-off folders:
    - `linkedin/` (`领英-post-<topic>-<date>.md` + landscape PNG) → marketing colleague who posts on LinkedIn
    - `xiaohongshu/` (`小红书-post-<topic>-<date>.md` + portrait PNG) → marketing colleague who posts on 小红书

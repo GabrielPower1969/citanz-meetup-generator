@@ -50,4 +50,4 @@ Source: Canva design `DAHVGvP64E8` ("CITANZ-automation-poster-竖版", Poster pr
 | Shared with landscape | watermark PNG, avatar, CITANZ logo, sponsor logos (byte-identical); avatar ring is a different asset (249×244) | `cmp` |
 | Not present | QR code, English date/time | layer list |
 
-Gotcha: this file's text boxes sit inside CSS-transformed groups, so `getComputedStyle().fontSize` had to be multiplied by the product of ancestor `transform` scales (see `reference/` notes in the memory file). Cross-checked against toolbar pt × 1.333.
+Gotcha: this file's text boxes sit inside CSS-transformed groups, so `getComputedStyle().fontSize` had to be multiplied by the product of ancestor `transform` scales . Cross-checked against toolbar pt × 1.333.

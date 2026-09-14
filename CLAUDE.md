@@ -1,61 +1,43 @@
-# citanz-meetup-generator
+# citanz-meetup-generator — map for agents
 
-Generates CITANZ (Chinese IT Association of New Zealand) meetup publicity material from one JSON event file.
-Done: two poster templates (landscape EN 1200×628, portrait ZH 1587×2244) and four copy templates (LinkedIn, meetup.com, 小红书, WeChat 群) assembled into per-channel hand-off folders.
-Later: 接龙 publishing schedule, post-event hand-off (photos/feedback) to marketing.
+One event JSON → two posters + five channel announcements + per-recipient hand-off folders. Full design: `docs/ARCHITECTURE.md`. User docs: `README.md` / `README.zh-CN.md`.
 
 ## Commands
 ```bash
-npm run example                                  # full pipeline on data/example.json: render -> validate -> copy
-npm run build data/<event>.json                  # self-installs deps + Chromium if missing, then render -> validate -> copy
-                                                 # -> output/<slug>/ (PNGs) + output/<slug>/{linkedin,xiaohongshu,meetup,wechat}/
-docker compose run --rm build data/<event>.json  # same inside the Playwright image (Linux path)
-node src/render.js data/<event>.json             # renders every template (--template landscape|portrait to pick one, --scale 2 default)
-node src/validate.js data/<event>.json           # overflow / clipping / missing-asset checks; exit 1 on failure
-node src/copy.js data/<event>.json               # fill templates/copy/*.md, copy posters into hand-off folders; exit 1 on [TODO]
+npm run build events/<event>.json    # THE command. Self-installs deps + Chromium if missing, then: 1 render → 2 validate → 3 write copy → output/<slug>/
+npm run example                      # same on events/example.json (smoke test — must end OK with no TODO list)
+npm run render|validate|copy events/<event>.json   # run one step alone
+docker compose run --rm build events/<event>.json  # same pipeline in the Playwright image
 ```
 
-## Directory map
+## Where things are (folder order = data flow)
 ```
-data/            one JSON per event (schema: data/schema.json; start from example.json). `copy.*` = LLM-written prose.
-                 Real event files and speaker photos are git-ignored; only example.json / scott.png are shared.
-config/citanz.json  org constants: fee text, bank account, base hashtags, WeChat group variants, hand-off owners
-assets/brand/    CITANZ logo, watermark, QR, circuit lines, avatar ring  (locked design elements)
-assets/sponsors/ sponsor logos          assets/speakers/  speaker photos (square, cropped to circle)
-assets/fonts/    Arimo (Latin) + Noto Sans SC (CJK) — OFL/Apache, self-hosted, embedded as data URIs
-templates/<name>/template.html + meta.json   HTML+CSS with {{vars}}; meta gives canvas size + lang. templates/fit.js is shared (auto-shrink)
-templates/copy/*.md   Markdown copy templates ({{var}}, {{#if}}, {{#each}}) — fixed wording lives here
-specs/           poster_*_spec.json — element positions/type scale extracted from Canva (source of truth for the template)
-reference/       design-analysis.md (how the spec was measured, evidence table)
-src/render.js    JSON -> HTML (self-contained, data URIs) -> PNG via Playwright
-src/validate.js  post-render checks
-src/copy.js      copy templates -> output/<slug>/<channel>/ (+ poster copied in)
-scripts/build.js render + validate + copy in one go
-output/          generated files, git-ignored; output/<slug>/ is the hand-off pack
-.claude/skills/meetup-poster/SKILL.md   poster workflow for LLM agents
-.claude/skills/meetup-copy/SKILL.md     copy-writing rules per channel + hand-off
-.claude/skills/meetup-publish/SKILL.md  click-by-click meetup.com publishing recipe (browser)
+events/            INPUT. One JSON per event, name = slug = <date>-<topic>-<speaker>. schema.json = field reference, example.json = full sample.
+                   Real events + speaker photos are git-ignored; only example.json / assets/speakers/scott.png are public.
+config/citanz.json Org constants: fee, bank, hashtags, house schedule (18:00 doors / 18:30 talk+stream / 20:00), channel owners, copy file naming.
+assets/            brand/ (locked) · fonts/ (Arimo + Noto Sans SC, self-hosted) · sponsors/ · speakers/
+templates/posters/ <name>/template.html + meta.json ({{vars}}, absolute px on a fixed canvas) · fit.js (auto-fit + per-line measurement)
+templates/copy/    linkedin · xiaohongshu · meetup · wechat · teams .md ({{var}} {{#if}} {{#each}})
+design/            poster_<name>_spec.json (measured from Canva, source of truth) · how-the-canva-design-was-measured.md
+src/build.js       entry: env check, then spawns src/steps/1-render-posters.js → 2-validate-posters.js → 3-write-copy.js (stop on first failure)
+src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataUri, esc, readJson
+output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/
+.claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → 5 announcements + pack) · meetup-publish (meetup.com clicks)
 ```
 
-## Invariants
-- **Poster generation is fully offline.** No Canva, no installed Chrome, no network: templates are local HTML, fonts/images are embedded as data URIs, rendering uses Playwright's bundled headless Chromium, and `render.js`/`validate.js` abort any non-`file://` request. Canva and the Chrome DOM were used exactly once, to measure the design into `specs/`.
-- Per event only four things change on a poster: speaker photo, title, speaker name/organisation, venue (+ date/time and sponsor logos from the same JSON). Everything else is locked brand layout.
-- Each template must stay pixel-faithful to its `specs/poster_<name>_spec.json`; change the spec first, then the template.
-- `{{title}}`, `{{venue}}`, `{{date_time}}` resolve to `ev.zh.*` in templates whose meta.lang is `zh`, falling back to the English fields.
-- Text is real text (never baked into images). Dynamic blocks carry `data-max-lines`; the in-page script shrinks font to fit, `validate.js` fails if it still doesn't.
-- Typography rules (all posters, enforced by validate.js): every line of a wrapped block ≥ 40% as wide as the widest (`ORPHAN_MIN`); auto-fit may shrink a block by at most 15% (`SHRINK_MIN`). Fix by rewording / moving `\n` / shortening, never by squeezing.
-- House schedule (config/citanz.json `schedule`): doors 18:00, talk and online stream 18:30, end 20:00. Copy templates state it explicitly; WeChat/Teams must say 线上 18:30 开始.
-- Every event needs a speaker photo (`speaker.photo`, enforced in lib.js). Slug = `<date>-<topic>-<speaker>` (enforced).
-- Fixed process = code, not prompts. Anything an LLM would otherwise re-derive each time (env setup, rendering, validation, hand-off layout) lives in `scripts/` + `src/`; skills only describe judgement calls.
-- Fonts and images are inlined as data URIs so `output/*.html` opens anywhere with no server.
-- Fonts are self-hosted only (Arimo for Latin, Noto Sans SC for CJK). Never rely on system fonts.
-- `assets/brand/*` are locked design elements — do not swap or restyle without a design decision.
-- QR: if `qr_url` is present it is generated at render time; otherwise the static `assets/brand/citanz-qr.png` is used.
-- Copy: prose is authored in the event JSON (`copy.*`), never in `output/`. Fixed wording (fee, bank account, agenda, thanks) comes from `config/` + `templates/copy/`; a missing field renders as `[TODO field]` and fails the build.
-- Public copy file naming (global rule): `<channel>-post-<topic>-<date>.md` — e.g. `小红书-post-agent-security-2026-09-17.md`, `领英-post-…`, `微信-会员群-post-…`, `微信-非会员群-post-…`, `meetup-post-…` (+ `.txt`), `Teams-post-…`. Labels live in `config/citanz.json` `handoff_naming`; `topic` comes from the event JSON.
-- Hand-off ownership: LinkedIn and 小红书 are posted by CITANZ marketing (they receive `output/<slug>/linkedin|xiaohongshu/`); meetup.com and WeChat are posted by the organiser.
+## Invariants (do not break)
+- **Fully offline rendering.** No Canva, no installed Chrome, no network. Fonts/images are data URIs; render and validate abort any non-`file://` request. Canva/Chrome DOM were used once, to measure `design/`.
+- **Per event only these change on a poster:** speaker photo, title, name/org, venue (+ date/time, sponsor logos) — all from the event JSON. Everything else is locked brand layout.
+- **Templates are transcriptions of `design/*.json`.** Change the spec first, then the template. Never edit a template for one event.
+- **Typography is validated, not advised:** every line of a wrapped block ≥ 40 % of the widest (`ORPHAN_MIN`); auto-fit shrink ≤ 15 % (`SHRINK_MIN`); no overflow/overlap/photo collision. Fix = reword or move `\n`.
+- **Speaker photo mandatory; slug format enforced** (`lib/event.js`).
+- **Fixed wording lives in code, prose lives in the event JSON.** `config/` + `templates/copy/` hold fee, bank, agenda, thanks, hashtags, schedule lines; `copy.*` holds only what changes. A missing field renders `[TODO field]` and fails the build.
+- **Public copy files are named `<channel>-post-<topic>-<date>.md`** (labels in `config.handoff_naming`): 领英 / 小红书 / meetup (+.txt) / 微信-会员群 / 微信-非会员群 / Teams.
+- **Hand-off ownership:** LinkedIn + 小红书 → CITANZ marketing (they get `linkedin/`, `xiaohongshu/`); meetup.com, WeChat, Teams → organiser.
+- **Fixed process = code, judgement = skill.** Never re-derive setup/render/validate in prompts.
 
-## How to verify a change
-1. `npm run example` must end with `wrote output/2026-08-26-blockchain/{…}` and no `TODO` list.
-2. Open both `output/2026-08-26-blockchain.*.png` and compare against the Canva references (links in README). Check title position and wrapping, avatar, pill sizes, sponsor row alignment.
-3. Try a long title (`data/example.json` with ~85 chars) — it must shrink, not overflow.
+## Verify a change
+1. `npm run example` prints `OK: …` and `wrote output/2026-08-26-blockchain/{…}` with no TODO list.
+2. Compare `output/2026-08-26-blockchain/*.png` with `docs/images/*` (regenerate those previews if the design legitimately changed).
+3. Poster/fit/validator changes: also try an ~85-char title and a 3-line venue — the FAIL message must name the block and say *reword*.
+4. Copy/config changes: `npm run copy events/example.json`, diff the Markdown.

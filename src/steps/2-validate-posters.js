@@ -1,10 +1,10 @@
-// Checks rendered posters: assets exist, text does not overflow, blocks don't collide, PNG has the right size.
-// Usage: node src/validate.js data/example.json [--template landscape|portrait|all]
+// STEP 2 — Check rendered posters: assets exist, text does not overflow, blocks don't collide, typography rules hold.
+// Usage: node src/steps/2-validate-posters.js events/example.json [--template landscape|portrait|all]
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-import { ROOT, loadEvent, readJson } from './lib.js';
-import { listTemplates } from './render.js';
+import { ROOT, loadEvent, readJson } from '../lib/event.js';
+import { listTemplates } from './1-render-posters.js';
 
 const args = process.argv.slice(2);
 const ev = loadEvent(args.find(a => !a.startsWith('--')));
@@ -20,7 +20,7 @@ for (const p of [ev.speaker.photo, ev.qr, ...(ev.sponsors || []).map(s => s.logo
 
 const browser = await chromium.launch();
 for (const template of which === 'all' ? listTemplates() : [which]) {
-  const meta = readJson(path.join(ROOT, 'templates', template, 'meta.json'));
+  const meta = readJson(path.join(ROOT, 'templates/posters', template, 'meta.json'));
   const stem = path.join(ROOT, 'output', ev.slug, `${ev.slug}.${template}`);
   if (!fs.existsSync(stem + '.html')) { problems.push(`${template}: run render first (${stem}.html not found)`); continue; }
 

@@ -1,13 +1,13 @@
-// Fill the four copy templates from an event JSON and build hand-off folders:
+// Fill the copy templates from an event JSON and build hand-off folders:
 //   output/<slug>/linkedin/     post.md + landscape poster   -> marketing (LinkedIn)
 //   output/<slug>/xiaohongshu/  post.md + portrait poster    -> marketing (小红书)
 //   output/<slug>/meetup/       event.md + landscape poster  -> organiser (meetup.com)
 //   output/<slug>/wechat/       member.md, public.md + portrait poster -> organiser (WeChat)
 //   output/<slug>/teams/        webinar.md (Title + Description) + landscape poster -> organiser (Teams)
-// Usage: node src/copy.js data/<event>.json   (run render.js first so the posters exist)
+// STEP 3 — Usage: node src/steps/3-write-copy.js events/<event>.json   (run step 1 first so the posters exist)
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, loadEvent, readJson } from './lib.js';
+import { ROOT, loadEvent, readJson } from '../lib/event.js';
 
 const eventArg = process.argv[2];
 const ev = loadEvent(eventArg);

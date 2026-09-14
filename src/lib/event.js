@@ -2,14 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 export function readJson(p) {
   return JSON.parse(fs.readFileSync(path.resolve(ROOT, p), 'utf8'));
 }
 
 export function loadEvent(argPath) {
-  if (!argPath) throw new Error('Usage: node src/render.js data/<event>.json');
+  if (!argPath) throw new Error('Usage: node src/build.js events/<event>.json');
   const ev = readJson(argPath);
   for (const k of ['slug', 'title', 'speaker', 'date', 'time', 'venue']) {
     if (!ev[k]) throw new Error(`event.${k} is required (${argPath})`);
