@@ -16,13 +16,13 @@ events/            INPUT. One JSON per event, name = slug = <date>-<topic>-<spea
                    Real events + speaker photos are git-ignored; only example.json / assets/speakers/scott.png are public.
 config/citanz.json Org constants: fee, bank, hashtags, house schedule (18:00 doors / 18:30 talk+stream / 20:00), channel owners, copy file naming.
 assets/            brand/ (locked) · fonts/ (Arimo + Noto Sans SC, self-hosted) · sponsors/ · speakers/
-templates/posters/ <name>/template.html + meta.json ({{vars}}, absolute px on a fixed canvas) · fit.js (auto-fit + per-line measurement)
+templates/posters/ <name>/template.html + meta.json ({{vars}}, absolute px on a fixed canvas; meta.exports = extra platform canvases, e.g. portrait → .xhs.png 3:4) · fit.js
 templates/copy/    linkedin · xiaohongshu · meetup · wechat · teams .md ({{var}} {{#if}} {{#each}})
 design/            poster_<name>_spec.json (measured from Canva, source of truth) · how-the-canva-design-was-measured.md
 src/build.js       entry: env check, then spawns src/steps/1-render-posters.js → 2-validate-posters.js → 3-write-copy.js (stop on first failure)
 src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataUri, esc, readJson
-output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/
-.claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → 5 announcements + pack) · meetup-publish (meetup.com clicks)
+output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xhs.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/
+.claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → announcements + pack) · meetup-publish (meetup.com) · xiaohongshu-publish (小红书)
 ```
 
 ## Invariants (do not break)
@@ -32,7 +32,10 @@ output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, README.md, linkedi
 - **Typography is validated, not advised:** every line of a wrapped block ≥ 40 % of the widest (`ORPHAN_MIN`); auto-fit shrink ≤ 15 % (`SHRINK_MIN`); no overflow/overlap/photo collision. Fix = reword or move `\n`.
 - **Speaker photo mandatory; slug format enforced** (`lib/event.js`).
 - **Fixed wording lives in code, prose lives in the event JSON.** `config/` + `templates/copy/` hold fee, bank, agenda, thanks, hashtags, schedule lines; `copy.*` holds only what changes. A missing field renders `[TODO field]` and fails the build.
-- **Public copy files are named `<channel>-post-<topic>-<date>.md`** (labels in `config.handoff_naming`): 领英 / 小红书 / meetup (+.txt) / 微信-会员群 / 微信-非会员群 / Teams.
+- **Public copy files are named `<channel>-post-<topic>-<date>.md`** (labels in `config.handoff_naming`): 领英 / 小红书 (+.txt) / meetup (+.txt) / 微信-本地会员群 / 微信-本地非会员群 / 微信-CITANZ大群 / Teams.
+- **WeChat group variants come from `config.wechat_groups`, never from separate prose:** local groups get `#接龙` as line 1 (WeChat needs it to start a 接龙) and the venue; the nationwide 大群 gets no `#接龙`, no address, online emphasis.
+- **Platform image standards are exports, not re-designs:** `meta.exports` pads the finished poster onto the platform's canvas (小红书 3:4) with the brand colour; never rescale or crop.
+- **Channel folders are wiped and rebuilt on every copy run** so a renamed/removed file can't survive with stale content (e.g. an old venue).
 - **Hand-off ownership:** LinkedIn + 小红书 → CITANZ marketing (they get `linkedin/`, `xiaohongshu/`); meetup.com, WeChat, Teams → organiser.
 - **Fixed process = code, judgement = skill.** Never re-derive setup/render/validate in prompts.
 

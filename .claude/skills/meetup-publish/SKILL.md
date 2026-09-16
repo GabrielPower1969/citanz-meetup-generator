@@ -19,6 +19,12 @@ Precondition: `npm run build events/<event>.json` has produced `output/<slug>/me
 9. On "Your event is live — Announce it now": click **Do it later**. Announcing emails every member; ask the user before ever clicking it. When they say yes: open the event page → organizer toolbar → **Announce** (one click, no confirmation dialog; the button then turns into "Attendees" and a toast says "Email notifications are being sent").
 10. Read the new event URL from the tab (`/events/<id>/`), write it into `rsvp_url` in the event JSON, rerun `npm run build`, and tell the user the link.
 
+## Changing the venue of a live event (verified 2026-09-17)
+1. Open `/events/<id>/edit/` → Location section → **Change** → type the street address in "Search or add location…" → pick the suggestion (not "New location").
+2. Fill **How to find us** with the building/room name (e.g. "Upper Riccarton Community and School Library, Room 2") — the address search only stores the street.
+3. Re-type the description from the rebuilt `.txt` so the LOCATION section matches (same JS-focus + cmd+a + type dance; expect the 30 s CDP timeout, wait, verify with `textContent.includes(...)`).
+4. **Save changes** → toast "Your changes have been saved". Meetup does not email attendees about the change — offer the user to post in the event chat / **Contact** attendees; that is a message on their behalf, so wait for a yes.
+
 ## Don'ts
 - Don't paste markdown (`###`, `**`) into meetup — use the `.txt` file, which is the plain-text variant.
 - Don't click "Announce it now", "Make event paid", or change hosts/topics.

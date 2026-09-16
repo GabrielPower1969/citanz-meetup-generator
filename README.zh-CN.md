@@ -36,9 +36,9 @@
 | `output/<活动>/` 里的文件夹 | 给谁 | 内容 |
 |---|---|---|
 | `linkedin/` | 营销同事 | `领英-post-<主题>-<日期>.md` + 横版海报 |
-| `xiaohongshu/` | 营销同事 | `小红书-post-<主题>-<日期>.md` + 竖版海报 |
+| `xiaohongshu/` | 营销同事 | `小红书-post-<主题>-<日期>.md` / `.txt` + 3:4 画布版海报（`.portrait.xhs.png`，小红书推荐比例） |
 | `meetup/` | 你 | `meetup-post-<主题>-<日期>.md`（+ 可直接粘贴的 `.txt`）+ 横版海报 |
-| `wechat/` | 你 | `微信-会员群-post-…md`、`微信-非会员群-post-…md` + 竖版海报 |
+| `wechat/` | 你 | `微信-本地会员群-post-…md`（#接龙）、`微信-本地非会员群-post-…md`（#接龙 + $5 行）、`微信-CITANZ大群-post-…md`（只强调线上，不写地址）+ 竖版海报 |
 | `teams/` | 你 | `Teams-post-<主题>-<日期>.md` + 横版海报 |
 | `README.md` | — | 哪个文件夹给谁 |
 
@@ -136,7 +136,8 @@ output/      生成物，git 忽略。一个活动一个文件夹。
 |---|---|
 | `meetup-poster` | 活动事实 → 两张海报；知道各处字数上限 |
 | `meetup-copy` | 讲者材料 → 五份文案，按渠道语气；生成交接包 |
-| `meetup-publish` | 在已登录的浏览器里发布到 meetup.com 的逐步操作 |
+| `meetup-publish` | 在已登录的浏览器里发布到 meetup.com 的逐步操作（建活动、群发、改地址） |
+| `xiaohongshu-publish` | 小红书创作平台的逐步操作：3:4 图、20 字标题、1000 字正文、10 个话题 |
 
 [`CLAUDE.md`](CLAUDE.md)（同 `AGENTS.md`）是给 agent 的地图：命令、不变量、怎么验证。
 原则：**固定流程是代码，判断是 skill。** 助手不需要每次推理怎么安装、渲染、校验；它只写文案、读校验结果。

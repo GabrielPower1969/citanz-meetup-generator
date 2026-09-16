@@ -148,7 +148,8 @@
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "description": "Added after config base tags; 小红书 allows 10 topics total, so keep base + event ≤ 10"
     },
     "agenda": {
       "type": "array",

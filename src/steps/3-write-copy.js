@@ -39,7 +39,7 @@ const ctx = {
   ...ev,
   org_name_en: cfg.org_name_en, org_name_zh: cfg.org_name_zh, city: cfg.city,
   title_plain: ev.title.replace(/\n/g, ' '),
-  title_zh: zh.title || ev.title,
+  title_zh: (zh.title || ev.title).replace(/\n/g, ''),   // poster title may carry a manual break; social titles are one line
   date_short: dateShort,
   publish_date: publishDate,
   time_long: ev.time_long || cfg.schedule.en_time_long,
@@ -83,6 +83,9 @@ const nameFor = (channelKey, ext = 'md') => cfg.handoff_naming.pattern
   .replace('{topic}', topic).replace('{date}', evDate).replace(/\.md$/, '.' + ext);
 const tpl = (n) => fs.readFileSync(path.join(ROOT, 'templates/copy', n), 'utf8');
 const poster = (kind) => path.join(outRoot, `${ev.slug}.${kind}.png`);
+// Channel folders are rebuilt from scratch every run so a renamed or removed file can never linger with stale content
+// (e.g. an old venue). Posters at the top level of output/<slug>/ are left alone — step 1 owns them.
+for (const channel of Object.keys(cfg.handoff)) fs.rmSync(path.join(outRoot, channel), { recursive: true, force: true });
 const write = (channel, file, text) => {
   const dir = path.join(outRoot, channel); fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, file), text.replace(/\n{3,}/g, '\n\n').trim() + '\n');
@@ -94,7 +97,10 @@ const attach = (channel) => {
 };
 
 write('linkedin', nameFor('linkedin'), fill(tpl('linkedin.md'), ctx, 'linkedin')); attach('linkedin');
-write('xiaohongshu', nameFor('xiaohongshu'), fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu')); attach('xiaohongshu');
+const xhsMd = fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu');
+write('xiaohongshu', nameFor('xiaohongshu'), xhsMd); attach('xiaohongshu');
+// 小红书 has a separate title field and no markdown: .txt = body only, bold markers stripped (paste as-is)
+write('xiaohongshu', nameFor('xiaohongshu', 'txt'), xhsMd.replace(/^\*\*.+\*\*\n\n?/, '').replace(/\*\*(.+?)\*\*/g, '$1'));
 const meetupMd = fill(tpl('meetup.md'), ctx, 'meetup');
 write('meetup', nameFor('meetup'), meetupMd); attach('meetup');
 // meetup.com's editor is plain text: strip markdown so the file can be pasted as-is
@@ -104,7 +110,18 @@ write('meetup', nameFor('meetup', 'txt'), meetupMd
   .replace(/\*\*(.+?)\*\*/g, '$1')
   .replace(/^\* /gm, '• '));
 for (const [g, spec] of Object.entries(cfg.wechat_groups)) {
-  write('wechat', nameFor(`wechat_${g}`), fill(tpl('wechat.md'), { ...ctx, fee_line: spec.fee_line }, `wechat/${g}`));
+  if (g.startsWith('$')) continue;
+  const gctx = {
+    ...ctx,
+    fee_line: spec.fee_line,
+    hashtag_line: spec.hashtag ? '#接龙' : '',
+    // local groups: date · time rule · venue; national group: date · "go to your local group" (no address)
+    wechat_when_where: spec.show_venue
+      ? `${ctx.date_time_wechat} · ${ctx.venue_short}`
+      : `${zh.date_time_short || zh.date_time || ev.date} · ${spec.venue_replacement || ''}`,
+    show_rsvp: spec.show_venue && ctx.rsvp_url ? ctx.rsvp_url : '',
+  };
+  write('wechat', nameFor(`wechat_${g}`), fill(tpl('wechat.md'), gctx, `wechat/${g}`));
 }
 attach('wechat');
 write('teams', nameFor('teams'), fill(tpl('teams.md'), ctx, 'teams')); attach('teams');

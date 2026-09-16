@@ -55,7 +55,7 @@ export async function buildHtml(ev, templateName) {
   return { html, meta };
 }
 
-export async function renderPng(htmlPath, pngPath, { width, height, scale = 2 }) {
+export async function renderPng(htmlPath, pngPath, { width, height, scale = 2, exports: exportsList = [] }) {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
   // Offline guarantee: the poster must render from the local file alone. Anything else is a bug.
@@ -63,6 +63,22 @@ export async function renderPng(htmlPath, pngPath, { width, height, scale = 2 })
   await page.goto('file://' + htmlPath);
   await page.waitForFunction(() => document.body.dataset.ready === '1');
   await page.locator('#poster').screenshot({ path: pngPath, type: 'png' });
+  // Platform-specific exports (meta.exports): the finished poster centred on a solid canvas of the requested
+  // aspect ratio. Nothing is rescaled or cropped — only padding is added, so the design stays pixel-identical.
+  for (const ex of exportsList) {
+    const [aw, ah] = ex.aspect.split(':').map(Number);
+    const fw = Math.max(width, Math.round(height * aw / ah)), fh = Math.max(height, Math.round(width * ah / aw));
+    await page.evaluate(({ fw, fh, bg }) => {
+      const poster = document.getElementById('poster');
+      const frame = document.createElement('div'); frame.id = 'export-frame';
+      Object.assign(frame.style, { width: fw + 'px', height: fh + 'px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' });
+      poster.replaceWith(frame); frame.appendChild(poster);
+    }, { fw, fh, bg: ex.background });
+    await page.setViewportSize({ width: fw, height: fh });
+    await page.locator('#export-frame').screenshot({ path: pngPath.replace(/\.png$/, `.${ex.suffix}.png`), type: 'png' });
+    await page.evaluate(() => { const f = document.getElementById('export-frame'); f.replaceWith(f.firstElementChild); });
+    await page.setViewportSize({ width, height });
+  }
   const fit = await page.evaluate(() =>
     [...document.querySelectorAll('[data-block]')].map(e => ({ id: e.id, lines: +e.dataset.lines, fontSize: +e.dataset.fontSize || null, last: +e.dataset.lastLineRatio, min: +e.dataset.minLineRatio })));
   await browser.close();
@@ -77,6 +93,7 @@ export async function renderEvent(ev, templateName, scale) {
   fs.writeFileSync(stem + '.html', html);
   const fit = await renderPng(stem + '.html', stem + '.png', { ...meta, scale });
   console.log(`wrote ${path.relative(ROOT, stem)}.png (${meta.width * scale}x${meta.height * scale})`);
+  for (const ex of meta.exports || []) console.log(`  + .${ex.suffix}.png (${ex.aspect} canvas for platform upload)`);
   for (const f of fit) if (f.lines > 1) console.log(`  ${f.id}: ${f.lines} lines${f.fontSize ? `, font ${f.fontSize}px` : ''}, narrowest line ${Math.round(f.min * 100)}% of widest`);
 }
 

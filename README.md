@@ -36,9 +36,9 @@ You describe one meetup in one JSON file. The tool produces everything you need 
 | Folder in `output/<event>/` | Give it to | Contains |
 |---|---|---|
 | `linkedin/` | marketing colleague | `领英-post-<topic>-<date>.md` + landscape poster |
-| `xiaohongshu/` | marketing colleague | `小红书-post-<topic>-<date>.md` + portrait poster |
+| `xiaohongshu/` | marketing colleague | `小红书-post-<topic>-<date>.md` / `.txt` + poster on a 3:4 canvas (`.portrait.xhs.png`, 小红书's recommended ratio) |
 | `meetup/` | you | `meetup-post-<topic>-<date>.md` (+ `.txt` to paste) + landscape poster |
-| `wechat/` | you | `微信-会员群-post-…md`, `微信-非会员群-post-…md` + portrait poster |
+| `wechat/` | you | `微信-本地会员群-post-…md` (#接龙), `微信-本地非会员群-post-…md` (#接龙 + $5 line), `微信-CITANZ大群-post-…md` (online-first, no address) + portrait poster |
 | `teams/` | you | `Teams-post-<topic>-<date>.md` + landscape poster |
 | `README.md` | — | who gets which folder |
 
@@ -136,7 +136,8 @@ Three skills in `.claude/skills/` (Claude Code loads them automatically; other a
 |---|---|
 | `meetup-poster` | event facts → two posters; knows the length limits |
 | `meetup-copy` | speaker notes → five announcements in the right voice; builds the hand-off pack |
-| `meetup-publish` | click-by-click recipe for meetup.com in a logged-in browser |
+| `meetup-publish` | click-by-click recipe for meetup.com in a logged-in browser (create, announce, change venue) |
+| `xiaohongshu-publish` | click-by-click recipe for 小红书 creator platform: 3:4 image, 20-char title, 1000-char body, 10 topics |
 
 [`CLAUDE.md`](CLAUDE.md) (= `AGENTS.md`) is the agent's map: commands, invariants, how to verify.
 Principle: **fixed process is code, judgement is a skill.** The assistant never re-derives how to install, render or validate; it writes prose and reads the validator's verdict.

@@ -27,22 +27,31 @@
       "新西兰基督城",
       "技术分享",
       "CITA",
-      "IT互助社区",
-      "程序员日常",
-      "新西兰生活",
-      "基督城活动",
-      "技术社区"
-    ]
+      "IT互助社区"
+    ],
+    "$comment": "小红书 caps topics at 10: 6 base + up to 4 per event (hashtags_zh)."
   },
   "linkedin_outro": "Follow CITANZ for more technology talks and career events across New Zealand.",
   "wechat_groups": {
+    "$comment": "One WeChat copy file per group type. hashtag=true puts '#接龙' as the very first line (WeChat turns it into a 接龙 thread). show_venue=false replaces the venue with venue_replacement (for the nationwide group that only attends online).",
     "member": {
-      "label": "CITANZ 会员群",
+      "label": "本地 CITANZ 会员群",
+      "hashtag": true,
+      "show_venue": true,
       "fee_line": ""
     },
     "public": {
-      "label": "非会员群 / 朋友圈",
+      "label": "本地 IT 交流群（非会员）",
+      "hashtag": true,
+      "show_venue": true,
       "fee_line": "🎫 CITA 会员免费，非会员 $5（非营利组织，用于场地和茶点）"
+    },
+    "national": {
+      "label": "CITANZ 大群（全国，线上为主）",
+      "hashtag": false,
+      "show_venue": false,
+      "fee_line": "",
+      "venue_replacement": "线下朋友建议去本地 CITANZ 群接龙"
     }
   },
   "handoff": {
@@ -52,7 +61,7 @@
     },
     "xiaohongshu": {
       "owner": "CITANZ marketing (小红书)",
-      "poster": "portrait"
+      "poster": "portrait.xhs"
     },
     "meetup": {
       "owner": "organiser (meetup.com)",
@@ -80,7 +89,7 @@
     ],
     "zh_start_note": "18:30 正式开讲（线上同步 18:30 开始）",
     "wechat_time_suffix": "18:00 签到 · 18:30 开讲",
-    "wechat_online_line": "💻 线上 18:30 开始，Teams 链接："
+    "wechat_online_line": "💻 线上【18:30】开始，Teams 链接："
   },
   "handoff_naming": {
     "$comment": "Global rule: every public copy file is named <channel>-post-<topic>-<date>.md. channel labels below; topic = event.topic (falls back to slug minus date); date = YYYY-MM-DD from the slug.",
@@ -89,9 +98,10 @@
       "linkedin": "领英",
       "xiaohongshu": "小红书",
       "meetup": "meetup",
-      "wechat_member": "微信-会员群",
-      "wechat_public": "微信-非会员群",
-      "teams": "Teams"
+      "wechat_member": "微信-本地会员群",
+      "wechat_public": "微信-本地非会员群",
+      "teams": "Teams",
+      "wechat_national": "微信-CITANZ大群"
     }
   }
 }

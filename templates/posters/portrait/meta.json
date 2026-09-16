@@ -1,1 +1,19 @@
-{ "width": 1587, "height": 2244, "lang": "zh", "fonts": ["Arimo-Regular.ttf", "Arimo-Bold.ttf", "NotoSansSC-Regular.otf", "NotoSansSC-Bold.otf"] }
+{
+  "width": 1587,
+  "height": 2244,
+  "lang": "zh",
+  "fonts": [
+    "Arimo-Regular.ttf",
+    "Arimo-Bold.ttf",
+    "NotoSansSC-Regular.otf",
+    "NotoSansSC-Bold.otf"
+  ],
+  "exports": [
+    {
+      "suffix": "xhs",
+      "aspect": "3:4",
+      "background": "#008FFF",
+      "$comment": "\u5c0f\u7ea2\u4e66 recommends 3:4 (min 720x960). The poster is centred on a brand-blue 3:4 canvas; nothing is rescaled or cropped."
+    }
+  ]
+}
