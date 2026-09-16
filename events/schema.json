@@ -283,6 +283,160 @@
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
       "description": "Short topic slug used in output file names (<channel>-post-<topic>-<date>.md), e.g. agent-security"
+    },
+    "results": {
+      "type": "object",
+      "description": "Post-event numbers and feedback, filled by hand or by the event-analytics skill. Every channel block should carry `checked` (YYYY-MM-DD) and `source` (page/URL the numbers were read from).",
+      "properties": {
+        "linkedin": {
+          "type": "object",
+          "properties": {
+            "impressions": {
+              "type": "integer"
+            },
+            "reactions": {
+              "type": "integer"
+            },
+            "comments": {
+              "type": "integer"
+            },
+            "reposts": {
+              "type": "integer"
+            },
+            "url": {
+              "type": "string"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            }
+          }
+        },
+        "meetup": {
+          "type": "object",
+          "properties": {
+            "rsvps": {
+              "type": "integer"
+            },
+            "attended": {
+              "type": "integer"
+            },
+            "waitlist": {
+              "type": "integer"
+            },
+            "url": {
+              "type": "string"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            }
+          }
+        },
+        "xiaohongshu": {
+          "type": "object",
+          "properties": {
+            "views": {
+              "type": "integer"
+            },
+            "likes": {
+              "type": "integer"
+            },
+            "saves": {
+              "type": "integer"
+            },
+            "comments": {
+              "type": "integer"
+            },
+            "url": {
+              "type": "string"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            }
+          }
+        },
+        "wechat": {
+          "type": "object",
+          "properties": {
+            "signups_member": {
+              "type": "integer"
+            },
+            "signups_public": {
+              "type": "integer"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            }
+          }
+        },
+        "teams": {
+          "type": "object",
+          "properties": {
+            "registered": {
+              "type": "integer"
+            },
+            "joined": {
+              "type": "integer"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            }
+          }
+        },
+        "feedback": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "quote",
+              "channel"
+            ],
+            "properties": {
+              "quote": {
+                "type": "string"
+              },
+              "who": {
+                "type": "string"
+              },
+              "channel": {
+                "type": "string"
+              },
+              "theme": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "photos_folder": {
+          "type": "string"
+        }
+      }
     }
   }
 }

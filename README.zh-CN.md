@@ -40,6 +40,7 @@
 | `meetup/` | 你 | `meetup-post-<主题>-<日期>.md`（+ 可直接粘贴的 `.txt`）+ 横版海报 |
 | `wechat/` | 你 | `微信-本地会员群-post-…md`（#接龙）、`微信-本地非会员群-post-…md`（#接龙 + $5 行）、`微信-CITANZ大群-post-…md`（只强调线上，不写地址）+ 竖版海报 |
 | `teams/` | 你 | `Teams-post-<主题>-<日期>.md` + 横版海报 |
+| `report/` | 你 + 营销同事 | 会后 `复盘-post-<主题>-<日期>.md`（带来源的数字、评论原话、观察、下次行动）—— `npm run report` 之后出现 |
 | `README.md` | — | 哪个文件夹给谁 |
 
 ## 2. 快速开始
@@ -138,6 +139,7 @@ output/      生成物，git 忽略。一个活动一个文件夹。
 | `meetup-copy` | 讲者材料 → 五份文案，按渠道语气；生成交接包 |
 | `meetup-publish` | 在已登录的浏览器里发布到 meetup.com 的逐步操作（建活动、群发、改地址） |
 | `xiaohongshu-publish` | 小红书创作平台的逐步操作：3:4 图、20 字标题、1000 字正文、10 个话题 |
+| `event-analytics` | 会后复盘：每个数字去哪读（领英 analytics、meetup 到场、小红书数据、微信接龙、Teams），评论原话，然后 `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md)（同 `AGENTS.md`）是给 agent 的地图：命令、不变量、怎么验证。
 原则：**固定流程是代码，判断是 skill。** 助手不需要每次推理怎么安装、渲染、校验；它只写文案、读校验结果。

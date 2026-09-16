@@ -1,1 +1,10 @@
-{ "width": 1200, "height": 628, "lang": "en", "fonts": ["Arimo-Regular.ttf", "Arimo-Bold.ttf"] }
+{
+  "width": 1200,
+  "height": 628,
+  "lang": "en",
+  "fonts": [
+    "Arimo-Regular.ttf",
+    "Arimo-Bold.ttf"
+  ],
+  "$todo": "LinkedIn feed cards are square-ish, so this 1.91:1 poster shows with bars. Padding to 1:1 was tried (2026-09-17) and looked empty. Real fix: an English 4:5 (1080x1350) template."
+}

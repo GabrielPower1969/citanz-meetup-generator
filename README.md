@@ -40,6 +40,7 @@ You describe one meetup in one JSON file. The tool produces everything you need 
 | `meetup/` | you | `meetup-post-<topic>-<date>.md` (+ `.txt` to paste) + landscape poster |
 | `wechat/` | you | `微信-本地会员群-post-…md` (#接龙), `微信-本地非会员群-post-…md` (#接龙 + $5 line), `微信-CITANZ大群-post-…md` (online-first, no address) + portrait poster |
 | `teams/` | you | `Teams-post-<topic>-<date>.md` + landscape poster |
+| `report/` | you + marketing | post-event `复盘-post-<topic>-<date>.md` (numbers with provenance, quotes, observations, next actions) — after `npm run report` |
 | `README.md` | — | who gets which folder |
 
 ## 2. Quick start
@@ -138,6 +139,7 @@ Three skills in `.claude/skills/` (Claude Code loads them automatically; other a
 | `meetup-copy` | speaker notes → five announcements in the right voice; builds the hand-off pack |
 | `meetup-publish` | click-by-click recipe for meetup.com in a logged-in browser (create, announce, change venue) |
 | `xiaohongshu-publish` | click-by-click recipe for 小红书 creator platform: 3:4 image, 20-char title, 1000-char body, 10 topics |
+| `event-analytics` | post-event 复盘: where to read each number (LinkedIn analytics, meetup attendees, 小红书 数据, WeChat 接龙, Teams), quotes verbatim, then `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md) (= `AGENTS.md`) is the agent's map: commands, invariants, how to verify.
 Principle: **fixed process is code, judgement is a skill.** The assistant never re-derives how to install, render or validate; it writes prose and reads the validator's verdict.

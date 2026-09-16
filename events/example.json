@@ -88,5 +88,38 @@
     "teams": {
       "title": "CITANZ Webinar - 考拉科技：区块链分享"
     }
+  },
+  "results": {
+    "linkedin": {
+      "impressions": 244,
+      "reactions": 4,
+      "comments": 0,
+      "reposts": 0,
+      "checked": "2026-08-28",
+      "source": "LinkedIn post → View analytics"
+    },
+    "meetup": {
+      "rsvps": 20,
+      "attended": 16,
+      "checked": "2026-08-27",
+      "source": "meetup.com event → Attendees → Manage"
+    },
+    "feedback": [
+      {
+        "quote": "开场那个手机上链的小实验很直观，第一次真的看懂了区块是怎么出来的。",
+        "who": "现场参会者",
+        "channel": "微信-本地会员群",
+        "theme": "互动开场有效"
+      }
+    ],
+    "observations": [
+      "领英 244 展示 / 4 个赞：曝光有，互动弱——标题偏学术，下次首句放一个问题。",
+      "到场率 80%，高于往期；周三比周五好。"
+    ],
+    "actions": [
+      "下次领英文案首句改成问题句",
+      "会前 1 天再发一次微信提醒"
+    ],
+    "photos_folder": "Google Drive/CITANZ/2026-08-26-blockchain/photos"
   }
 }
