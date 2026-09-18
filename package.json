@@ -9,7 +9,8 @@
     "render": "node src/steps/1-render-posters.js",
     "validate": "node src/steps/2-validate-posters.js",
     "copy": "node src/steps/3-write-copy.js",
-    "report": "node src/steps/4-write-report.js"
+    "report": "node src/steps/4-write-report.js",
+    "test": "node --test 'test/*.test.js'"
   },
   "license": "MIT",
   "dependencies": {

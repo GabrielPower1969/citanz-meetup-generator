@@ -23,7 +23,8 @@
 5. [目录地图](#5-目录地图) — 看这里知道东西放在哪
 6. [工具强制执行的规则](#6-工具强制执行的规则)
 7. [配合 AI 助手使用](#7-配合-ai-助手使用)
-8. [换一个社区用](#8-换一个社区用)
+8. [测试](#8-测试)
+9. [换一个社区用](#9-换一个社区用)
 
 深入阅读：[docs/ARCHITECTURE.zh-CN.md](docs/ARCHITECTURE.zh-CN.md) 有调用关系图、数据模型（ERD）、思维导图和设计决策。
 
@@ -131,7 +132,7 @@ output/      生成物，git 忽略。一个活动一个文件夹。
 
 ## 7. 配合 AI 助手使用
 
-`.claude/skills/` 里三个 skill（Claude Code 自动加载，其他 agent 读同样的 Markdown 即可）：
+`.claude/skills/` 里六个 skill（顺序和索引见 [`.claude/skills/README.md`](.claude/skills/README.md)）（Claude Code 自动加载，其他 agent 读同样的 Markdown 即可）：
 
 | Skill | 做什么 |
 |---|---|
@@ -139,13 +140,22 @@ output/      生成物，git 忽略。一个活动一个文件夹。
 | `meetup-copy` | 讲者材料 → 五份文案，按渠道语气；生成交接包 |
 | `meetup-publish` | 在已登录的浏览器里发布到 meetup.com 的逐步操作（建活动、群发、改地址） |
 | `xiaohongshu-publish` | 小红书创作平台的逐步操作：3:4 图、20 字标题、1000 字正文、10 个话题 |
-| `linkedin-recap` | 逐字稿 + 照片 → ≤900 字的领英 recap（一句 hook、三条要点、一句原话），你确认后从已登录的 Chrome 发出 |
+| `event-recap` | 逐字稿 + 照片 → 领英 recap（≤900 字）和小红书 recap（本地口语），你确认后分别从已登录的 Chrome 发出 |
 | `event-analytics` | 会后复盘：每个数字去哪读（领英 analytics、meetup 到场、小红书数据、微信接龙、Teams），评论原话，然后 `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md)（同 `AGENTS.md`）是给 agent 的地图：命令、不变量、怎么验证。
 原则：**固定流程是代码，判断是 skill。** 助手不需要每次推理怎么安装、渲染、校验；它只写文案、读校验结果。
 
-## 8. 换一个社区用
+## 8. 测试
+
+```bash
+npm test        # 约 10 秒：模板引擎、配置不变量、示例活动端到端构建、校验器拒绝用例
+```
+集成测试真的构建 `events/example.json`，逐个断言交接文件名、小红书 3:4 导出、微信三个版本、平台字数上限，以及旧文件不会在重跑后残留。校验器测试证明 85 字标题和只剩一个字的孤行会被拒绝并提示「改措辞」。
+
+各平台发布标准（横竖图尺寸、字数、话题上限，每条带来源和日期）在 [`config/platforms.json`](config/platforms.json)。
+
+## 9. 换一个社区用
 
 1. 换掉 `assets/brand/*` 和 `config/citanz.json`。
 2. 把你的海报设计量进 `design/`（方法见 [`design/how-the-canva-design-was-measured.md`](design/how-the-canva-design-was-measured.md)），调整 `templates/posters/`。

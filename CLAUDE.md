@@ -8,14 +8,28 @@ npm run build events/<event>.json    # THE command. Self-installs deps + Chromiu
 npm run example                      # same on events/example.json (smoke test — must end OK with no TODO list)
 npm run render|validate|copy events/<event>.json   # run one step alone
 npm run report events/<event>.json   # STEP 4, post-event: `results` block → output/<slug>/report/复盘-post-<topic>-<date>.md
+npm test                             # unit + integration + validator tests (~10 s, renders the example)
 docker compose run --rm build events/<event>.json  # same pipeline in the Playwright image
 ```
+
+## Where to look (question → file)
+| You need… | Open |
+|---|---|
+| what a field means / which fields exist | `events/schema.json`, then `events/example.json` |
+| the org's fixed wording, fee, bank, schedule, who owns a channel, file naming | `config/citanz.json` |
+| a platform's image size / text limits / topic cap (with source + date) | `config/platforms.json` |
+| why a poster element is where it is | `design/poster_<name>_spec.json` |
+| how to change a template safely | `design/how-the-canva-design-was-measured.md` → edit spec → template → `npm run example` |
+| the click recipe for a platform | `.claude/skills/<platform>-publish/SKILL.md` (index: `.claude/skills/README.md`) |
+| what happened at a past event | `output/<slug>/report/`, `events/<slug>.json` `results` |
+| proof the pipeline still works | `npm test` (19 tests: engine, config, end-to-end build, validator rejections) |
 
 ## Where things are (folder order = data flow)
 ```
 events/            INPUT. One JSON per event, name = slug = <date>-<topic>-<speaker>. schema.json = field reference, example.json = full sample.
                    Real events + speaker photos are git-ignored; only example.json / assets/speakers/scott.png are public.
-config/citanz.json Org constants: fee, bank, hashtags, house schedule (18:00 doors / 18:30 talk+stream / 20:00), channel owners, copy file naming.
+config/citanz.json Org constants: fee, bank, hashtags, house schedule (18:00 doors / 18:30 talk+stream / 20:00), channel owners, copy file naming, WeChat group variants, recap defaults.
+config/platforms.json  Per-platform image sizes + copy limits with provenance; read by exports and by the copy step's limit checks.
 assets/            brand/ (locked) · fonts/ (Arimo + Noto Sans SC, self-hosted) · sponsors/ · speakers/
 templates/posters/ <name>/template.html + meta.json ({{vars}}, absolute px on a fixed canvas; meta.exports = extra platform canvases, e.g. portrait → .xhs.png 3:4) · fit.js
 templates/copy/    linkedin · xiaohongshu · meetup · wechat · teams · linkedin-recap · report .md ({{var}} {{#if}} {{#each}})
@@ -23,8 +37,10 @@ design/            poster_<name>_spec.json (measured from Canva, source of truth
 src/build.js       entry: env check, then spawns src/steps/1-render-posters.js → 2-validate-posters.js → 3-write-copy.js (stop on first failure)
 src/steps/4-write-report.js   post-event, run separately: events/<slug>.json `results` → 复盘 report (templates/copy/report.md)
 src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataUri, esc, readJson
+src/lib/template.js  the {{var}} / {{#if}} / {{#each}} engine + plainText() — shared by steps 3 and 4
+test/              node:test suites; `npm test`
 output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xhs.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/ report/
-.claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → announcements + pack) · meetup-publish (meetup.com) · xiaohongshu-publish (小红书) · event-analytics (复盘: numbers + comments → report) · linkedin-recap (transcript + photos → ≤900-char recap → post)
+.claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → announcements + pack) · meetup-publish (meetup.com) · xiaohongshu-publish (小红书) · event-recap (transcript + photos → LinkedIn ≤900 + 小红书 recaps → post) · event-analytics (复盘) — index + order: .claude/skills/README.md
 ```
 
 ## Invariants (do not break)
@@ -39,11 +55,13 @@ output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xh
 - **Platform image standards are exports, not re-designs:** `meta.exports` pads the finished poster onto the platform's canvas (小红书 3:4) with the brand colour; never rescale or crop.
 - **Channel folders are wiped and rebuilt on every copy run** so a renamed/removed file can't survive with stale content (e.g. an old venue).
 - **Hand-off ownership:** LinkedIn + 小红书 → CITANZ marketing (they get `linkedin/`, `xiaohongshu/`); meetup.com, WeChat, Teams → organiser.
-- **LinkedIn recap ≤ 900 chars:** hook + 3 takeaways + 1 quote; thanks/hashtags come from the template. `recap` block in the event JSON; photos in `assets/photos/<slug>/` (git-ignored), first = lead.
+- **Recaps:** LinkedIn ≤ 900 chars (hook + 3 takeaways + 1 quote); 小红书 title ≤ 20 / body ≤ 1000 / topics ≤ 10, local casual voice. Thanks/hashtags come from templates. `recap` block in the event JSON; photos in `assets/photos/<slug>/` (git-ignored), first = lead.
+- **Platform limits are enforced in the copy step** from `config/platforms.json` (title/body/topic counts) — a breach fails the build, same as a missing field.
 - **Every post-event number carries `checked` + `source`** (results block); the report prints them. No number without provenance.
 - **Fixed process = code, judgement = skill.** Never re-derive setup/render/validate in prompts.
 
 ## Verify a change
+0. `npm test` must pass (it builds the example and asserts on every hand-off file, the 3:4 export, WeChat variants, limits, and that the validator rejects long/orphan titles).
 1. `npm run example` prints `OK: …` and `wrote output/2026-08-26-blockchain/{…}` with no TODO list.
 2. Compare `output/2026-08-26-blockchain/*.png` with `docs/images/*` (regenerate those previews if the design legitimately changed).
 3. Poster/fit/validator changes: also try an ~85-char title and a 3-line venue — the FAIL message must name the block and say *reword*.

@@ -8,25 +8,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, loadEvent, readJson } from '../lib/event.js';
+import { fill as fillTpl, plainText } from '../lib/template.js';
 
 const eventArg = process.argv[2];
 const ev = loadEvent(eventArg);
 const eventRel = path.relative(ROOT, path.resolve(ROOT, eventArg));
 const cfg = readJson('config/citanz.json');
 
-// ---------- tiny template engine: {{a.b}}, {{#if a}}..{{/if}}, {{#each a}}{{.}}{{/each}} ----------
-const get = (obj, keyPath) => keyPath === '.' ? obj['.'] : keyPath.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
-function fill(tpl, ctx, file) {
-  tpl = tpl.replace(/\{\{#each ([\w.]+)\}\}([\s\S]*?)\{\{\/each\}\}/g, (_, k, body) =>
-    (get(ctx, k) || []).map(item => fill(body, typeof item === 'object' ? { ...ctx, ...item, '.': item } : { ...ctx, '.': item }, file)).join(''));
-  tpl = tpl.replace(/\{\{#if ([\w.]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (_, k, body) => (get(ctx, k) ? fill(body, ctx, file) : ''));
-  return tpl.replace(/\{\{([\w.]+)\}\}/g, (_, k) => {
-    const v = get(ctx, k);
-    if (v === undefined || v === null || v === '') { missing.add(`${file}: {{${k}}}`); return `[TODO ${k}]`; }
-    return String(v);
-  });
-}
 const missing = new Set();
+const fill = (tpl, ctx, file) => fillTpl(tpl, ctx, (k) => { missing.add(`${file}: {{${k}}}`); return `[TODO ${k}]`; });
+const platforms = readJson('config/platforms.json');
 
 // ---------- derived fields ----------
 const zh = ev.zh || {};
@@ -73,6 +64,19 @@ const ctx = {
   organiser_name: ev.organiser_name || 'Gabriel',
 };
 
+// ---------- platform limits (config/platforms.json) — a violation fails the build like a missing field ----------
+function checkLimits(label, platform, { title, body }) {
+  const lim = platforms[platform].copy;
+  if (title != null && lim.title_max_chars && [...title].length > lim.title_max_chars) missing.add(`${label}: title is ${[...title].length} chars, ${platform} allows ${lim.title_max_chars}`);
+  if (body != null) {
+    const n = [...body].length, max = lim.body_max_chars || lim.post_max_chars;
+    if (max && n > max) missing.add(`${label}: body is ${n} chars, ${platform} allows ${max}`);
+    if (lim.recap_house_limit && label.includes('recap') && n > lim.recap_house_limit) missing.add(`${label}: ${n} chars, house limit ${lim.recap_house_limit} — cut it`);
+    const topics = (body.match(/(^|\s)#[^\s#]+/g) || []).length;
+    if (lim.topics_max && topics > lim.topics_max) missing.add(`${label}: ${topics} topics, ${platform} allows ${lim.topics_max}`);
+  }
+}
+
 // ---------- write hand-off folders ----------
 const outRoot = path.join(ROOT, 'output', ev.slug);
 // Global naming rule for public copy: <channel>-post-<topic>-<date>.md (config/citanz.json handoff_naming)
@@ -98,13 +102,13 @@ const attach = (channel) => {
 
 const liMd = fill(tpl('linkedin.md'), ctx, 'linkedin');
 write('linkedin', nameFor('linkedin'), liMd); attach('linkedin');
-// LinkedIn's composer is plain text: .txt = no markdown escapes, no bold markers, no editor note
-const liPlain = (md) => md.replace(/^\*.*\*\n\n---\n\n/s, '').replace(/\\#/g, '#').replace(/\*\*(.+?)\*\*/g, '$1');
-write('linkedin', nameFor('linkedin', 'txt'), liPlain(liMd));
+write('linkedin', nameFor('linkedin', 'txt'), plainText(liMd));
+checkLimits('linkedin post', 'linkedin', { body: plainText(liMd) });
 const xhsMd = fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu');
 write('xiaohongshu', nameFor('xiaohongshu'), xhsMd); attach('xiaohongshu');
 // 小红书 has a separate title field and no markdown: .txt = body only, bold markers stripped (paste as-is)
-write('xiaohongshu', nameFor('xiaohongshu', 'txt'), xhsMd.replace(/^\*\*.+\*\*\n\n?/, '').replace(/\*\*(.+?)\*\*/g, '$1'));
+write('xiaohongshu', nameFor('xiaohongshu', 'txt'), plainText(xhsMd));
+checkLimits('小红书 post', 'xiaohongshu', { title: ctx.title_zh, body: plainText(xhsMd) });
 const meetupMd = fill(tpl('meetup.md'), ctx, 'meetup');
 write('meetup', nameFor('meetup'), meetupMd); attach('meetup');
 // meetup.com's editor is plain text: strip markdown so the file can be pasted as-is
@@ -140,11 +144,19 @@ if (ev.recap?.linkedin) {
   const recapName = cfg.handoff_naming.recap_pattern.replace('{channel}', cfg.handoff_naming.channel_labels.linkedin).replace('{topic}', topic).replace('{date}', evDate);
   const recapMd = fill(tpl('linkedin-recap.md'), rctx, 'linkedin-recap');
   write('linkedin', recapName, recapMd);
-  write('linkedin', recapName.replace(/\.md$/, '.txt'), liPlain(recapMd));
+  write('linkedin', recapName.replace(/\.md$/, '.txt'), plainText(recapMd));
+  checkLimits('linkedin recap', 'linkedin', { body: plainText(recapMd) });
+  if (ev.recap.xiaohongshu) {
+    const xr = fill(tpl('xiaohongshu-recap.md'), rctx, 'xiaohongshu-recap');
+    const xrName = recapName.replace(cfg.handoff_naming.channel_labels.linkedin, cfg.handoff_naming.channel_labels.xiaohongshu);
+    write('xiaohongshu', xrName, xr);
+    write('xiaohongshu', xrName.replace(/\.md$/, '.txt'), plainText(xr));
+    checkLimits('小红书 recap', 'xiaohongshu', { title: ev.recap.xiaohongshu.title, body: plainText(xr) });
+  }
   (ev.recap.photos || []).forEach((src, i) => {
     const abs = path.resolve(ROOT, src);
     if (!fs.existsSync(abs)) { missing.add(`recap photo not found: ${src}`); return; }
-    fs.copyFileSync(abs, path.join(outRoot, 'linkedin', `recap-${String(i + 1).padStart(2, '0')}-${path.basename(src)}`));
+    for (const ch of ['linkedin', 'xiaohongshu']) fs.copyFileSync(abs, path.join(outRoot, ch, `recap-${String(i + 1).padStart(2, '0')}-${path.basename(src)}`));
   });
 }
 

@@ -23,7 +23,8 @@
 5. [Folder map](#5-folder-map) — read this to know where things live
 6. [Rules the tool enforces](#6-rules-the-tool-enforces)
 7. [Using it with an AI assistant](#7-using-it-with-an-ai-assistant)
-8. [Adapting it for another community](#8-adapting-it-for-another-community)
+8. [Tests](#8-tests)
+9. [Adapting it for another community](#9-adapting-it-for-another-community)
 
 Deeper reading: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) has the call graph, the data model (ERD), the mind map and the design decisions.
 
@@ -131,7 +132,7 @@ House rules (fee, 18:00 doors / 18:30 start, thank-you line, hashtags) live in `
 
 ## 7. Using it with an AI assistant
 
-Three skills in `.claude/skills/` (Claude Code loads them automatically; other agents read the same Markdown):
+Six skills in `.claude/skills/` (index and order: [`.claude/skills/README.md`](.claude/skills/README.md)) (Claude Code loads them automatically; other agents read the same Markdown):
 
 | Skill | Does |
 |---|---|
@@ -139,13 +140,22 @@ Three skills in `.claude/skills/` (Claude Code loads them automatically; other a
 | `meetup-copy` | speaker notes → five announcements in the right voice; builds the hand-off pack |
 | `meetup-publish` | click-by-click recipe for meetup.com in a logged-in browser (create, announce, change venue) |
 | `xiaohongshu-publish` | click-by-click recipe for 小红书 creator platform: 3:4 image, 20-char title, 1000-char body, 10 topics |
-| `linkedin-recap` | transcript + photos → a ≤ 900-char LinkedIn recap (hook, 3 takeaways, 1 quote), approval, then posts it from your logged-in Chrome |
+| `event-recap` | transcript + photos → LinkedIn recap (≤ 900 chars) and 小红书 recap (local voice), approval, then posts each from your logged-in Chrome |
 | `event-analytics` | post-event 复盘: where to read each number (LinkedIn analytics, meetup attendees, 小红书 数据, WeChat 接龙, Teams), quotes verbatim, then `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md) (= `AGENTS.md`) is the agent's map: commands, invariants, how to verify.
 Principle: **fixed process is code, judgement is a skill.** The assistant never re-derives how to install, render or validate; it writes prose and reads the validator's verdict.
 
-## 8. Adapting it for another community
+## 8. Tests
+
+```bash
+npm test        # ~10 s: template engine, config invariants, end-to-end build of the example, validator rejections
+```
+The integration test builds `events/example.json` and asserts on every hand-off file name, the 3:4 小红书 export, the three WeChat variants, platform limits, and that a stale file cannot survive a rerun. The validator test proves an 85-char title and a one-character orphan line are rejected with a *reword* message.
+
+Platform standards (image sizes horizontal/vertical, text limits, topic caps — each with source and date) live in [`config/platforms.json`](config/platforms.json).
+
+## 9. Adapting it for another community
 
 1. Replace `assets/brand/*` and `config/citanz.json`.
 2. Measure your poster design into `design/` (method: [`design/how-the-canva-design-was-measured.md`](design/how-the-canva-design-was-measured.md)) and adjust `templates/posters/`.

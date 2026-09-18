@@ -1,0 +1,40 @@
+{
+  "$comment": "Publishing standards per platform. Every number carries where it was read (source) and when (checked). Poster exports (meta.exports) and copy-length validation (3-write-copy.js) read this file; skills quote it instead of re-deriving.",
+  "linkedin": {
+    "image": {
+      "feed_recommended": { "w": 1080, "h": 1080, "aspect": "1:1", "note": "square fills the feed card; 4:5 (1080x1350) is the other recommended feed shape" },
+      "landscape_link_preview": { "w": 1200, "h": 628, "aspect": "1.91:1", "note": "our landscape poster; shows with bars in the feed card" },
+      "portrait_max": { "aspect": "4:5" },
+      "photos": { "aspect": "4:3 displays in full; first image is shown largest in a multi-image post" }
+    },
+    "copy": { "post_max_chars": 3000, "recap_house_limit": 900, "hashtags_recommended": "3-10" },
+    "source": "linkedin.com composer + observed feed rendering", "checked": "2026-09-18"
+  },
+  "xiaohongshu": {
+    "image": {
+      "recommended": { "aspect": "3:4", "w": 1242, "h": 1656, "note": "platform text: 推荐上传 3:4 或 2:1 之间，分辨率不低于 720*960，超过 1280P 用网页端上传更清晰" },
+      "min": { "w": 720, "h": 960 },
+      "aspect_range": ["3:4", "2:1"],
+      "max_size_mb": 32,
+      "formats": ["png", "jpg", "jpeg", "webp"],
+      "max_images": 18
+    },
+    "copy": { "title_max_chars": 20, "body_max_chars": 1000, "topics_max": 10, "markdown": false },
+    "source": "creator.xiaohongshu.com 上传图文 page text + editor counters", "checked": "2026-09-18"
+  },
+  "meetup": {
+    "image": { "featured": { "aspect": "16:9 crop offered; 1.91:1 accepted", "max_size_mb": 10, "max_megapixels": 24, "formats": ["jpeg", "gif", "png"] } },
+    "copy": { "description": "plain text (no markdown); ~2.6k chars typed fine" },
+    "source": "meetup.com photo dialog text", "checked": "2026-09-14"
+  },
+  "wechat": {
+    "image": { "portrait": { "aspect": "portrait poster as-is; groups show a thumbnail, full image on tap" } },
+    "copy": { "hashtag_line": "#接龙 must be line 1 for local groups (WeChat converts it into a 接龙 thread); never for the nationwide group" },
+    "source": "house rule (Gabriel, 2026-09-17)", "checked": "2026-09-17"
+  },
+  "teams": {
+    "image": { "banner": { "aspect": "landscape poster; Teams webinar cover is optional" } },
+    "copy": { "title_pattern": "CITANZ Webinar - <合作方>：<主题>", "description": "defaults to the WeChat body" },
+    "source": "house rule", "checked": "2026-09-17"
+  }
+}

@@ -4,18 +4,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, loadEvent, readJson } from '../lib/event.js';
+import { fill as fillTpl } from '../lib/template.js';
+const fill = (t, ctx) => fillTpl(t, ctx, () => '—');
 
 const ev = loadEvent(process.argv[2]);
 const cfg = readJson('config/citanz.json');
 const R = ev.results;
 if (!R) { console.error('events/<event>.json has no `results` block yet — see .claude/skills/event-analytics/SKILL.md'); process.exit(2); }
 
-const get = (o, k) => k === '.' ? o['.'] : k.split('.').reduce((x, p) => (x == null ? undefined : x[p]), o);
-function fill(t, ctx) {
-  t = t.replace(/\{\{#each ([\w.]+)\}\}([\s\S]*?)\{\{\/each\}\}/g, (_, k, b) => (get(ctx, k) || []).map(i => fill(b, typeof i === 'object' ? { ...ctx, ...i, '.': i } : { ...ctx, '.': i })).join(''));
-  t = t.replace(/\{\{#if ([\w.]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (_, k, b) => (get(ctx, k) ? fill(b, ctx) : ''));
-  return t.replace(/\{\{([\w.]+)\}\}/g, (_, k) => { const v = get(ctx, k); return v == null || v === '' ? '—' : String(v); });
-}
 
 // Flatten results.<channel>.<metric> into table rows; `url` and `checked` are metadata, not metrics.
 const metrics = [];
