@@ -35,7 +35,7 @@ You describe one meetup in one JSON file. The tool produces everything you need 
 
 | Folder in `output/<event>/` | Give it to | Contains |
 |---|---|---|
-| `linkedin/` | marketing colleague | `领英-post-<topic>-<date>.md` + landscape poster |
+| `linkedin/` | marketing colleague / you | `领英-post-<topic>-<date>.md` + landscape poster; after the event `领英-recap-<topic>-<date>.md` + photos |
 | `xiaohongshu/` | marketing colleague | `小红书-post-<topic>-<date>.md` / `.txt` + poster on a 3:4 canvas (`.portrait.xhs.png`, 小红书's recommended ratio) |
 | `meetup/` | you | `meetup-post-<topic>-<date>.md` (+ `.txt` to paste) + landscape poster |
 | `wechat/` | you | `微信-本地会员群-post-…md` (#接龙), `微信-本地非会员群-post-…md` (#接龙 + $5 line), `微信-CITANZ大群-post-…md` (online-first, no address) + portrait poster |
@@ -139,6 +139,7 @@ Three skills in `.claude/skills/` (Claude Code loads them automatically; other a
 | `meetup-copy` | speaker notes → five announcements in the right voice; builds the hand-off pack |
 | `meetup-publish` | click-by-click recipe for meetup.com in a logged-in browser (create, announce, change venue) |
 | `xiaohongshu-publish` | click-by-click recipe for 小红书 creator platform: 3:4 image, 20-char title, 1000-char body, 10 topics |
+| `linkedin-recap` | transcript + photos → a ≤ 900-char LinkedIn recap (hook, 3 takeaways, 1 quote), approval, then posts it from your logged-in Chrome |
 | `event-analytics` | post-event 复盘: where to read each number (LinkedIn analytics, meetup attendees, 小红书 数据, WeChat 接龙, Teams), quotes verbatim, then `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md) (= `AGENTS.md`) is the agent's map: commands, invariants, how to verify.

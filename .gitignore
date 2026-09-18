@@ -9,3 +9,6 @@ events/*.json
 !events/schema.json
 assets/speakers/*
 !assets/speakers/scott.png
+
+# Event photos (people) stay local
+assets/photos/

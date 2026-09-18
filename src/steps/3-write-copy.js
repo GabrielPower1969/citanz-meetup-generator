@@ -96,7 +96,11 @@ const attach = (channel) => {
   else missing.add(`${channel}: poster ${path.relative(ROOT, src)} not found — run render.js first`);
 };
 
-write('linkedin', nameFor('linkedin'), fill(tpl('linkedin.md'), ctx, 'linkedin')); attach('linkedin');
+const liMd = fill(tpl('linkedin.md'), ctx, 'linkedin');
+write('linkedin', nameFor('linkedin'), liMd); attach('linkedin');
+// LinkedIn's composer is plain text: .txt = no markdown escapes, no bold markers, no editor note
+const liPlain = (md) => md.replace(/^\*.*\*\n\n---\n\n/s, '').replace(/\\#/g, '#').replace(/\*\*(.+?)\*\*/g, '$1');
+write('linkedin', nameFor('linkedin', 'txt'), liPlain(liMd));
 const xhsMd = fill(tpl('xiaohongshu.md'), ctx, 'xiaohongshu');
 write('xiaohongshu', nameFor('xiaohongshu'), xhsMd); attach('xiaohongshu');
 // 小红书 has a separate title field and no markdown: .txt = body only, bold markers stripped (paste as-is)
@@ -125,6 +129,24 @@ for (const [g, spec] of Object.entries(cfg.wechat_groups)) {
 }
 attach('wechat');
 write('teams', nameFor('teams'), fill(tpl('teams.md'), ctx, 'teams')); attach('teams');
+
+// Post-event LinkedIn recap (optional): events/<slug>.json `recap` → linkedin/领英-recap-<topic>-<date>.md + the photos, in order.
+if (ev.recap?.linkedin) {
+  const thanked = (ev.sponsors || []).filter(s => s.thank).map(s => s.legal_name || s.name);
+  const rctx = { ...ctx, recap: ev.recap,
+    sponsor_thanks_recap: thanked.length ? joinEn(thanked) : '',
+    venue_short_en: ev.venue_short_en || (ev.venue_full || ev.venue).split('\n')[0],
+    recap_next_line: ev.recap.next_line || cfg.recap.next_line };
+  const recapName = cfg.handoff_naming.recap_pattern.replace('{channel}', cfg.handoff_naming.channel_labels.linkedin).replace('{topic}', topic).replace('{date}', evDate);
+  const recapMd = fill(tpl('linkedin-recap.md'), rctx, 'linkedin-recap');
+  write('linkedin', recapName, recapMd);
+  write('linkedin', recapName.replace(/\.md$/, '.txt'), liPlain(recapMd));
+  (ev.recap.photos || []).forEach((src, i) => {
+    const abs = path.resolve(ROOT, src);
+    if (!fs.existsSync(abs)) { missing.add(`recap photo not found: ${src}`); return; }
+    fs.copyFileSync(abs, path.join(outRoot, 'linkedin', `recap-${String(i + 1).padStart(2, '0')}-${path.basename(src)}`));
+  });
+}
 
 const readme = `# ${ctx.title_plain} — hand-off pack
 

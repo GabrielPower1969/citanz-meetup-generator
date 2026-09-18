@@ -437,6 +437,50 @@
           "type": "string"
         }
       }
+    },
+    "recap": {
+      "type": "object",
+      "description": "Post-event recap. Written from the transcript by the linkedin-recap skill; photos are copied into linkedin/ in order (first = the one LinkedIn shows largest).",
+      "properties": {
+        "linkedin": {
+          "type": "object",
+          "required": [
+            "hook",
+            "thanks_speaker",
+            "takeaways",
+            "closing"
+          ],
+          "properties": {
+            "hook": {
+              "type": "string"
+            },
+            "thanks_speaker": {
+              "type": "string"
+            },
+            "takeaways": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 3,
+              "maxItems": 6
+            },
+            "closing": {
+              "type": "string"
+            }
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Paths under assets/photos/<slug>/, EXIF-corrected, ≤ 2048 px on the long side"
+        },
+        "next_line": {
+          "type": "string"
+        }
+      }
     }
   }
 }

@@ -101,7 +101,14 @@
       "wechat_member": "微信-本地会员群",
       "wechat_public": "微信-本地非会员群",
       "teams": "Teams",
-      "wechat_national": "微信-CITANZ大群"
-    }
+      "wechat_national": "微信-CITANZ大群",
+      "linkedin_recap": "领英"
+    },
+    "recap_pattern": "{channel}-recap-{topic}-{date}.md"
+  },
+  "recap": {
+    "$comment": "Post-event LinkedIn recap. Prose in events/<slug>.json recap.linkedin; photos listed in recap.photos (first = lead image).",
+    "next_line": "If you would like to speak at a future CITANZ meetup, or just want to hear about the next one, follow CITANZ or get in touch.",
+    "file_label": "recap"
   }
 }

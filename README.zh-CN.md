@@ -35,7 +35,7 @@
 
 | `output/<活动>/` 里的文件夹 | 给谁 | 内容 |
 |---|---|---|
-| `linkedin/` | 营销同事 | `领英-post-<主题>-<日期>.md` + 横版海报 |
+| `linkedin/` | 营销同事 / 你 | `领英-post-<主题>-<日期>.md` + 横版海报；会后加 `领英-recap-<主题>-<日期>.md` + 照片 |
 | `xiaohongshu/` | 营销同事 | `小红书-post-<主题>-<日期>.md` / `.txt` + 3:4 画布版海报（`.portrait.xhs.png`，小红书推荐比例） |
 | `meetup/` | 你 | `meetup-post-<主题>-<日期>.md`（+ 可直接粘贴的 `.txt`）+ 横版海报 |
 | `wechat/` | 你 | `微信-本地会员群-post-…md`（#接龙）、`微信-本地非会员群-post-…md`（#接龙 + $5 行）、`微信-CITANZ大群-post-…md`（只强调线上，不写地址）+ 竖版海报 |
@@ -139,6 +139,7 @@ output/      生成物，git 忽略。一个活动一个文件夹。
 | `meetup-copy` | 讲者材料 → 五份文案，按渠道语气；生成交接包 |
 | `meetup-publish` | 在已登录的浏览器里发布到 meetup.com 的逐步操作（建活动、群发、改地址） |
 | `xiaohongshu-publish` | 小红书创作平台的逐步操作：3:4 图、20 字标题、1000 字正文、10 个话题 |
+| `linkedin-recap` | 逐字稿 + 照片 → ≤900 字的领英 recap（一句 hook、三条要点、一句原话），你确认后从已登录的 Chrome 发出 |
 | `event-analytics` | 会后复盘：每个数字去哪读（领英 analytics、meetup 到场、小红书数据、微信接龙、Teams），评论原话，然后 `npm run report` |
 
 [`CLAUDE.md`](CLAUDE.md)（同 `AGENTS.md`）是给 agent 的地图：命令、不变量、怎么验证。
