@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>citanz-meetup-generator — promo</title>
+<meta name="viewport" content="width=1080">
+<style>
+/* ─── fonts (self-hosted, OFL) ─────────────────────────────────────────── */
+@font-face{font-family:"Space Grotesk";src:url(fonts/SpaceGrotesk.woff2) format("woff2");font-weight:300 700;font-display:block}
+@font-face{font-family:"Inter";src:url(fonts/Inter.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono.woff2) format("woff2");font-weight:100 800;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url(../assets/fonts/NotoSansSC-Bold.otf) format("opentype");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url(../assets/fonts/NotoSansSC-Regular.otf) format("opentype");font-weight:400;font-display:block}
+
+/* ─── tokens ───────────────────────────────────────────────────────────── */
+:root{
+  --bg:#0A0F1E; --bg2:#0F1730;
+  --ink:#F5F7FF; --muted:#8B93B0; --dim:#4B5473;
+  --blue:#008FFF;           /* CITANZ brand */
+  --violet:#7C5CFF; --mint:#22D3A5; --coral:#FF6B6B; --rose:#FF2442;
+  --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.10);
+  --display:"Space Grotesk","Inter",system-ui,sans-serif;
+  --body:"Inter","Noto Sans SC",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --cjk:"Noto Sans SC","PingFang SC",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+/* ─── stage: fills the viewport (1080×1350 or 1080×1920); safe box is centred */
+.stage{position:fixed;inset:0;overflow:hidden;
+  background:
+    radial-gradient(900px 700px at 90% -10%, rgba(0,143,255,.28), transparent 60%),
+    radial-gradient(800px 700px at -10% 110%, rgba(124,92,255,.22), transparent 60%),
+    linear-gradient(180deg,var(--bg2),var(--bg) 60%);}
+.stage::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.085) 1.2px, transparent 1.4px);
+  background-size:28px 28px;mask-image:radial-gradient(70% 70% at 50% 45%, #000 40%, transparent 100%)}
+.safe{position:absolute;left:0;top:50%;width:1080px;height:1350px;transform:translateY(-50%)}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.pad{position:absolute;left:72px;right:72px}
+
+/* chrome: tiny header + progress bar (always visible) */
+.hdr{position:absolute;left:72px;right:72px;top:64px;display:flex;justify-content:space-between;align-items:center;
+  font:600 20px/1 var(--mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.hdr b{display:inline-flex;align-items:center;gap:12px;color:var(--ink)}
+.hdr b img{height:26px;filter:drop-shadow(0 0 12px rgba(0,143,255,.6))}
+.progress{position:absolute;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.06)}
+.progress i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--violet))}
+
+/* type */
+.label{font:600 22px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--blue)}
+.label.violet{color:var(--violet)} .label.mint{color:var(--mint)}
+h1{font:700 96px/.98 var(--display);letter-spacing:-.035em;color:var(--ink)}
+h1 .lite{color:var(--muted)} h1 .blue{color:var(--blue)} h1 .mint{color:var(--mint)} h1 .violet{color:var(--violet)}
+h1.xl{font-size:150px} h1.md{font-size:76px}
+.sub{font:400 30px/1.35 var(--body);color:var(--muted);letter-spacing:-.01em}
+.sub b{color:var(--ink);font-weight:600}
+.cap{font:500 24px/1.4 var(--body);color:var(--muted)}
+.row{display:block}
+
+/* cards */
+.card{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px)}
+.card .bar{height:52px;display:flex;align-items:center;gap:8px;padding:0 20px;border-bottom:1px solid var(--line);
+  font:500 18px/1 var(--mono);color:var(--muted)}
+.card .bar i{width:12px;height:12px;border-radius:50%;background:#3A4260}
+.card .bar i:nth-child(1){background:#FF5F57}.card .bar i:nth-child(2){background:#FEBC2E}.card .bar i:nth-child(3){background:#28C840}
+.card .bar span{margin-left:auto}
+pre{font:500 22px/1.65 var(--mono);color:#C9D1E8;padding:26px 30px;white-space:pre;tab-size:2}
+pre .k{color:#7DD3FC}pre .s{color:#A5F3C4}pre .p{color:#8B93B0}pre .c{color:#5B6485}
+pre .cmd{color:var(--ink);font-weight:600}pre .ok{color:var(--mint)}pre .dim{color:var(--muted)}pre .num{color:var(--violet)}
+.type{display:inline-block;clip-path:inset(0 100% 0 0)}
+
+/* to-do rows (scene 0) */
+.todo{position:absolute;left:72px;right:72px;height:86px;border-radius:18px;background:var(--card);border:1px solid var(--line);
+  display:flex;align-items:center;gap:22px;padding:0 28px;font:500 32px/1 var(--body);color:var(--ink);letter-spacing:-.01em}
+.todo .n{font:600 20px/1 var(--mono);color:var(--muted);width:40px}
+.todo .t{position:relative}
+.todo .t::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:4px;background:var(--coral);border-radius:2px;
+  transform:scaleX(0);transform-origin:left}
+.todo.done .t::after{transform:scaleX(1)} .todo .h{margin-left:auto;font:500 22px/1 var(--mono);color:var(--dim)}
+
+/* figma-ish selection frame */
+.sel{position:absolute;outline:2px solid var(--blue);outline-offset:0}
+.sel::before,.sel::after,.sel .h1,.sel .h2{content:"";position:absolute;width:14px;height:14px;background:#fff;border:2px solid var(--blue);border-radius:3px}
+.sel::before{left:-8px;top:-8px}.sel::after{right:-8px;top:-8px}.sel .h1{left:-8px;bottom:-8px}.sel .h2{right:-8px;bottom:-8px}
+.sel .dim{position:absolute;left:50%;bottom:-46px;transform:translateX(-50%);white-space:nowrap;
+  background:var(--blue);color:#fff;font:600 18px/1 var(--mono);padding:8px 12px;border-radius:6px}
+.poster{position:absolute;border-radius:14px;box-shadow:0 40px 90px rgba(0,0,0,.55)}
+.poster img{display:block;width:100%;height:100%;border-radius:14px}
+
+/* cursor with name tag */
+.cur{position:absolute;left:0;top:0;pointer-events:none;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));z-index:10}
+.cur svg{width:34px;height:34px;display:block}
+.cur span{position:absolute;left:26px;top:28px;white-space:nowrap;border-radius:8px;padding:8px 12px;
+  font:600 19px/1 var(--body);color:#fff}
+.cur.gabriel svg path{fill:var(--violet)} .cur.gabriel span{background:var(--violet)}
+.cur.llm svg path{fill:var(--mint)} .cur.llm span{background:var(--mint);color:#052}
+
+/* channel chips (scene 3) */
+.chip{position:absolute;height:104px;width:452px;border-radius:20px;background:var(--card);border:1px solid var(--line);
+  display:flex;align-items:center;gap:18px;padding:0 22px}
+.chip .ic{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font:800 26px/1 var(--display);color:#fff;flex:none}
+.chip .nm{font:600 30px/1.1 var(--body);letter-spacing:-.01em}.chip .nm small{display:block;font:500 18px/1.4 var(--mono);color:var(--muted);letter-spacing:0}
+.chip .ok{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--mint);display:grid;place-items:center;color:#052;font:800 22px/1 var(--display);transform:scale(0)}
+
+/* chat (scene 3) */
+.bub{position:absolute;max-width:760px;padding:22px 28px;border-radius:24px;font:500 30px/1.35 var(--body);letter-spacing:-.01em}
+.bub.me{right:72px;background:var(--blue);color:#fff;border-bottom-right-radius:8px}
+.bub.ai{left:72px;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:8px}
+.bub.ai .mono{display:block;margin-top:14px;font:500 20px/1.5 var(--mono);color:var(--muted)}
+.bub .who{position:absolute;top:-30px;font:600 18px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bub.me .who{right:6px}.bub.ai .who{left:6px}
+
+/* analytics (scene 4) */
+.tile{position:absolute;width:296px;height:200px;border-radius:22px;background:var(--card);border:1px solid var(--line);padding:26px 28px}
+.tile .k{font:600 18px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tile .v{margin-top:18px;font:700 76px/1 var(--display);letter-spacing:-.04em}
+pre span[data-in]{display:inline-block}
+.tile .v small{font:600 26px/1 var(--display);color:var(--muted);letter-spacing:0;margin-left:8px}
+.tile .d{margin-top:10px;font:500 20px/1 var(--body);color:var(--mint)}
+.brow{position:absolute;left:72px;right:72px;height:64px;display:grid;grid-template-columns:200px 1fr 90px;align-items:center;gap:22px}
+.brow .l{font:600 26px/1 var(--body);color:var(--ink)}
+.brow .b{height:22px;border-radius:11px;background:rgba(255,255,255,.06);overflow:hidden}
+.brow .b i{display:block;height:100%;border-radius:11px;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--violet))}
+.brow .b.mint i{background:linear-gradient(90deg,var(--mint),#6EE7C9)}
+.brow .n{font:600 26px/1 var(--mono);color:var(--muted);text-align:right}
+.src{position:absolute;left:72px;right:72px;padding:18px 24px;border-radius:14px;border:1px dashed var(--line);
+  font:500 21px/1.5 var(--mono);color:var(--muted)}
+.src b{color:var(--mint);font-weight:600}
+
+/* result (scene 5) */
+.big{position:absolute;left:0;right:0;text-align:center;font:700 180px/1 var(--display);letter-spacing:-.05em}
+.big .x{position:relative;display:inline-block;color:var(--muted)}
+.big .x::after{content:"";position:absolute;left:-10px;right:-10px;top:50%;height:12px;border-radius:6px;background:var(--coral);transform:scaleX(0);transform-origin:left}
+.big.mint{color:var(--mint)}
+.stats{position:absolute;left:72px;right:72px;display:flex;justify-content:space-between}
+.stat{text-align:center}.stat .v{font:700 64px/1 var(--display);letter-spacing:-.04em;color:var(--ink)}
+.stat .k{margin-top:10px;font:600 18px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* cta (scene 6) */
+.gh{position:absolute;left:72px;right:72px;border-radius:26px;background:#0D1117;border:1px solid #30363D;padding:34px 38px;text-align:left}
+.gh .top{display:flex;align-items:center;gap:18px;font:600 26px/1 var(--body);color:#C9D1D9}
+.gh .top svg{width:44px;height:44px;fill:#fff}
+.gh .repo{margin-top:22px;font:700 44px/1.1 var(--display);letter-spacing:-.03em;color:#fff;word-break:break-all}
+.gh .repo span{color:#8B949E;font-weight:500}
+.gh .desc{margin-top:14px;font:400 24px/1.45 var(--body);color:#8B949E}
+.gh .btns{margin-top:28px;display:flex;gap:14px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;height:60px;padding:0 22px;border-radius:12px;border:1px solid #30363D;background:#21262D;
+  font:600 24px/1 var(--body);color:#C9D1D9}
+.btn .star{width:26px;height:26px;fill:none;stroke:#8B949E;stroke-width:2}
+.btn.on{background:#1F6FEB;border-color:#1F6FEB;color:#fff}.btn.on .star{fill:#FFD33D;stroke:#FFD33D}
+.btn .cnt{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);font:600 20px/1 var(--mono)}
+.tag{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #30363D;font:500 19px/1 var(--mono);color:#58A6FF;margin-right:8px}
+.foot{position:absolute;left:72px;right:72px;text-align:center;font:500 22px/1.6 var(--body);color:var(--muted)}
+.foot b{color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="safe">
+
+  <!-- persistent chrome -->
+  <div class="hdr" data-in="0.2">
+    <b><img src="assets/citanz-logo.png" alt="">meetup-generator</b>
+    <span>christchurch · nz</span>
+  </div>
+
+  <!-- ════ S0 · WHY (0–6) ════ -->
+  <section class="scene" data-in="0" data-out="5.7" data-fx="scene">
+    <div class="pad label" style="top:180px" data-in="0.3">why I built this</div>
+    <h1 class="pad" style="top:232px" data-in="0.55">Every meetup,<br><span class="lite">the same 3 hours.</span></h1>
+
+    <div class="todo" style="top:520px"  data-in="1.5" data-fx="left" data-strike="3.3"><span class="n">01</span><span class="t">Design the poster in Canva</span><span class="h">45 min</span></div>
+    <div class="todo" style="top:622px"  data-in="1.8" data-fx="left" data-strike="3.5"><span class="n">02</span><span class="t">Rewrite the announcement × 5 channels</span><span class="h">60 min</span></div>
+    <div class="todo" style="top:724px"  data-in="2.1" data-fx="left" data-strike="3.7"><span class="n">03</span><span class="t">Venue changed? Fix it in 7 places</span><span class="h">30 min</span></div>
+    <div class="todo" style="top:826px"  data-in="2.4" data-fx="left" data-strike="3.9"><span class="n">04</span><span class="t">Count RSVPs &amp; write the recap</span><span class="h">45 min</span></div>
+
+    <p class="pad sub" style="top:990px" data-in="4.2">I'm a developer. I'd rather <b>write it once</b> —<br>and let the community reuse it.</p>
+
+    <div class="cur gabriel" id="cur0"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>Gabriel · organiser</span></div>
+  </section>
+
+  <!-- ════ S1 · ONE JSON (5.7–11.6) ════ -->
+  <section class="scene" data-in="5.7" data-out="11.6" data-fx="scene">
+    <div class="pad label" style="top:180px" data-in="5.9">step 1 · describe the event</div>
+    <h1 class="pad" style="top:232px" data-in="6.1">One JSON in.<br><span class="lite">One command.</span></h1>
+
+    <div class="card" style="left:72px;right:72px;top:500px;height:380px" data-in="6.5" data-fx="scale">
+      <div class="bar"><i></i><i></i><i></i><span>events/2026-08-26-blockchain.json</span></div>
+<pre><span class="p">{</span>
+  <span class="k">"title"</span><span class="p">:</span>   <span class="s type" data-in="6.9">"Why We Need Blockchain, and What It Actually Is",</span>
+  <span class="k">"speaker"</span><span class="p">:</span> <span class="s type" data-in="7.6">{ "name": "Scott", "org": "Koala Technology" },</span>
+  <span class="k">"date"</span><span class="p">:</span>    <span class="s type" data-in="8.2">"Wednesday, 26 August 2026 · 6–8 PM",</span>
+  <span class="k">"venue"</span><span class="p">:</span>   <span class="s type" data-in="8.7">"Halswell Library – Hao Room"</span>
+<span class="p">}</span>  <span class="c" data-in="9.1">// prose here; fee, bank, agenda, hashtags live in code</span></pre>
+    </div>
+
+    <div class="card" style="left:72px;right:72px;top:920px;height:270px" data-in="9.3" data-fx="scale">
+      <div class="bar"><i></i><i></i><i></i><span>zsh</span></div>
+<pre><span class="dim">$</span> <span class="cmd type" data-in="9.5" data-cps="40">npm run build events/2026-08-26-blockchain.json</span>
+<span data-in="10.35"><span class="num">1</span> render    <span class="ok">✓</span> 2 posters + 3:4 export      <span class="dim">offline Chromium</span></span>
+<span data-in="10.6"><span class="num">2</span> validate  <span class="ok">✓</span> no overflow · no orphan lines</span>
+<span data-in="10.85"><span class="num">3</span> copy      <span class="ok">✓</span> 7 announcements · 5 channels <span class="dim">→ output/…/</span></span></pre>
+    </div>
+  </section>
+
+  <!-- ════ S2 · POSTERS (11.6–18) ════ -->
+  <section class="scene" data-in="11.6" data-out="18" data-fx="scene">
+    <div class="pad label" style="top:180px" data-in="11.8">step 2 · posters, rendered &amp; validated</div>
+    <h1 class="pad" style="top:232px" data-in="12">Two posters out.<br><span class="lite">Zero Canva.</span></h1>
+
+    <p class="pad cap" style="top:430px" data-in="12.3">Case study · CITANZ × Koala Tech · Blockchain, 26 Aug 2026</p>
+    <div class="poster sel" style="left:250px;top:490px;width:760px;height:398px" data-in="12.5" data-fx="right">
+      <img src="assets/poster-landscape.png" alt=""><i class="h1"></i><i class="h2"></i>
+      <span class="dim" style="left:auto;right:0;transform:none">landscape · 2400 × 1256 · LinkedIn</span>
+    </div>
+    <div class="poster sel" style="left:72px;top:640px;width:400px;height:566px" data-in="13.4" data-fx="up">
+      <img src="assets/poster-portrait.png" alt=""><i class="h1"></i><i class="h2"></i>
+      <span class="dim">portrait · 3:4 export · 小红书 / WeChat</span>
+    </div>
+
+    <div class="card" style="left:520px;top:980px;width:488px;padding:24px 28px;border-color:rgba(34,211,165,.5)" data-in="15" data-fx="scale">
+      <div class="label mint" style="font-size:18px">validator</div>
+      <div style="margin-top:14px;font:500 24px/1.6 var(--body);color:var(--ink)">
+        <div><span style="color:var(--mint)">✓</span>&nbsp; every line ≥ 40 % of the widest</div>
+        <div><span style="color:var(--mint)">✓</span>&nbsp; auto-fit shrink ≤ 15 %</div>
+        <div><span style="color:var(--mint)">✓</span>&nbsp; no overflow · no photo collision</div>
+      </div>
+      <div style="margin-top:14px;font:500 18px/1.5 var(--mono);color:var(--muted)">fail = "reword", never a broken poster</div>
+    </div>
+
+
+    <div class="cur llm" id="cur2"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>LLM · validator</span></div>
+  </section>
+
+  <!-- ════ S3 · CHANNELS (18–24.6) ════ -->
+  <section class="scene" data-in="18" data-out="24.6" data-fx="scene">
+    <div class="pad label" style="top:180px" data-in="18.2">step 3 · publish by talking</div>
+    <h1 class="pad" style="top:232px" data-in="18.4">Published<br><span class="blue">everywhere.</span></h1>
+
+    <div class="chip" style="left:72px;top:500px"  data-in="18.9" data-fx="up" data-ok="19.9"><div class="ic" style="background:#0A66C2">in</div><div class="nm">LinkedIn<small>landscape + copy</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:556px;top:500px" data-in="19.05" data-fx="up" data-ok="20.05"><div class="ic" style="background:#FF2442;font-family:var(--cjk);font-size:30px">红</div><div class="nm">RedNote<small>3:4 · 20/1000/10 limits</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:72px;top:624px"  data-in="19.2" data-fx="up" data-ok="20.2"><div class="ic" style="background:#F64060">M</div><div class="nm">meetup.com<small>create · announce · venue</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:556px;top:624px" data-in="19.35" data-fx="up" data-ok="20.35"><div class="ic" style="background:#07C160">微</div><div class="nm">WeChat × 3<small>#接龙 · local + nationwide</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:72px;top:748px"  data-in="19.5" data-fx="up" data-ok="20.5"><div class="ic" style="background:#6264A7">T</div><div class="nm">Teams<small>webinar link</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:556px;top:748px;border-style:dashed;background:transparent" data-in="19.65" data-fx="up"><div class="ic" style="background:var(--card);border:1px solid var(--line);color:var(--muted)">+</div><div class="nm" style="color:var(--muted)">your channel<small>one Markdown template</small></div></div>
+
+    <div class="bub me" style="top:930px" data-in="21" data-fx="up"><span class="who">you</span><span class="type" data-in="21.2" data-cps="34">Publish the blockchain meetup to 小红书.</span></div>
+    <div class="bub ai" style="top:1060px" data-in="22.6" data-fx="up"><span class="who">claude · xiaohongshu-publish skill</span>Done — note is live. <span style="color:var(--mint)">✓</span><span class="mono">3:4 image · title 18/20 · body 612/1000 · 10 topics</span></div>
+    <p class="pad cap" style="top:1250px" data-in="23.6">Just talk to the LLM. The skills do the clicking.</p>
+  </section>
+
+  <!-- ════ S4 · ANALYTICS (24.6–30.4) ════ -->
+  <section class="scene" data-in="24.6" data-out="30.4" data-fx="scene">
+    <div class="pad label violet" style="top:180px" data-in="24.8">step 4 · after the event</div>
+    <h1 class="pad" style="top:232px" data-in="25">…and it tracks<br><span class="violet">what happened.</span></h1>
+
+    <div class="tile" style="left:72px;top:500px"  data-in="25.5" data-fx="up"><div class="k">rsvps</div><div class="v count" data-count="20" data-in="25.7"></div><div class="d">meetup.com · checked</div></div>
+    <div class="tile" style="left:392px;top:500px" data-in="25.65" data-fx="up"><div class="k">recap posted</div><div class="v"><span class="count" data-count="900" data-in="25.85" style="display:inline-block"></span><small>chars</small></div><div class="d">LinkedIn · ≤ 900 rule</div></div>
+    <div class="tile" style="left:712px;top:500px" data-in="25.8" data-fx="up"><div class="k">turnaround</div><div class="v">+1<small>day</small></div><div class="d">transcript → recap</div></div>
+
+    <div class="brow" style="top:770px" data-in="26.4"><div class="l">LinkedIn</div><div class="b"><i data-grow="0.86" data-in="26.6"></i></div><div class="n">86 %</div></div>
+    <div class="brow" style="top:856px" data-in="26.55"><div class="l">小红书</div><div class="b mint"><i data-grow="0.62" data-in="26.75"></i></div><div class="n">62 %</div></div>
+    <div class="brow" style="top:942px" data-in="26.7"><div class="l">meetup</div><div class="b"><i data-grow="0.48" data-in="26.9"></i></div><div class="n">48 %</div></div>
+    <p class="pad cap" style="top:1015px;font:500 19px/1 var(--mono);color:var(--dim)" data-in="26.9">reach share by channel · illustrative</p>
+
+    <div class="src" style="top:1090px" data-in="28"><b>rule:</b> every number carries <b>checked</b> + <b>source</b> — no number without provenance.<br>results → <b>npm run report</b> → 复盘 markdown, ready for the next organiser.</div>
+  </section>
+
+  <!-- ════ S5 · RESULT (30.4–35) ════ -->
+  <section class="scene" data-in="30.4" data-out="35" data-fx="scene">
+    <div class="pad label mint" style="top:300px;text-align:center" data-in="30.6">the result</div>
+    <div class="big" style="top:380px" data-in="30.8" data-fx="up"><span class="x" data-strike="31.9">3 hours</span></div>
+    <div class="big mint" style="top:600px" data-in="32.2" data-fx="pop">3 minutes</div>
+    <h1 class="pad md" style="top:850px;text-align:center" data-in="32.9">Ops on autopilot.<br><span class="lite">Judgement stays human.</span></h1>
+
+    <div class="stats" style="top:1090px" data-in="33.6" data-fx="up">
+      <div class="stat"><div class="v">1</div><div class="k">command</div></div>
+      <div class="stat"><div class="v">2</div><div class="k">posters</div></div>
+      <div class="stat"><div class="v">7</div><div class="k">announcements</div></div>
+      <div class="stat"><div class="v">5</div><div class="k">channels</div></div>
+      <div class="stat"><div class="v">0</div><div class="k">canva</div></div>
+    </div>
+  </section>
+
+  <!-- ════ S6 · CTA (35–42) ════ -->
+  <section class="scene" data-in="35" data-out="60" data-fx="scene">
+    <div class="pad label" style="top:180px" data-in="35.2">open source · MIT</div>
+    <h1 class="pad" style="top:232px;font-size:86px" data-in="35.4">Steal it. <span class="lite">Star it.</span><br><span class="blue">Run your own.</span></h1>
+
+    <div class="gh" style="top:560px" data-in="36" data-fx="scale">
+      <div class="top"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>github.com</div>
+      <div class="repo"><span>GabrielPower1969 /</span><br>citanz-meetup-generator</div>
+      <div class="desc">One event JSON → two posters + five channel announcements + hand-off folders. Offline render, validated typography, LLM skills for publishing &amp; recap. Node + Playwright.</div>
+      <div class="btns">
+        <div class="btn" id="starbtn"><svg class="star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 17.6 5.9 20.9l1.3-6.7-5-4.7 6.8-.8z"/></svg><span class="lbl">Star</span><span class="cnt" id="starcnt">0</span></div>
+        <span class="tag">node</span><span class="tag">playwright</span><span class="tag">claude-code</span>
+      </div>
+    </div>
+
+    <p class="pad sub" style="top:1060px" data-in="38.6">If this saves you a Wednesday, <b>star it ⭐</b> —<br>that's the only pay an open-source organiser gets.</p>
+    <p class="foot" style="top:1215px" data-in="39.4"><b>Gabriel Chen</b> · CITANZ Christchurch · built in the open</p>
+
+    <div class="cur gabriel" id="cur6"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>you</span></div>
+  </section>
+
+</div>
+<div class="progress"><i id="prog"></i></div>
+</div>
+
+<script>
+/* ─── tiny seekable timeline built on the Web Animations API ───────────── */
+const DURATION = 42;            // seconds, total
+const EASE = 'cubic-bezier(.2,.75,.2,1)';
+const ANIMS = [];
+const S = s => s * 1000;
+const add = (el, kf, o) => { const a = el.animate(kf, o); ANIMS.push(a); return a; };
+
+try { CSS.registerProperty({ name: '--n', syntax: '<integer>', inherits: false, initialValue: 0 }); } catch (e) {}
+
+const IN = {
+  up:    [{ opacity: 0, transform: 'translateY(46px)' },            { opacity: 1, transform: 'translateY(0)' }],
+  left:  [{ opacity: 0, transform: 'translateX(-70px)' },           { opacity: 1, transform: 'translateX(0)' }],
+  right: [{ opacity: 0, transform: 'translateX(110px) rotate(2deg)' }, { opacity: 1, transform: 'translateX(0) rotate(0)' }],
+  scale: [{ opacity: 0, transform: 'scale(.94) translateY(24px)' },  { opacity: 1, transform: 'scale(1) translateY(0)' }],
+  pop:   [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1.06)', offset: .7 }, { opacity: 1, transform: 'scale(1)' }],
+  scene: [{ opacity: 0, transform: 'scale(.985)' },                 { opacity: 1, transform: 'scale(1)' }],
+  fade:  [{ opacity: 0 }, { opacity: 1 }],
+};
+
+document.querySelectorAll('[data-in]').forEach(el => {
+  const t = parseFloat(el.dataset.in), fx = el.dataset.fx || (el.classList.contains('type') ? 'type' : 'up');
+  if (fx === 'type') {
+    const n = el.textContent.length, cps = parseFloat(el.dataset.cps || 55);
+    add(el, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 -2% 0 0)' }],
+        { delay: S(t), duration: S(n / cps), easing: `steps(${n}, end)`, fill: 'both' });
+    return;
+  }
+  const dur = fx === 'scene' ? 600 : fx === 'pop' ? 700 : 720;
+  add(el, IN[fx], { delay: S(t) + (fx === 'scene' ? 280 : 0), duration: dur, easing: fx === 'pop' ? 'cubic-bezier(.34,1.56,.64,1)' : EASE, fill: 'both' });
+  if (el.dataset.out) {
+    add(el, [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.03)' }],
+        { delay: S(parseFloat(el.dataset.out)), duration: 300, easing: 'ease-in', fill: 'forwards' });
+  }
+});
+/* strike-through lines */
+document.querySelectorAll('[data-strike]').forEach(el => {
+  const t = parseFloat(el.dataset.strike);
+  const target = el.classList.contains('todo') ? el.querySelector('.t') : el;
+  const line = document.createElement('i');
+  line.style.cssText = 'position:absolute;left:-6px;right:-6px;top:50%;height:' + (el.classList.contains('big') ? 14 : 4) + 'px;border-radius:7px;background:var(--coral);transform:scaleX(0);transform-origin:left;translate:0 -50%';
+  target.style.position = 'relative'; target.appendChild(line);
+  add(line, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { delay: S(t), duration: 380, easing: EASE, fill: 'both' });
+  add(target, [{ color: 'var(--ink)' }, { color: 'var(--dim)' }], { delay: S(t), duration: 380, fill: 'both' });
+});
+/* chip ticks */
+document.querySelectorAll('[data-ok]').forEach(el => {
+  add(el.querySelector('.ok'), [{ transform: 'scale(0)' }, { transform: 'scale(1.25)', offset: .7 }, { transform: 'scale(1)' }],
+      { delay: S(parseFloat(el.dataset.ok)), duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)', fill: 'both' });
+});
+/* counters + bars */
+const COUNTERS = [];   // {el, t0, dur, to} — driven by the clock in tick(), so they seek like everything else
+document.querySelectorAll('[data-count]').forEach(el => COUNTERS.push({ el, t0: parseFloat(el.dataset.in), dur: 1.4, to: parseInt(el.dataset.count) }));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+function tick(sec) { for (const c of COUNTERS) { const p = Math.min(1, Math.max(0, (sec - c.t0) / c.dur)); c.el.textContent = Math.round(easeOut(p) * c.to); } }
+document.querySelectorAll('[data-grow]').forEach(el => {
+  add(el, [{ transform: 'scaleX(0)' }, { transform: `scaleX(${el.dataset.grow})` }], { delay: S(parseFloat(el.dataset.in)), duration: 1200, easing: EASE, fill: 'both' });
+});
+/* cursors: [time, x, y] waypoints, absolute seconds */
+function cursor(id, pts, show, hide) {
+  const el = document.getElementById(id);
+  const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+  add(el, pts.map(([t, x, y]) => ({ transform: `translate(${x}px,${y}px)`, offset: (t - t0) / (t1 - t0) })),
+      { delay: S(t0), duration: S(t1 - t0), easing: 'ease-in-out', fill: 'both' });
+  add(el, [{ opacity: 0 }, { opacity: 1 }], { delay: S(show), duration: 300, fill: 'both' });
+  add(el, [{ opacity: 1 }, { opacity: 0 }], { delay: S(hide), duration: 300, fill: 'forwards' });
+}
+cursor('cur0', [[3.0, 1100, 640], [3.3, 880, 560], [3.6, 870, 660], [3.9, 880, 765], [4.2, 890, 865], [4.8, 640, 1035]], 3.05, 5.5);
+cursor('cur2', [[13.8, 1100, 500], [14.3, 300, 760], [14.7, 330, 880], [15.1, 800, 1200], [15.5, 790, 1215]], 13.85, 17.6);
+cursor('cur6', [[37.0, 1100, 1300], [37.6, 200, 930], [37.9, 185, 905]], 37.05, 41.5);
+/* star button click at 37.9 */
+{
+  const btn = document.getElementById('starbtn'), cnt = document.getElementById('starcnt');
+  add(btn, [{ transform: 'scale(1)' }, { transform: 'scale(.94)', offset: .3 }, { transform: 'scale(1)' }], { delay: S(37.9), duration: 300, fill: 'both' });
+  add(btn, [{ background: '#21262D', borderColor: '#30363D', color: '#C9D1D9' }, { background: '#1F6FEB', borderColor: '#1F6FEB', color: '#fff' }], { delay: S(37.95), duration: 250, fill: 'both' });
+  add(btn.querySelector('.star'), [{ fill: 'rgba(255,211,61,0)', stroke: '#8B949E' }, { fill: '#FFD33D', stroke: '#FFD33D' }], { delay: S(37.95), duration: 250, fill: 'both' });
+  COUNTERS.push({ el: cnt, t0: 37.95, dur: 0.01, to: 1 });
+}
+/* progress bar */
+const CLOCK = add(document.getElementById('prog'), [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: S(DURATION), easing: 'linear', fill: 'both' });
+let live = true;
+(function loop() { if (live) { tick(CLOCK.currentTime / 1000); requestAnimationFrame(loop); } })();
+
+/* seek API for the renderer; in a normal browser tab it just plays */
+window.__duration = DURATION;
+window.__pause = () => { live = false; ANIMS.forEach(a => a.pause()); };
+window.__seek = ms => { ANIMS.forEach(a => { a.currentTime = ms; }); tick(ms / 1000); };
+window.__ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.decode().catch(() => {}))));
+</script>
+</body>
+</html>

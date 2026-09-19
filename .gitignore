@@ -12,3 +12,6 @@ assets/speakers/*
 
 # Event photos (people) stay local
 assets/photos/
+
+# promo video renders (regenerate with node promo/render.mjs)
+promo/out/

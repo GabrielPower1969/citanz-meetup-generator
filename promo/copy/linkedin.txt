@@ -1,0 +1,12 @@
+I gave every CITANZ meetup back three hours — and open-sourced how.
+
+Every meetup used to cost me the same three hours: a poster in Canva, one announcement rewritten for five channels, the venue fixed in seven places, RSVPs counted by hand.
+
+So I built citanz-meetup-generator. One event JSON → two brand-locked posters (validated typography, rendered fully offline) + announcements for LinkedIn, 小红书/RedNote, meetup.com, three WeChat groups and Teams. Then you just talk to an LLM — "publish the blockchain meetup to 小红书" — and the skills do the clicking. After the event it drafts the recap and a 复盘 report where every number carries its source.
+
+3 hours → 3 minutes. Ops on autopilot; judgement stays human.
+
+MIT licence, Node + Playwright + Claude Code, generic enough for any community. If it saves you a Wednesday, a ⭐ is the only pay an open-source organiser gets:
+https://github.com/GabrielPower1969/citanz-meetup-generator
+
+#OpenSource #CITANZ #NZTech #Christchurch #DeveloperExperience #Automation #ClaudeCode

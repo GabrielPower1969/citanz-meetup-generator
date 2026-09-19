@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>citanz-meetup-generator — promo</title>
+<meta name="viewport" content="width=1080">
+<style>
+/* ─── fonts (self-hosted, OFL) ─────────────────────────────────────────── */
+@font-face{font-family:"Bricolage Grotesque";src:url(fonts/BricolageGrotesque.woff2) format("woff2");font-weight:200 800;font-display:block}
+@font-face{font-family:"Instrument Serif";src:url(fonts/InstrumentSerif-Italic.woff2) format("woff2");font-style:italic;font-weight:400;font-display:block}
+@font-face{font-family:"Inter";src:url(fonts/Inter.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:"JetBrains Mono";src:url(fonts/JetBrainsMono.woff2) format("woff2");font-weight:100 800;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url(../assets/fonts/NotoSansSC-Bold.otf) format("opentype");font-weight:700;font-display:block}
+@font-face{font-family:"Noto Sans SC";src:url(../assets/fonts/NotoSansSC-Regular.otf) format("opentype");font-weight:400;font-display:block}
+
+/* ─── tokens · light "canvas" + Figma-family accents ───────────────────── */
+:root{
+  --canvas:#F7F7FB; --grid:#D3D6E3;
+  --ink:#12142B; --muted:#61667F; --dim:#A3A8BE; --line:#E5E7F0; --white:#FFFFFF;
+  --blue:#008FFF;              /* CITANZ brand */
+  --figblue:#0D99FF;           /* Figma selection blue */
+  --purple:#A259FF; --coral:#FF7262; --orange:#F24E1E; --green:#0ACF83; --cyan:#1ABCFE; --yellow:#FFC700;
+  --accent:var(--blue);
+  --display:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --body:"Inter","Noto Sans SC",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --cjk:"Noto Sans SC","PingFang SC",sans-serif;
+  --shadow:0 24px 60px rgba(18,20,43,.12), 0 2px 6px rgba(18,20,43,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:100%;overflow:hidden;background:var(--canvas)}
+body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+/* ─── stage: fills the viewport (1080×1350 or 1080×1920); safe box is centred */
+.stage{position:fixed;inset:0;overflow:hidden;background:var(--canvas)}
+.blob{position:absolute;width:900px;height:900px;border-radius:50%;opacity:.55;will-change:transform}
+.blob.b1{left:-300px;top:-380px;background:radial-gradient(circle,rgba(0,143,255,.55),rgba(0,143,255,0) 65%)}
+.blob.b2{right:-380px;top:-250px;background:radial-gradient(circle,rgba(162,89,255,.50),rgba(162,89,255,0) 65%)}
+.blob.b3{left:-260px;bottom:-420px;background:radial-gradient(circle,rgba(255,114,98,.50),rgba(255,114,98,0) 65%)}
+.blob.b4{right:-300px;bottom:-380px;background:radial-gradient(circle,rgba(10,207,131,.45),rgba(10,207,131,0) 65%)}
+.grid{position:absolute;inset:0;background-image:radial-gradient(var(--grid) 1.3px, transparent 1.5px);background-size:28px 28px;
+  mask-image:radial-gradient(75% 75% at 50% 50%, #000 30%, transparent 100%)}
+.safe{position:absolute;left:0;top:50%;width:1080px;height:1350px;transform:translateY(-50%)}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.pad{position:absolute;left:72px;right:72px}
+
+/* persistent chrome */
+.hdr{position:absolute;left:72px;right:72px;top:64px;display:flex;justify-content:space-between;align-items:center;
+  font:600 19px/1 var(--mono);letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.hdr b{display:inline-flex;align-items:center;gap:14px;color:var(--ink)}
+.hdr b i{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--blue);box-shadow:0 6px 18px rgba(0,143,255,.35)}
+.hdr b i img{height:20px}
+.progress{position:absolute;left:0;right:0;bottom:0;height:6px;background:rgba(18,20,43,.06)}
+.progress i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--purple),var(--coral))}
+
+/* chapter label: ■ 01 / EMPATHISE */
+.ch{display:inline-flex;align-items:center;gap:14px;font:600 20px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.ch::before{content:"";width:14px;height:14px;border-radius:4px;background:var(--accent)}
+.ch b{color:var(--accent);font-weight:600}
+
+/* type */
+h1{font:800 104px/.95 var(--display);letter-spacing:-.035em;color:var(--ink);font-variation-settings:"opsz" 96}
+h1 em{font:italic 400 1.14em/.85 var(--serif);letter-spacing:-.02em;color:var(--accent)}
+h1.md{font-size:72px}
+.sub{font:400 30px/1.35 var(--body);color:var(--muted);letter-spacing:-.01em}
+.sub b{color:var(--ink);font-weight:600}
+.cap{font:500 23px/1.4 var(--body);color:var(--muted)}
+.grad{background:linear-gradient(90deg,var(--blue),var(--purple) 55%,var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* cards */
+.card{position:absolute;background:var(--white);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.card.dark{background:#15172B;border-color:#2A2D48;color:#E6E8F5}
+.card .bar{height:52px;display:flex;align-items:center;gap:8px;padding:0 20px;border-bottom:1px solid rgba(255,255,255,.08);
+  font:500 17px/1 var(--mono);color:#8C91AE}
+.card .bar i{width:12px;height:12px;border-radius:50%}
+.card .bar i:nth-child(1){background:#FF5F57}.card .bar i:nth-child(2){background:#FEBC2E}.card .bar i:nth-child(3){background:#28C840}
+.card .bar span{margin-left:auto}
+pre{font:500 22px/1.65 var(--mono);color:#DDE1F3;padding:24px 30px;white-space:pre}
+pre .k{color:#7DD3FC}pre .s{color:#B9F5CF}pre .p{color:#8C91AE}pre .c{color:#6B7092}
+pre .cmd{color:#fff;font-weight:600}pre .ok{color:var(--green)}pre .dim{color:#8C91AE}pre .num{color:#C79BFF}
+pre span[data-in]{display:inline-block}
+.type{display:inline-block;clip-path:inset(0 100% 0 0)}
+
+/* to-do rows (scene 0) */
+.todo{position:absolute;left:72px;right:72px;height:86px;border-radius:18px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:22px;padding:0 28px;font:500 31px/1 var(--body);color:var(--ink);letter-spacing:-.01em}
+.todo .n{width:34px;height:34px;border-radius:9px;border:2px solid var(--dim);flex:none}
+.todo .t{position:relative}
+.todo .h{margin-left:auto;font:500 21px/1 var(--mono);color:var(--dim)}
+
+/* figma-ish selection frame + comment pin */
+.sel{position:absolute;outline:2px solid var(--figblue);outline-offset:0}
+.sel::before,.sel::after,.sel .h1,.sel .h2{content:"";position:absolute;width:14px;height:14px;background:#fff;border:2px solid var(--figblue);border-radius:3px}
+.sel::before{left:-8px;top:-8px}.sel::after{right:-8px;top:-8px}.sel .h1{left:-8px;bottom:-8px}.sel .h2{right:-8px;bottom:-8px}
+.sel .dim{position:absolute;left:50%;bottom:-44px;transform:translateX(-50%);white-space:nowrap;
+  background:var(--figblue);color:#fff;font:600 17px/1 var(--mono);padding:8px 12px;border-radius:6px}
+.poster{position:absolute;border-radius:14px;box-shadow:0 34px 80px rgba(18,20,43,.28)}
+.poster img{display:block;width:100%;height:100%;border-radius:14px}
+.pin{position:absolute;width:56px;height:56px;border-radius:50% 50% 50% 6px;background:var(--green);display:grid;place-items:center;
+  color:#fff;font:800 20px/1 var(--display);box-shadow:0 10px 26px rgba(10,207,131,.45);border:3px solid #fff}
+.comment{position:absolute;width:470px;background:var(--white);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:22px 26px}
+.comment .who{display:flex;align-items:center;gap:12px;font:600 19px/1 var(--body);color:var(--ink)}
+.comment .who i{width:30px;height:30px;border-radius:50%;background:var(--green)}
+.comment .who span{color:var(--dim);font-weight:500;font-family:var(--mono);font-size:16px}
+.comment .txt{margin-top:14px;font:500 23px/1.55 var(--body);color:var(--ink)}
+.comment .txt b{color:var(--green);font-weight:700}
+.comment .meta{margin-top:12px;font:500 16px/1.5 var(--mono);color:var(--dim)}
+
+/* multiplayer cursor with name tag */
+.cur{position:absolute;left:0;top:0;pointer-events:none;filter:drop-shadow(0 6px 14px rgba(18,20,43,.28));z-index:10}
+.cur svg{width:34px;height:34px;display:block}.cur svg path{stroke:#fff;stroke-width:1.5}
+.cur span{position:absolute;left:26px;top:28px;white-space:nowrap;border-radius:8px;padding:8px 12px;font:600 19px/1 var(--body);color:#fff}
+.cur.gabriel svg path{fill:var(--purple)} .cur.gabriel span{background:var(--purple)}
+.cur.llm svg path{fill:var(--green)} .cur.llm span{background:var(--green)}
+.cur.you svg path{fill:var(--orange)} .cur.you span{background:var(--orange)}
+
+/* channel chips (scene 3) */
+.chip{position:absolute;height:104px;width:452px;border-radius:20px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:18px;padding:0 22px}
+.chip.ghost{background:transparent;box-shadow:none;border:2px dashed var(--grid)}
+.chip .ic{width:60px;height:60px;border-radius:16px;display:grid;place-items:center;font:800 26px/1 var(--display);color:#fff;flex:none}
+.chip .nm{font:600 29px/1.1 var(--body);letter-spacing:-.01em;color:var(--ink)}.chip .nm small{display:block;font:500 17px/1.5 var(--mono);color:var(--muted);letter-spacing:0}
+.chip .ok{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;font:800 22px/1 var(--display);transform:scale(0)}
+
+/* chat (scene 3) */
+.bub{position:absolute;max-width:780px;padding:22px 28px;border-radius:24px;font:500 29px/1.35 var(--body);letter-spacing:-.01em}
+.bub.me{right:72px;background:var(--purple);color:#fff;border-bottom-right-radius:8px;box-shadow:0 14px 34px rgba(162,89,255,.35)}
+.bub.ai{left:72px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);border-bottom-left-radius:8px;color:var(--ink)}
+.bub.ai .mono{display:block;margin-top:12px;font:500 19px/1.5 var(--mono);color:var(--muted)}
+.bub .who{position:absolute;top:-30px;font:600 17px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bub.me .who{right:6px}.bub.ai .who{left:6px}
+
+/* analytics (scene 4) */
+.tile{position:absolute;width:296px;height:200px;border-radius:22px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);padding:26px 28px}
+.tile .k{font:600 17px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tile .v{margin-top:18px;font:800 76px/1 var(--display);letter-spacing:-.04em;color:var(--ink)}
+.tile .v small{font:700 24px/1 var(--display);color:var(--muted);letter-spacing:0;margin-left:8px}
+.tile .d{margin-top:10px;font:600 18px/1 var(--body);color:var(--green)}
+.brow{position:absolute;left:72px;right:72px;height:64px;display:grid;grid-template-columns:200px 1fr 90px;align-items:center;gap:22px}
+.brow .l{font:600 26px/1 var(--body);color:var(--ink)}
+.brow .b{height:22px;border-radius:11px;background:rgba(18,20,43,.06);overflow:hidden}
+.brow .b i{display:block;height:100%;border-radius:11px;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--purple))}
+.brow .b.g i{background:linear-gradient(90deg,var(--green),#5EE6B0)}
+.brow .b.c i{background:linear-gradient(90deg,var(--coral),var(--orange))}
+.brow .n{font:600 26px/1 var(--mono);color:var(--muted);text-align:right}
+.src{position:absolute;left:72px;right:72px;padding:20px 26px;border-radius:16px;background:rgba(10,207,131,.10);border:1px solid rgba(10,207,131,.35);
+  font:500 21px/1.55 var(--mono);color:var(--ink)}
+.src b{color:#059862;font-weight:700}
+
+/* result (scene 5) */
+.big{position:absolute;left:0;right:0;text-align:center;font:800 176px/1 var(--display);letter-spacing:-.05em;color:var(--dim)}
+.big .x{position:relative;display:inline-block}
+.big.win{color:var(--ink)}
+.stats{position:absolute;left:72px;right:72px;display:flex;justify-content:space-between}
+.stat{text-align:center}.stat .v{font:800 64px/1 var(--display);letter-spacing:-.04em;color:var(--ink)}
+.stat .k{margin-top:10px;font:600 17px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* cta (scene 6) */
+.gh{position:absolute;left:72px;right:72px;border-radius:26px;background:#0D1117;border:1px solid #30363D;padding:34px 38px;box-shadow:0 40px 90px rgba(18,20,43,.35)}
+.gh .top{display:flex;align-items:center;gap:18px;font:600 24px/1 var(--body);color:#C9D1D9}
+.gh .top svg{width:42px;height:42px;fill:#fff}
+.gh .repo{margin-top:20px;font:800 44px/1.1 var(--display);letter-spacing:-.03em;color:#fff}
+.gh .repo span{color:#8B949E;font-weight:500}
+.gh .desc{margin-top:14px;font:400 23px/1.45 var(--body);color:#8B949E}
+.gh .btns{margin-top:26px;display:flex;gap:14px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;height:60px;padding:0 22px;border-radius:12px;border:1px solid #30363D;background:#21262D;
+  font:600 24px/1 var(--body);color:#C9D1D9}
+.btn .star{width:26px;height:26px;fill:none;stroke:#8B949E;stroke-width:2}
+.btn .cnt{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);font:600 20px/1 var(--mono)}
+.tag{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #30363D;font:500 18px/1 var(--mono);color:#58A6FF}
+.foot{position:absolute;left:72px;right:72px;text-align:center;font:500 22px/1.6 var(--body);color:var(--muted)}
+.foot b{color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="blob b1" id="b1"></div><div class="blob b2" id="b2"></div><div class="blob b3" id="b3"></div><div class="blob b4" id="b4"></div>
+<div class="grid"></div>
+<div class="safe">
+
+  <div class="hdr" data-in="0.2"><b><i><img src="assets/citanz-logo.png" alt=""></i>citanz · meetup-generator</b><span>open source · nz</span></div>
+
+  <!-- ════ 01 EMPATHISE (0–5.2) ════ -->
+  <section class="scene" data-in="0" data-out="5.2" data-fx="scene" style="--accent:var(--coral)">
+    <div class="pad" style="top:180px" data-in="0.3"><span class="ch">01 / <b>empathise</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="0.5">Every meetup ate<br><em>three hours.</em></h1>
+
+    <div class="todo" style="top:540px" data-in="1.3"  data-fx="left" data-strike="2.9"><span class="n"></span><span class="t">Design the poster in Canva</span><span class="h">45 min</span></div>
+    <div class="todo" style="top:642px" data-in="1.55" data-fx="left" data-strike="3.1"><span class="n"></span><span class="t">Rewrite the announcement × 5 channels</span><span class="h">60 min</span></div>
+    <div class="todo" style="top:744px" data-in="1.8"  data-fx="left" data-strike="3.3"><span class="n"></span><span class="t">Venue changed? Fix it in 7 places</span><span class="h">30 min</span></div>
+    <div class="todo" style="top:846px" data-in="2.05" data-fx="left" data-strike="3.5"><span class="n"></span><span class="t">Count RSVPs &amp; write the recap</span><span class="h">45 min</span></div>
+
+    <p class="pad sub" style="top:1010px" data-in="3.9">Happy to organise. <b>Not happy to repeat myself.</b><br>So I built the thing I wished existed — and open-sourced it.</p>
+    <div class="cur gabriel" id="cur0"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>Gabriel · organiser</span></div>
+  </section>
+
+  <!-- ════ 02 DEFINE (5.2–10.4) ════ -->
+  <section class="scene" data-in="5.2" data-out="10.4" data-fx="scene" style="--accent:var(--blue)">
+    <div class="pad" style="top:180px" data-in="5.5"><span class="ch">02 / <b>define</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="5.7">Describe it<br><em>once.</em></h1>
+
+    <div class="card dark" style="left:72px;right:72px;top:500px;height:380px" data-in="6.1" data-fx="scale">
+      <div class="bar"><i></i><i></i><i></i><span>events/2026-08-26-blockchain.json</span></div>
+<pre><span class="p">{</span>
+  <span class="k">"title"</span><span class="p">:</span>   <span class="s type" data-in="6.4">"Why We Need Blockchain, and What It Actually Is",</span>
+  <span class="k">"speaker"</span><span class="p">:</span> <span class="s type" data-in="7.0">{ "name": "Scott", "org": "Koala Technology" },</span>
+  <span class="k">"date"</span><span class="p">:</span>    <span class="s type" data-in="7.5">"Wednesday, 26 August 2026 · 6–8 PM",</span>
+  <span class="k">"venue"</span><span class="p">:</span>   <span class="s type" data-in="7.9">"Halswell Library – Hao Room"</span>
+<span class="p">}</span>  <span class="c" data-in="8.2">// prose here; fee, bank, agenda, hashtags live in code</span></pre>
+    </div>
+    <div class="card dark" style="left:72px;right:72px;top:920px;height:270px" data-in="8.4" data-fx="scale">
+      <div class="bar"><i></i><i></i><i></i><span>zsh</span></div>
+<pre><span class="dim">$</span> <span class="cmd type" data-in="8.6" data-cps="46">npm run build events/2026-08-26-blockchain.json</span>
+<span data-in="9.2"><span class="num">1</span> render    <span class="ok">✓</span> 2 posters + 3:4 export      <span class="dim">offline Chromium</span></span>
+<span data-in="9.45"><span class="num">2</span> validate  <span class="ok">✓</span> no overflow · no orphan lines</span>
+<span data-in="9.7"><span class="num">3</span> copy      <span class="ok">✓</span> 7 announcements · 5 channels <span class="dim">→ output/…/</span></span></pre>
+    </div>
+  </section>
+
+  <!-- ════ 03 PROTOTYPE (10.4–16) ════ -->
+  <section class="scene" data-in="10.4" data-out="16" data-fx="scene" style="--accent:var(--cyan)">
+    <div class="pad" style="top:180px" data-in="10.7"><span class="ch">03 / <b>prototype</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="10.9">Posters,<br><em>validated.</em></h1>
+    <p class="pad cap" style="top:450px" data-in="11.2">Case study · CITANZ × Koala Tech · "Why We Need Blockchain" · 26 Aug 2026</p>
+
+    <div class="poster sel" style="left:250px;top:505px;width:760px;height:398px" data-in="11.4" data-fx="right">
+      <img src="assets/poster-landscape.png" alt=""><i class="h1"></i><i class="h2"></i>
+      <span class="dim" style="left:auto;right:0;transform:none">landscape · 2400 × 1256 · LinkedIn</span>
+    </div>
+    <div class="poster sel" style="left:72px;top:655px;width:400px;height:566px" data-in="12.2" data-fx="up">
+      <img src="assets/poster-portrait.png" alt=""><i class="h1"></i><i class="h2"></i>
+      <span class="dim">portrait · 3:4 export · 小红书 / WeChat</span>
+    </div>
+
+    <div class="pin" style="left:498px;top:985px" data-in="13.6" data-fx="pop">✓</div>
+    <div class="comment" style="left:538px;top:975px" data-in="13.8" data-fx="scale">
+      <div class="who"><i></i>Validator <span>· resolved</span></div>
+      <div class="txt"><b>✓</b> every line ≥ 40 % of the widest<br><b>✓</b> auto-fit shrink ≤ 15 %<br><b>✓</b> no overflow, no photo collision</div>
+      <div class="meta">fail = "reword" — never a broken poster</div>
+    </div>
+    <div class="cur llm" id="cur2"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>LLM · validator</span></div>
+  </section>
+
+  <!-- ════ 04 SHIP (16–21.8) ════ -->
+  <section class="scene" data-in="16" data-out="21.8" data-fx="scene" style="--accent:var(--purple)">
+    <div class="pad" style="top:180px" data-in="16.3"><span class="ch">04 / <b>ship</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="16.5">Publish by<br><em>talking.</em></h1>
+
+    <div class="chip" style="left:72px;top:500px"  data-in="16.9"  data-fx="up" data-ok="17.8"><div class="ic" style="background:#0A66C2">in</div><div class="nm">LinkedIn<small>landscape + copy</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:556px;top:500px" data-in="17.02" data-fx="up" data-ok="17.92"><div class="ic" style="background:#FF2442;font-family:var(--cjk);font-size:30px">红</div><div class="nm">RedNote<small>3:4 · 20/1000/10 limits</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:72px;top:624px"  data-in="17.14" data-fx="up" data-ok="18.04"><div class="ic" style="background:#F64060">M</div><div class="nm">meetup.com<small>create · announce · venue</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:556px;top:624px" data-in="17.26" data-fx="up" data-ok="18.16"><div class="ic" style="background:#07C160">微</div><div class="nm">WeChat × 3<small>#接龙 · local + nationwide</small></div><div class="ok">✓</div></div>
+    <div class="chip" style="left:72px;top:748px"  data-in="17.38" data-fx="up" data-ok="18.28"><div class="ic" style="background:#6264A7">T</div><div class="nm">Teams<small>webinar link</small></div><div class="ok">✓</div></div>
+    <div class="chip ghost" style="left:556px;top:748px" data-in="17.5" data-fx="up"><div class="ic" style="background:var(--canvas);border:2px dashed var(--grid);color:var(--dim)">+</div><div class="nm" style="color:var(--muted)">your channel<small>one Markdown template</small></div></div>
+
+    <div class="bub me" style="top:930px" data-in="18.6" data-fx="up"><span class="who">you</span><span class="type" data-in="18.8" data-cps="36">Publish the blockchain meetup to 小红书.</span></div>
+    <div class="bub ai" style="top:1060px" data-in="19.9" data-fx="up"><span class="who">claude · xiaohongshu-publish skill</span>Done — the note is live <span style="color:var(--green)">✓</span><span class="mono">3:4 image · title 18/20 · body 612/1000 · 10 topics</span></div>
+    <p class="pad cap" style="top:1250px" data-in="20.8">Just talk to the LLM. The skills do the clicking.</p>
+  </section>
+
+  <!-- ════ 05 MEASURE (21.8–26.6) ════ -->
+  <section class="scene" data-in="21.8" data-out="26.6" data-fx="scene" style="--accent:var(--green)">
+    <div class="pad" style="top:180px" data-in="22.1"><span class="ch">05 / <b>measure</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="22.3">Numbers with<br><em>receipts.</em></h1>
+
+    <div class="tile" style="left:72px;top:500px"  data-in="22.7"  data-fx="up"><div class="k">rsvps</div><div class="v" data-count="20" data-in="22.9"></div><div class="d">meetup.com · 27 Aug</div></div>
+    <div class="tile" style="left:392px;top:500px" data-in="22.85" data-fx="up"><div class="k">attended</div><div class="v"><span data-count="16" data-in="23.05" style="display:inline-block"></span><small>/ 20</small></div><div class="d">80 % show-up</div></div>
+    <div class="tile" style="left:712px;top:500px" data-in="23.0"  data-fx="up"><div class="k">impressions</div><div class="v" data-count="244" data-in="23.2"></div><div class="d">LinkedIn · 28 Aug</div></div>
+
+    <div class="brow" style="top:770px" data-in="23.6"><div class="l">impressions</div><div class="b"><i data-grow="1" data-in="23.8"></i></div><div class="n">244</div></div>
+    <div class="brow" style="top:856px" data-in="23.75"><div class="l">reactions</div><div class="b c"><i data-grow="0.016" data-in="23.95"></i></div><div class="n">4</div></div>
+    <div class="brow" style="top:942px" data-in="23.9"><div class="l">attendance</div><div class="b g"><i data-grow="0.8" data-in="24.1"></i></div><div class="n">80 %</div></div>
+    <p class="pad" style="top:1015px;font:500 18px/1 var(--mono);color:var(--dim)" data-in="24.1">blockchain meetup · 26 aug 2026 · reach ok, hook weak → next time open with a question</p>
+
+    <div class="src" style="top:1090px" data-in="24.9"><b>house rule:</b> every number carries <b>checked</b> + <b>source</b>.<br>results → <b>npm run report</b> → 复盘 markdown for the next organiser.</div>
+  </section>
+
+  <!-- ════ 06 RESULT (26.6–30.4) ════ -->
+  <section class="scene" data-in="26.6" data-out="30.4" data-fx="scene" style="--accent:var(--blue)">
+    <div class="pad" style="top:300px;text-align:center" data-in="26.9"><span class="ch">06 / <b>the result</b></span></div>
+    <div class="big" style="top:380px" data-in="27.0" data-fx="up"><span class="x" data-strike="27.9">3 hours</span></div>
+    <div class="big win" style="top:590px" data-in="28.1" data-fx="pop"><span class="grad">3 minutes</span></div>
+    <h1 class="pad md" style="top:840px;text-align:center" data-in="28.7">Ops on autopilot.<br><em style="color:var(--purple)">Judgement stays human.</em></h1>
+
+    <div class="stats" style="top:1090px" data-in="29.3" data-fx="up">
+      <div class="stat"><div class="v">1</div><div class="k">command</div></div>
+      <div class="stat"><div class="v">2</div><div class="k">posters</div></div>
+      <div class="stat"><div class="v">7</div><div class="k">announcements</div></div>
+      <div class="stat"><div class="v">5</div><div class="k">channels</div></div>
+      <div class="stat"><div class="v">0</div><div class="k">canva</div></div>
+    </div>
+  </section>
+
+  <!-- ════ 07 SHARE (30.4–36) ════ -->
+  <section class="scene" data-in="30.4" data-out="60" data-fx="scene" style="--accent:var(--orange)">
+    <div class="pad" style="top:180px" data-in="30.7"><span class="ch">07 / <b>share · MIT</b></span></div>
+    <h1 class="pad" style="top:236px" data-in="30.9">Steal it.<br>Star it.<br><em>Run your own.</em></h1>
+
+    <div class="gh" style="top:600px" data-in="31.4" data-fx="scale">
+      <div class="top"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>github.com</div>
+      <div class="repo"><span>GabrielPower1969 /</span><br>citanz-meetup-generator</div>
+      <div class="desc">One event JSON → two posters + five channel announcements + hand-off folders. Offline render, validated typography, LLM skills for publishing &amp; recap. Node + Playwright.</div>
+      <div class="btns">
+        <div class="btn" id="starbtn"><svg class="star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.7L12 17.6 5.9 20.9l1.3-6.7-5-4.7 6.8-.8z"/></svg><span>Star</span><span class="cnt" id="starcnt">0</span></div>
+        <span class="tag">node</span><span class="tag">playwright</span><span class="tag">claude-code</span>
+      </div>
+    </div>
+
+    <p class="pad sub" style="top:1085px" data-in="33.8">If this saves you a Wednesday, <b>star it ⭐</b> —<br>that's the only pay an open-source organiser gets.</p>
+    <p class="foot" style="top:1230px" data-in="34.6"><b>Gabriel Chen</b> · CITANZ Christchurch · built in the open</p>
+    <div class="cur you" id="cur6"><svg viewBox="0 0 24 24"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.36Z"/></svg><span>you</span></div>
+  </section>
+
+</div>
+<div class="progress"><i id="prog"></i></div>
+</div>
+
+<script>
+/* ─── tiny seekable timeline built on the Web Animations API ───────────── */
+const DURATION = 36;            // seconds, total
+const EASE = 'cubic-bezier(.2,.75,.2,1)';
+const ANIMS = [];
+const S = s => s * 1000;
+const add = (el, kf, o) => { const a = el.animate(kf, o); ANIMS.push(a); return a; };
+
+const IN = {
+  up:    [{ opacity: 0, transform: 'translateY(46px)' },            { opacity: 1, transform: 'translateY(0)' }],
+  left:  [{ opacity: 0, transform: 'translateX(-70px)' },           { opacity: 1, transform: 'translateX(0)' }],
+  right: [{ opacity: 0, transform: 'translateX(110px) rotate(2deg)' }, { opacity: 1, transform: 'translateX(0) rotate(0)' }],
+  scale: [{ opacity: 0, transform: 'scale(.94) translateY(24px)' },  { opacity: 1, transform: 'scale(1) translateY(0)' }],
+  pop:   [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1.06)', offset: .7 }, { opacity: 1, transform: 'scale(1)' }],
+  scene: [{ opacity: 0, transform: 'scale(.985)' },                 { opacity: 1, transform: 'scale(1)' }],
+};
+
+document.querySelectorAll('[data-in]').forEach(el => {
+  const t = parseFloat(el.dataset.in), fx = el.dataset.fx || (el.classList.contains('type') ? 'type' : 'up');
+  if (fx === 'type') {
+    const n = el.textContent.length, cps = parseFloat(el.dataset.cps || 60);
+    add(el, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 -2% 0 0)' }],
+        { delay: S(t), duration: S(n / cps), easing: `steps(${n}, end)`, fill: 'both' });
+    return;
+  }
+  const dur = fx === 'scene' ? 600 : fx === 'pop' ? 700 : 720;
+  add(el, IN[fx], { delay: S(t) + (fx === 'scene' ? 280 : 0), duration: dur, easing: fx === 'pop' ? 'cubic-bezier(.34,1.56,.64,1)' : EASE, fill: 'both' });
+  if (el.dataset.out) {
+    add(el, [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.03)' }],
+        { delay: S(parseFloat(el.dataset.out)), duration: 300, easing: 'ease-in', fill: 'forwards' });
+  }
+});
+/* strike-through: coral line + text fades to dim; to-do checkbox fills */
+document.querySelectorAll('[data-strike]').forEach(el => {
+  const t = parseFloat(el.dataset.strike), isBig = el.classList.contains('x');
+  const target = el.classList.contains('todo') ? el.querySelector('.t') : el;
+  const line = document.createElement('i');
+  line.style.cssText = `position:absolute;left:-6px;right:-6px;top:50%;height:${isBig ? 14 : 4}px;border-radius:7px;background:var(--coral);transform:scaleX(0);transform-origin:left;translate:0 -50%`;
+  target.style.position = 'relative'; target.appendChild(line);
+  add(line, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { delay: S(t), duration: 380, easing: EASE, fill: 'both' });
+  add(target, [{ color: isBig ? 'var(--dim)' : 'var(--ink)' }, { color: 'var(--dim)' }], { delay: S(t), duration: 380, fill: 'both' });
+  const box = el.querySelector('.n');
+  if (box) add(box, [{ background: 'transparent', borderColor: 'var(--dim)' }, { background: 'var(--coral)', borderColor: 'var(--coral)' }], { delay: S(t), duration: 300, fill: 'both' });
+});
+/* chip ticks */
+document.querySelectorAll('[data-ok]').forEach(el => {
+  add(el.querySelector('.ok'), [{ transform: 'scale(0)' }, { transform: 'scale(1.25)', offset: .7 }, { transform: 'scale(1)' }],
+      { delay: S(parseFloat(el.dataset.ok)), duration: 420, easing: 'cubic-bezier(.34,1.56,.64,1)', fill: 'both' });
+});
+/* counters (driven by the clock so they seek like everything else) + bars */
+const COUNTERS = [];
+document.querySelectorAll('[data-count]').forEach(el => COUNTERS.push({ el, t0: parseFloat(el.dataset.in), dur: 1.4, to: parseInt(el.dataset.count) }));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+function tick(sec) { for (const c of COUNTERS) { const p = Math.min(1, Math.max(0, (sec - c.t0) / c.dur)); c.el.textContent = Math.round(easeOut(p) * c.to); } }
+document.querySelectorAll('[data-grow]').forEach(el => {
+  add(el, [{ transform: 'scaleX(0)' }, { transform: `scaleX(${el.dataset.grow})` }], { delay: S(parseFloat(el.dataset.in)), duration: 1200, easing: EASE, fill: 'both' });
+});
+/* multiplayer cursors: [time, x, y] waypoints, absolute seconds */
+function cursor(id, pts, show, hide) {
+  const el = document.getElementById(id);
+  const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+  add(el, pts.map(([t, x, y]) => ({ transform: `translate(${x}px,${y}px)`, offset: (t - t0) / (t1 - t0) })),
+      { delay: S(t0), duration: S(t1 - t0), easing: 'ease-in-out', fill: 'both' });
+  add(el, [{ opacity: 0 }, { opacity: 1 }], { delay: S(show), duration: 300, fill: 'both' });
+  add(el, [{ opacity: 1 }, { opacity: 0 }], { delay: S(hide), duration: 300, fill: 'forwards' });
+}
+cursor('cur0', [[2.55, 1100, 640], [2.85, 880, 580], [3.1, 870, 680], [3.3, 880, 785], [3.5, 890, 885], [4.2, 700, 1105]], 2.6, 5.0);
+cursor('cur2', [[12.8, 1100, 520], [13.2, 300, 780], [13.55, 520, 1000], [13.9, 560, 1215]], 12.85, 15.7);
+cursor('cur6', [[32.3, 1100, 1300], [32.9, 200, 970], [33.2, 185, 945]], 32.35, 35.6);
+/* star click */
+{
+  const btn = document.getElementById('starbtn'), cnt = document.getElementById('starcnt');
+  add(btn, [{ transform: 'scale(1)' }, { transform: 'scale(.94)', offset: .3 }, { transform: 'scale(1)' }], { delay: S(33.2), duration: 300, fill: 'both' });
+  add(btn, [{ background: '#21262D', borderColor: '#30363D', color: '#C9D1D9' }, { background: '#1F6FEB', borderColor: '#1F6FEB', color: '#fff' }], { delay: S(33.25), duration: 250, fill: 'both' });
+  add(btn.querySelector('.star'), [{ fill: 'rgba(255,211,61,0)', stroke: '#8B949E' }, { fill: '#FFD33D', stroke: '#FFD33D' }], { delay: S(33.25), duration: 250, fill: 'both' });
+  COUNTERS.push({ el: cnt, t0: 33.25, dur: 0.01, to: 1 });
+}
+/* ambient colour blobs drift for the whole film */
+[['b1', 120, 90], ['b2', -140, 110], ['b3', 110, -120], ['b4', -120, -90]].forEach(([id, dx, dy]) =>
+  add(document.getElementById(id), [{ transform: 'translate(0,0) scale(1)' }, { transform: `translate(${dx}px,${dy}px) scale(1.12)`, offset: .5 }, { transform: 'translate(0,0) scale(1)' }],
+      { duration: S(DURATION), easing: 'ease-in-out', fill: 'both' }));
+/* progress bar doubles as the master clock */
+const CLOCK = add(document.getElementById('prog'), [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: S(DURATION), easing: 'linear', fill: 'both' });
+let live = true;
+(function loop() { if (live) { tick(CLOCK.currentTime / 1000); requestAnimationFrame(loop); } })();
+
+/* seek API for the renderer; in a normal browser tab it just plays */
+window.__duration = DURATION;
+window.__pause = () => { live = false; ANIMS.forEach(a => a.pause()); };
+window.__seek = ms => { ANIMS.forEach(a => { a.currentTime = ms; }); tick(ms / 1000); };
+window.__ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.decode().catch(() => {}))));
+</script>
+</body>
+</html>

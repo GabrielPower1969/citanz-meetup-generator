@@ -23,6 +23,7 @@ docker compose run --rm build events/<event>.json  # same pipeline in the Playwr
 | the click recipe for a platform | `.claude/skills/<platform>-publish/SKILL.md` (index: `.claude/skills/README.md`) |
 | what happened at a past event | `output/<slug>/report/`, `events/<slug>.json` `results` |
 | proof the pipeline still works | `npm test` (19 tests: engine, config, end-to-end build, validator rejections) |
+| the launch video / promo animation | `promo/README.md` → `promo/index.html` (storyboard) · `node promo/render.mjs` (MP4/GIF) |
 
 ## Where things are (folder order = data flow)
 ```
@@ -40,6 +41,7 @@ src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataU
 src/lib/template.js  the {{var}} / {{#if}} / {{#each}} engine + plainText() — shared by steps 3 and 4
 test/              node:test suites; `npm test`
 output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xhs.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/ report/
+promo/             launch video: index.html (seekable WAAPI storyboard) + render.mjs (Playwright → ffmpeg) → out/*.mp4 (git-ignored)
 .claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → announcements + pack) · meetup-publish (meetup.com) · xiaohongshu-publish (小红书) · event-recap (transcript + photos → LinkedIn ≤900 + 小红书 recaps → post) · event-analytics (复盘) — index + order: .claude/skills/README.md
 ```
 

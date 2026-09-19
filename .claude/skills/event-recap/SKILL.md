@@ -34,6 +34,7 @@ Both: takeaways come from the transcript only. Leave out the speaker's offhand j
    - JS: append your own `<input type="file" multiple id="claude-bridge-upload" aria-label="claude bridge upload">` to `document.body`;
    - `find` "file input 'claude bridge upload'" → `file_upload` both photos (lead first);
    - JS: build a `DataTransfer` from `input.files`, dispatch `dragenter`/`dragover`/`drop` (bubbles, composed) on the `.ql-editor` found via shadow-root walk. `drop.defaultPrevented === true` means LinkedIn took them; wait 4 s and screenshot — thumbnails appear in upload order.
+   - **Video (checked 2026-09-20):** the drop bridge is refused for `video/mp4` (`drop.defaultPrevented === false`). Instead patch `HTMLInputElement.prototype.click` to swallow file-input clicks and record the element, click the composer's **Video** button, then `file_upload` into the recorded `<input accept="video/*">`; the "Editor" modal loads the clip → **Next**. The composer is now tiptap/ProseMirror (`.tiptap.ProseMirror`), not Quill.
 3. **Text.** Click the editor, `type` the `.txt` file. Do **not** press Escape afterwards — it opens "Save this post as a draft?"; if it appears, close it with its own × (never *Discard*).
 4. Verify with JS (`innerText.length` ≈ file length, starts/ends right) and one scroll-through screenshot showing text above, photos below.
 5. Click **Post** (bottom-right of the modal; `find` does not see it — use coordinates from the screenshot). Composer closes and the feed shows "New posts".
