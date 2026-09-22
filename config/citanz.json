@@ -102,7 +102,11 @@
       "wechat_public": "微信-本地非会员群",
       "teams": "Teams",
       "wechat_national": "微信-CITANZ大群",
-      "linkedin_recap": "领英"
+      "linkedin_recap": "领英",
+      "linkedin_announcement": "领英-预告",
+      "xiaohongshu_announcement": "小红书-预告",
+      "audience_linkedin": "领英受众画像",
+      "benchmark_xiaohongshu": "小红书对照组"
     },
     "recap_pattern": "{channel}-recap-{topic}-{date}.md"
   },

@@ -18,7 +18,7 @@ const metrics = [];
 for (const [ch, data] of Object.entries(R)) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) continue;
   for (const [k, v] of Object.entries(data)) {
-    if (['url', 'checked', 'source'].includes(k) || typeof v === 'object') continue;
+    if (k.startsWith('$') || ['url', 'checked', 'source'].includes(k) || typeof v === 'object') continue;
     metrics.push({ channel: cfg.handoff_naming.channel_labels[ch] || ch, metric: k, value: v, checked: data.checked || '—', source: data.source || data.url || '—' });
   }
 }
@@ -30,9 +30,10 @@ const ctx = {
   report_date: new Date().toLocaleDateString('en-CA'),
   attendance_rate: R.meetup?.attended && R.meetup?.rsvps ? Math.round(100 * R.meetup.attended / R.meetup.rsvps) : '',
   no_feedback: !(R.feedback && R.feedback.length), no_observations: !(R.observations && R.observations.length),
+  no_questions: !(R.qa_questions && R.qa_questions.length), no_next_topics: !(R.next_topics && R.next_topics.length),
 };
 const dir = path.join(ROOT, 'output', ev.slug, 'report'); fs.mkdirSync(dir, { recursive: true });
 const topic = ev.topic || ev.slug.replace(/^\d{4}-\d{2}-\d{2}-/, '');
 const file = path.join(dir, `复盘-post-${topic}-${ev.slug.slice(0, 10)}.md`);
 fs.writeFileSync(file, fill(fs.readFileSync(path.join(ROOT, 'templates/copy/report.md'), 'utf8'), ctx).replace(/\n{3,}/g, '\n\n'));
-console.log(`wrote ${path.relative(ROOT, file)} (${metrics.length} metric rows, ${(R.feedback || []).length} quotes)`);
+console.log(`wrote ${path.relative(ROOT, file)} (${metrics.length} metric rows, ${(R.feedback || []).length} quotes, ${(R.qa_questions || []).length} questions, ${(R.next_topics || []).length} topic candidates)`);

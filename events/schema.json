@@ -435,6 +435,47 @@
         },
         "photos_folder": {
           "type": "string"
+        },
+        "qa_questions": {
+          "type": "array",
+          "description": "Questions the audience actually asked, copied from the transcript Q&A. The strongest next-topic signal there is.",
+          "items": {
+            "type": "object",
+            "required": [
+              "q"
+            ],
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "theme": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "next_topics": {
+          "type": "array",
+          "description": "Candidate topics for the next meetup. Every entry must cite evidence from this results block or from qa_questions.",
+          "items": {
+            "type": "object",
+            "required": [
+              "topic",
+              "why",
+              "evidence"
+            ],
+            "properties": {
+              "topic": {
+                "type": "string"
+              },
+              "why": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },

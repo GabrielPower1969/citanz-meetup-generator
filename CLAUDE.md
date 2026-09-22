@@ -60,6 +60,7 @@ promo/             launch video: index.html (seekable WAAPI storyboard) + render
 - **Recaps:** LinkedIn ≤ 900 chars (hook + 3 takeaways + 1 quote); 小红书 title ≤ 20 / body ≤ 1000 / topics ≤ 10, local casual voice. Thanks/hashtags come from templates. `recap` block in the event JSON; photos in `assets/photos/<slug>/` (git-ignored), first = lead.
 - **Platform limits are enforced in the copy step** from `config/platforms.json` (title/body/topic counts) — a breach fails the build, same as a missing field.
 - **Every post-event number carries `checked` + `source`** (results block); the report prints them. No number without provenance.
+- **Every `results.next_topics` candidate carries `evidence`** pointing at a field in `results` or a question in `results.qa_questions`. Collect the announcement post's numbers and an off-topic benchmark from the same account, or channel performance cannot be judged.
 - **Fixed process = code, judgement = skill.** Never re-derive setup/render/validate in prompts.
 
 ## Verify a change
