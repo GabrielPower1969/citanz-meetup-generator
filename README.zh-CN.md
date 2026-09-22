@@ -42,6 +42,7 @@
 | `wechat/` | 你 | `微信-本地会员群-post-…md`（#接龙）、`微信-本地非会员群-post-…md`（#接龙 + $5 行）、`微信-CITANZ大群-post-…md`（只强调线上，不写地址）+ 竖版海报 |
 | `teams/` | 你 | `Teams-post-<主题>-<日期>.md` + 横版海报 |
 | `report/` | 你 + 营销同事 | 会后 `复盘-post-<主题>-<日期>.md`（带来源的数字、评论原话、观察、下次行动）—— `npm run report` 之后出现 |
+| `POST-EVENT.md` | 你 | 会后要交回来的东西（录音/逐字稿、照片、Notion Q&A、各群人数、check-in）|
 | `README.md` | — | 哪个文件夹给谁 |
 
 ## 2. 快速开始

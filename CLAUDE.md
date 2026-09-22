@@ -40,7 +40,7 @@ src/steps/4-write-report.js   post-event, run separately: events/<slug>.json `re
 src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataUri, esc, readJson
 src/lib/template.js  the {{var}} / {{#if}} / {{#each}} engine + plainText() — shared by steps 3 and 4
 test/              node:test suites; `npm test`
-output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xhs.png, README.md, linkedin/ xiaohongshu/ meetup/ wechat/ teams/ report/
+output/<slug>/     <slug>.landscape.png, <slug>.portrait.png, <slug>.portrait.xhs.png, README.md, POST-EVENT.md (organiser's post-event checklist), linkedin/ xiaohongshu/ meetup/ wechat/ teams/ report/
 promo/             launch video: index.html (seekable WAAPI storyboard) + render.mjs (Playwright → ffmpeg) → out/*.mp4 (git-ignored)
 .claude/skills/    meetup-poster (facts → posters) · meetup-copy (notes → announcements + pack) · meetup-publish (meetup.com) · xiaohongshu-publish (小红书) · event-recap (transcript + photos → LinkedIn ≤900 + 小红书 recaps → post) · event-analytics (复盘) — index + order: .claude/skills/README.md
 ```
@@ -58,6 +58,8 @@ promo/             launch video: index.html (seekable WAAPI storyboard) + render
 - **Channel folders are wiped and rebuilt on every copy run** so a renamed/removed file can't survive with stale content (e.g. an old venue).
 - **Hand-off ownership:** LinkedIn + 小红书 → CITANZ marketing (they get `linkedin/`, `xiaohongshu/`); meetup.com, WeChat, Teams → organiser.
 - **Recaps:** LinkedIn ≤ 900 chars (hook + 3 takeaways + 1 quote); 小红书 title ≤ 20 / body ≤ 1000 / topics ≤ 10, local casual voice. Thanks/hashtags come from templates. `recap` block in the event JSON; photos in `assets/photos/<slug>/` (git-ignored), first = lead.
+- **Every public post ends with the CTA from `config.cta`** asking what to cover next and who wants to speak. Announcements bring almost no RSVPs (1 click, 2026-09-16); their real job is topic + speaker discovery. Replies go into `results.feedback` and become `next_topics` evidence.
+- **Every pack ships `POST-EVENT.md`** — the organiser's checklist of what to send back after the event (recording/transcript, photos, Notion Q&A, WeChat counts, Teams joined, check-in). Ask for what's missing instead of guessing.
 - **Platform limits are enforced in the copy step** from `config/platforms.json` (title/body/topic counts) — a breach fails the build, same as a missing field.
 - **Every post-event number carries `checked` + `source`** (results block); the report prints them. No number without provenance.
 - **Every `results.next_topics` candidate carries `evidence`** pointing at a field in `results` or a question in `results.qa_questions`. Collect the announcement post's numbers and an off-topic benchmark from the same account, or channel performance cannot be judged.

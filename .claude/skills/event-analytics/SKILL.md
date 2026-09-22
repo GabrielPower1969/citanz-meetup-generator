@@ -38,6 +38,13 @@ The questions the audience asked out loud are the strongest next-topic evidence 
 5. `photos_folder`: where the photos/feedback went for the marketing team's post-event LinkedIn — a path or link, not a promise.
 6. **`next_topics`: 2–3 candidates, each with `why` and `evidence`.** `evidence` must point at a field in this results block or at a numbered question in `qa_questions` — a candidate with no evidence is a hunch, and the report says so. Rank them; say which one you would run next and what it would cost (a normal talk vs a workshop).
 
+## Ask for these first (the organiser has them, you don't)
+`output/<slug>/POST-EVENT.md` is the checklist that ships with every pack. At the start of any 复盘, ask for whatever is still missing:
+**recording / Teams transcript `.docx`** · **the Notion page with the live Q&A** · **WeChat 接龙 counts (3 groups)** · **Teams joined** · **headcount / meetup check-in** · **小红书 comment text (App only)**.
+Put the Notion link in `results.notion_qa_url` so the next reader knows where the questions came from.
+
+**Comments on the posts are topic requests.** Every announcement and recap ends with a CTA asking what to cover next and who wants to speak (`config/citanz.json` → `cta`). Harvest those replies into `results.feedback` (theme `选题建议` or `讲者自荐`) and cite them in `next_topics` — a named person asking for a subject is stronger evidence than any view count, and a volunteer speaker goes straight to the organiser.
+
 ## Steps
 1. Read `events/<slug>.json`; add/refresh `results` (browser reads above; `checked` = today).
 2. Mine the transcript Q&A into `results.qa_questions`.

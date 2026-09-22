@@ -26,6 +26,8 @@ RSVP here: {{rsvp_url}}
 {{#if sponsor_thanks_en}}
 {{sponsor_thanks_en}}
 {{/if}}
+{{cta.linkedin_announcement}}
+
 {{linkedin_outro}}
 
 {{hashtags_linkedin}}

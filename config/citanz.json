@@ -114,5 +114,13 @@
     "$comment": "Post-event LinkedIn recap. Prose in events/<slug>.json recap.linkedin; photos listed in recap.photos (first = lead image).",
     "next_line": "If you would like to speak at a future CITANZ meetup, or just want to hear about the next one, follow CITANZ or get in touch.",
     "file_label": "recap"
+  },
+  "cta": {
+    "$comment": "Every public post asks two things: what should we cover next, and do you want to speak. This is how next_topics gets evidence and how the speaker pipeline fills — the announcement posts drive almost no RSVPs (1 click on 2026-09-16), so their real job is discovery.",
+    "linkedin_announcement": "What would you like us to cover after this one? Comment below — and if you would like to speak at a future CITANZ meetup, get in touch.",
+    "linkedin_recap": "What should we cover next? Comment below — or put your hand up to speak.",
+    "xiaohongshu": "💡 想听什么主题？评论区告诉我们。想自己上台讲一场的，也直接留言 🙋",
+    "wechat": "💡 想听什么主题，或者自己想来讲一场 —— 群里直接说，或者私我",
+    "meetup": "Have a topic you would like to see covered, or would you like to speak at a future session? Comment on this event or message the organiser."
   }
 }

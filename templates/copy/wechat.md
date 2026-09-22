@@ -10,7 +10,9 @@
 {{online_url}}
 {{/if}}{{#if show_rsvp}}
 🔗 报名：{{rsvp_url}}
-{{/if}}{{#if hashtag_line}}
+{{/if}}
+{{cta.wechat}}
+{{#if hashtag_line}}
 —— 接龙 ——
 1. {{organiser_name}}
 2.

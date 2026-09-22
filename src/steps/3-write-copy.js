@@ -62,6 +62,7 @@ const ctx = {
   rsvp_url: ev.rsvp_url || ev.qr_url || '',
   agenda: ev.agenda || cfg.schedule.agenda_en,
   organiser_name: ev.organiser_name || 'Gabriel',
+  cta: cfg.cta,   // fixed call-to-action: ask for next topics + speakers (config/citanz.json)
 };
 
 // ---------- platform limits (config/platforms.json) — a violation fails the build like a missing field ----------
@@ -160,13 +161,17 @@ if (ev.recap?.linkedin) {
   });
 }
 
+// The organiser's own checklist: what to send back after the event. Ships inside every pack so the
+// reminder is an artifact, not something an assistant has to remember to ask for.
+fs.writeFileSync(path.join(outRoot, 'POST-EVENT.md'), fill(tpl('post-event-checklist.md'), ctx, 'post-event-checklist'));
+
 const readme = `# ${ctx.title_plain} — hand-off pack
 
 | Folder | Give to | Contains |
 |---|---|---|
 ${Object.entries(cfg.handoff).map(([c, h]) => `| \`${c}/\` | ${h.owner} | copy + ${h.poster} poster |`).join('\n')}
 
-Generated ${new Date().toLocaleDateString('en-CA')} from \`${eventRel}\`. Re-run \`npm run build ${eventRel}\` after edits.
+Generated ${new Date().toLocaleDateString('en-CA')} from \`${eventRel}\`. Re-run \`npm run build ${eventRel}\` after edits.\n\n**会后**：见 [POST-EVENT.md](POST-EVENT.md) —— 录音、照片、Notion Q&A、各群人数，交齐就能一次出 recap + 复盘。
 `;
 fs.writeFileSync(path.join(outRoot, 'README.md'), readme);
 

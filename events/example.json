@@ -129,7 +129,7 @@
       "thanks_speaker": "Three things I took home:",
       "takeaways": [
         "Bitcoin invented no new maths — it combined hashing, signatures and proof of work into one system that needs no administrator.",
-        "Everyone in the room joined a toy chain from their phone and watched a block form before a single slide went up.",
+        "Everyone joined a toy chain from their phone and watched a block form before a single slide went up.",
         "Most \"blockchain\" projects are an expensive database: three conditions decide when it is the right tool, and it usually isn't."
       ],
       "closing": "\"If you can trust one party, use a database.\" — Scott"

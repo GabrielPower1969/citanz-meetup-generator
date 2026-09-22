@@ -17,4 +17,6 @@
 {{/if}}
 {{copy.xiaohongshu.signoff}}
 
+{{cta.xiaohongshu}}
+
 {{hashtags_xiaohongshu}}

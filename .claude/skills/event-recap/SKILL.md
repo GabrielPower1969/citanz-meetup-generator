@@ -8,6 +8,8 @@ description: After a CITANZ meetup — turn the recording transcript (Teams .doc
 What the user gets: `output/<slug>/linkedin/领英-recap-<topic>-<date>.md/.txt`, `output/<slug>/xiaohongshu/小红书-recap-<topic>-<date>.md/.txt`, photos copied into both folders in order — then, after a **yes** per platform, the posts live. Limits come from `config/platforms.json`; the build fails if a recap exceeds them.
 
 ## 1. Inputs
+If the user hasn't sent them yet, ask — `output/<slug>/POST-EVENT.md` lists them: the **recording or Teams `.docx` transcript**, **two photos** (lead one shows the organiser), and the **Notion Q&A page**. Don't write a recap from memory of the event.
+
 - Transcript: Teams exports a `.docx` with 6–8 giant paragraphs. Extract text with `unzip -p file.docx word/document.xml`, pull `<w:t>` runs, split on speaker turns (`Name   m:ss`). Keep only the speaker's substantive turns; skip the pre-talk chatter.
 - Photos: the user says which is the lead. Save EXIF-corrected, ≤ 2048 px long side, to `assets/photos/<slug>/01-….jpg`, `02-….jpg` (git-ignored). LinkedIn shows the **first** photo largest; 4:3 displays in full.
 

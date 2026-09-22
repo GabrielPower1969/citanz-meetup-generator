@@ -28,6 +28,9 @@ Fixed parts (date, venue, fee, bank account, agenda, sponsor thanks, hashtags, o
 
 **WeChat 群 (`copy.wechat`)** — 最短。`headline` = `CITANZ ✖️<赞助商/合作方>：<主题>`；`body` = 一句定位（点名讲者，如"这次由 UC 的 He Ke 老师系统地讲一遍！"）+ 一个引子问题 + 5 个短横线要点 + 一句收尾。不超过 12 行。三个群版本（本地会员 / 本地非会员 / 全国大群）的差异——`#接龙` 首行、费用行、是否显示地址——全部由 `config/citanz.json` `wechat_groups` 控制，正文只写一份。
 
+## Don't write these — they are automatic
+The call-to-action asking readers for next topics and for speakers is appended to every announcement and recap from `config/citanz.json` → `cta`. So are the fee line, thanks, agenda, schedule and hashtags. Writing your own version duplicates them.
+
 ## Don'ts
 - Don't put prices/investment/project recommendations in any channel for finance-adjacent topics; say explicitly that the session is technical.
 - Don't translate LinkedIn → 小红书 literally; 小红书 is rewritten for a Chinese-speaking, casual audience.

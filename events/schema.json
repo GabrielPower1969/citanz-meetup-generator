@@ -476,6 +476,10 @@
               }
             }
           }
+        },
+        "notion_qa_url": {
+          "type": "string",
+          "description": "Notion page where the organiser wrote up the live Q&A; the source for results.qa_questions"
         }
       }
     },

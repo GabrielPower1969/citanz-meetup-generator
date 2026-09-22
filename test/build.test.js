@@ -86,6 +86,25 @@ test('LinkedIn recap stays under the house limit', () => {
   assert.ok([...txt].length <= platforms.linkedin.copy.recap_house_limit, [...txt].length);
 });
 
+test('every pack ships POST-EVENT.md telling the organiser what to send back', () => {
+  const t = fs.readFileSync(path.join(out, 'POST-EVENT.md'), 'utf8');
+  for (const must of ['录音', 'Notion', '照片', 'check-in', '微信', 'Teams', '小红书'])
+    assert.ok(t.includes(must), `POST-EVENT.md mentions ${must}`);
+  assert.ok(fs.readFileSync(path.join(out, 'README.md'), 'utf8').includes('POST-EVENT.md'));
+});
+
+test('every public post asks for next topics and for speakers', () => {
+  const cfg = readJson('config/citanz.json');
+  const date = ev.slug.slice(0, 10);
+  const has = (ch, file, cta) => assert.ok(fs.readFileSync(path.join(out, ch, file), 'utf8').includes(cta), `${ch}/${file} carries its CTA`);
+  has('linkedin', `领英-post-${ev.topic}-${date}.md`, cfg.cta.linkedin_announcement);
+  has('linkedin', `领英-recap-${ev.topic}-${date}.md`, cfg.cta.linkedin_recap);
+  has('xiaohongshu', `小红书-post-${ev.topic}-${date}.md`, cfg.cta.xiaohongshu);
+  has('meetup', `meetup-post-${ev.topic}-${date}.md`, cfg.cta.meetup);
+  for (const g of ['本地会员群', '本地非会员群', 'CITANZ大群'])
+    has('wechat', `微信-${g}-post-${ev.topic}-${date}.md`, cfg.cta.wechat);
+});
+
 test('copy step wipes channel folders: a stale file does not survive a rerun', () => {
   const stale = path.join(out, 'wechat', 'OLD-venue.md');
   fs.writeFileSync(stale, 'Rarakau');

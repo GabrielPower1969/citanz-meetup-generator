@@ -42,6 +42,7 @@ You describe one meetup in one JSON file. The tool produces everything you need 
 | `wechat/` | you | `微信-本地会员群-post-…md` (#接龙), `微信-本地非会员群-post-…md` (#接龙 + $5 line), `微信-CITANZ大群-post-…md` (online-first, no address) + portrait poster |
 | `teams/` | you | `Teams-post-<topic>-<date>.md` + landscape poster |
 | `report/` | you + marketing | post-event `复盘-post-<topic>-<date>.md` (numbers with provenance, quotes, observations, next actions) — after `npm run report` |
+| `POST-EVENT.md` | you | checklist of what to send back after the event (recording, photos, Notion Q&A, WeChat counts, check-in) |
 | `README.md` | — | who gets which folder |
 
 ## 2. Quick start

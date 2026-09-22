@@ -36,6 +36,10 @@ This event will be delivered in {{language_en}}.
 
 {{fee_meetup}}
 
+### Topics and speakers
+
+{{cta.meetup}}
+
 ### Notes
 
 {{refreshments_en}}

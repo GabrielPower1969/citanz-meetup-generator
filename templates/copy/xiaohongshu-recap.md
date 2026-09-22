@@ -8,4 +8,6 @@
 
 感谢 {{org_name_zh}}{{#if sponsor_thanks_recap}} 和 {{sponsor_thanks_recap}}{{/if}}，也感谢每一位来的朋友 ❤️ 下一场见！
 
+{{cta.xiaohongshu}}
+
 {{hashtags_xiaohongshu}}

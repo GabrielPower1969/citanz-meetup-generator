@@ -8,4 +8,6 @@
 
 Thanks to {{org_name_en}}{{#if sponsor_thanks_recap}} and {{sponsor_thanks_recap}}{{/if}} for making it happen, and to everyone who came.
 
+{{cta.linkedin_recap}}
+
 {{hashtags_linkedin}}
