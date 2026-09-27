@@ -1,0 +1,62 @@
+{
+  "$comment": "Field reference for topics/backlog.json — the standing pool of meetup topics. Read this next to topics/backlog.json. Scoring weights live in config/topics.json; `npm run topics` scores and ranks, it never edits your judgement.",
+  "type": "object",
+  "required": ["candidates"],
+  "properties": {
+    "$comment": { "type": "string" },
+    "updated": { "type": "string", "description": "YYYY-MM-DD the backlog was last curated by a human." },
+    "speakers": {
+      "type": "array",
+      "description": "The standing speaker pipeline, independent of any one topic. A person here is someone who has actually been approached or has volunteered — never a wish.",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "org": { "type": "string" },
+          "topics": { "type": "array", "items": { "type": "string" }, "description": "What they could talk about." },
+          "status": { "enum": ["confirmed", "asked", "shortlist", "idea", "none"] },
+          "asked_on": { "type": "string" },
+          "source": { "type": "string", "description": "Where this came from: a comment, a 接龙 reply, an intro. Same rule as numbers — no ghost speakers." },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "evidence"],
+        "properties": {
+          "topic": { "type": "string", "description": "The topic as you would say it out loud to a speaker, not a poster title." },
+          "angle": { "type": "string", "description": "The specific cut: what the audience walks away able to do." },
+          "format": { "enum": ["talk", "talk+demo", "panel", "workshop"], "description": "Drives the organising-cost points in config/topics.json." },
+          "evidence": {
+            "type": "array",
+            "description": "REQUIRED. Each entry is '<event-slug>:<path-into-results>', e.g. '2026-09-17-agent-security-ke-he:qa_questions[3].q'. `npm run topics` resolves every one of them: A = resolves and the block carries checked+source, B = resolves without provenance metadata, D = does not resolve. A candidate with no A/B evidence is listed but never ranked.",
+            "items": { "type": "string" }
+          },
+          "audience_fit": { "type": "integer", "minimum": 0, "maximum": 5, "description": "How well it fits the audience that actually turns up (see the audience table the shortlist prints). 0 unless audience_fit_why says why." },
+          "audience_fit_why": { "type": "string" },
+          "channel_pull": { "type": "integer", "minimum": 0, "maximum": 5, "description": "Will the channels that actually pull people carry it? Needs a reason." },
+          "channel_pull_why": { "type": "string" },
+          "speaker": {
+            "type": "object",
+            "description": "The real bottleneck. status: confirmed > asked > shortlist > idea > none.",
+            "properties": {
+              "name": { "type": "string" },
+              "org": { "type": "string" },
+              "status": { "enum": ["confirmed", "asked", "shortlist", "idea", "none"] },
+              "note": { "type": "string" }
+            }
+          },
+          "status": { "enum": ["candidate", "scheduled", "done", "dropped"], "description": "candidate = in the running (the only status that gets ranked). scheduled/done link to `event`. dropped needs `dropped_why`." },
+          "event": { "type": "string", "description": "Slug of the event that used this topic, once scheduled or done — this is what closes the loop back to results." },
+          "outcome": { "type": "string", "description": "One line on how it went once done, pointing at the event's results (e.g. '22 RSVP / 692 领英展示, see 2026-09-17…:meetup.rsvps')." },
+          "dropped_why": { "type": "string" },
+          "origin": { "type": "string", "description": "Where the candidate came from, e.g. '2026-09-17-…:next_topics[0]' when harvested from a 复盘." }
+        }
+      }
+    }
+  }
+}

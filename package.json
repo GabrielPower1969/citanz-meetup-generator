@@ -10,6 +10,7 @@
     "validate": "node src/steps/2-validate-posters.js",
     "copy": "node src/steps/3-write-copy.js",
     "report": "node src/steps/4-write-report.js",
+    "topics": "node src/steps/0-pick-topics.js",
     "test": "node --test 'test/*.test.js'"
   },
   "license": "MIT",

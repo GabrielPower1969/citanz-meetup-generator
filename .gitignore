@@ -15,3 +15,7 @@ assets/photos/
 
 # promo video renders (regenerate with node promo/render.mjs)
 promo/out/
+
+# personal signal — watch history and the profile derived from it (see topics/profile/README.md)
+topics/profile/
+topics/profile.json

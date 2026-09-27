@@ -1,0 +1,227 @@
+{
+  "$comment": "The standing topic pool. Fields: topics/schema.json. Weights: config/topics.json. Run `npm run topics` to rank it. Every candidate must cite evidence as '<event-slug>:<path>' — unresolvable refs are printed as 未验证 and never ranked. Seeded 2026-09-27 from the 2026-09-17 复盘; speaker column is deliberately empty until someone has actually been asked. track: meetup = CITANZ 活动选题；personal = Gabriel 自己的自媒体选题（证据可以用 'me:<profile 路径>'）。",
+  "updated": "2026-09-27",
+  "speakers": [
+    {
+      "name": "Ke He",
+      "org": "University of Canterbury",
+      "topics": [
+        "agent security",
+        "prompt injection",
+        "入门路径"
+      ],
+      "status": "idea",
+      "source": "spoke at 2026-09-17; not yet approached about a second session",
+      "note": "Ask only if a topic genuinely needs him again — a repeat speaker inside 12 months also triggers the recency penalty on his topic."
+    }
+  ],
+  "candidates": [
+    {
+      "topic": "公司里怎么安全地用 AI：数据去哪了、本地还是云、agent 关在什么盒子里",
+      "angle": "一套能在周一早上照着做的清单：什么能发给大模型、什么不能，自建 agent 的最小隔离，ZDR 之类的条款怎么读",
+      "format": "talk",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:qa_questions[2].q",
+        "2026-09-17-agent-security-ke-he:qa_questions[4].q",
+        "2026-09-17-agent-security-ke-he:qa_questions[0].q",
+        "2026-09-17-agent-security-ke-he:audience_linkedin.entry_level_pct"
+      ],
+      "audience_fit": 5,
+      "audience_fit_why": "领英受众 38% 是 Entry level、32% 在基督城，要的是能用的做法而不是前沿研究；现场 7 个问题里 3 个就是这一类",
+      "channel_pull": 2,
+      "channel_pull_why": "偏技术，小红书拉不动（同账号技术笔记 115–118 浏览）；靠微信接龙和 meetup 拉人",
+      "speaker": {
+        "status": "none",
+        "note": "待找：企业内做过 AI 治理 / 安全合规的人，或 Trimble、Koala Tech 这类本地公司的工程负责人"
+      },
+      "status": "candidate",
+      "origin": "2026-09-17-agent-security-ke-he:next_topics[0]",
+      "track": "meetup"
+    },
+    {
+      "topic": "AI 是怎么筛你简历的（以及怎么写才过得去）",
+      "angle": "把 ATS / LLM 筛选拆开讲，现场拿两份真简历跑一遍；顺带回答「加隐形字符能不能骗过去」",
+      "format": "talk+demo",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:qa_questions[3].q",
+        "2026-09-17-agent-security-ke-he:benchmark_xiaohongshu.resume_note_views",
+        "2026-09-17-agent-security-ke-he:benchmark_xiaohongshu.resume_note_saves",
+        "2026-09-17-agent-security-ke-he:xiaohongshu.views"
+      ],
+      "audience_fit": 4,
+      "audience_fit_why": "Entry level 占 38%、meetup 有 32% 是第一次来，求职是这批人最近的痛点",
+      "channel_pull": 5,
+      "channel_pull_why": "唯一有小红书数据支撑的角度：同账号求职笔记 493 浏览 / 24 收藏，技术笔记只有 115–118 浏览 / 0–5 收藏，差约 4 倍",
+      "speaker": {
+        "status": "none",
+        "note": "待找：本地 recruiter 或做过招聘系统的工程师；也可以 Gabriel 自己讲，但那会占掉组织者的精力"
+      },
+      "status": "candidate",
+      "origin": "2026-09-17-agent-security-ke-he:next_topics[1]",
+      "track": "meetup"
+    },
+    {
+      "topic": "动手搭一个 Agent（带电脑来，两小时跑通一个）",
+      "angle": "从空目录到一个能调工具的 agent，现场跑通；给不会的人留一条最短路径",
+      "format": "workshop",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:qa_questions[5].q",
+        "2026-09-17-agent-security-ke-he:meetup.first_time_attendees",
+        "2026-09-17-agent-security-ke-he:feedback[0].quote"
+      ],
+      "audience_fit": 4,
+      "audience_fit_why": "22 个报名里 7 个第一次来，需要低门槛入口；唯一一条文字反馈夸的也是「容易跟上」",
+      "channel_pull": 3,
+      "channel_pull_why": "workshop 在微信群里比讲座好招人（名额有限会推动接龙），但没有历史数据，先按 3 估",
+      "speaker": {
+        "status": "none",
+        "note": "待找：愿意带 workshop 的人 + 一个助手；场地要有电源和桌子，现在的图书馆房间不一定够"
+      },
+      "status": "candidate",
+      "origin": "2026-09-17-agent-security-ke-he:next_topics[2]",
+      "track": "meetup"
+    },
+    {
+      "topic": "本地模型 vs 云端模型：什么时候值得自己跑",
+      "angle": "成本、隐私、速度三条线各给一个真实数字，现场比一次同样的任务",
+      "format": "talk+demo",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:qa_questions[1].q",
+        "2026-09-17-agent-security-ke-he:qa_questions[4].q"
+      ],
+      "audience_fit": 3,
+      "audience_fit_why": "问的人是有部署需求的一小撮；对 38% 的 Entry level 偏深，需要前 15 分钟做铺垫",
+      "channel_pull": 2,
+      "channel_pull_why": "和上一个主题一样偏技术，小红书无数据支撑",
+      "speaker": {
+        "status": "none"
+      },
+      "status": "candidate",
+      "origin": "2026-09-17-agent-security-ke-he:qa_questions[1]",
+      "track": "meetup"
+    },
+    {
+      "topic": "开源模型和闭源模型，工程上到底差在哪",
+      "angle": "不谈立场，只谈可落地的差别：能不能微调、能不能审计、出事了找谁",
+      "format": "panel",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:qa_questions[6].q"
+      ],
+      "audience_fit": 2,
+      "audience_fit_why": "只有 1 个现场问题支撑，且话题容易变成观点对撞而不是可带走的东西",
+      "channel_pull": 2,
+      "channel_pull_why": "无数据",
+      "speaker": {
+        "status": "none",
+        "note": "panel 要 3 个人，是所有候选里最难凑的"
+      },
+      "status": "candidate",
+      "origin": "2026-09-17-agent-security-ke-he:qa_questions[6]",
+      "track": "meetup"
+    },
+    {
+      "topic": "AI Agent 安全：攻击、失败和还没解决的问题",
+      "angle": "已交付，留在池子里是为了让重复惩罚和「讲过什么」有据可查",
+      "format": "talk",
+      "evidence": [
+        "2026-09-17-agent-security-ke-he:meetup.rsvps"
+      ],
+      "speaker": {
+        "name": "Ke He",
+        "org": "University of Canterbury",
+        "status": "confirmed"
+      },
+      "status": "done",
+      "event": "2026-09-17-agent-security-ke-he",
+      "outcome": "22 报名 / 3 取消 / 1 缺席，7 人第一次来；领英 recap 692 展示 20 互动，预告 301 展示 1 次点击；小红书两条都在 115–118 浏览",
+      "track": "meetup"
+    },
+    {
+      "track": "personal",
+      "topic": "把重复的运营/工程活儿交给 AI：我怎么把一场 meetup 从 3 小时压到 3 分钟",
+      "angle": "不讲概念，只拆自己的真实流水线：一个 JSON 进去，海报/五个渠道文案/复盘出来；每一步为什么这样设计、哪里翻过车",
+      "format": "talk+demo",
+      "evidence": [
+        "me:projects.citanz_meetup_generator",
+        "me:projects.promo_video_pipeline",
+        "me:publishing_track_record.linkedin_best_post_impressions",
+        "2026-09-17-agent-security-ke-he:linkedin.impressions"
+      ],
+      "audience_fit": 5,
+      "audience_fit_why": "唯一一个我有完整一手经验、且已经有成品可展示的题；领英受众 38% Entry level，最吃“能照抄的做法”",
+      "channel_pull": 4,
+      "channel_pull_why": "领英已验证：同类内容（promo 视频那条）是账号历史最好的一条；小红书偏弱，需要套职业角度",
+      "speaker": {
+        "name": "Gabriel",
+        "status": "confirmed",
+        "note": "自己讲，素材已经在仓库里"
+      },
+      "status": "candidate"
+    },
+    {
+      "track": "personal",
+      "topic": "AI 时代在海外找工作：简历怎么被机器读，以及我自己那一轮是怎么过的",
+      "angle": "把 ATS/LLM 筛选拆开，再叠上我在新西兰真实投递到拿 offer 的过程；给一份能照着改的清单",
+      "format": "talk",
+      "evidence": [
+        "me:publishing_track_record.xiaohongshu_career_note_views",
+        "me:publishing_track_record.xiaohongshu_tech_note_views",
+        "me:consumption_bilibili.career_finish_pct",
+        "me:consumption_youtube.recruiter_channels",
+        "2026-09-17-agent-security-ke-he:qa_questions[3].q"
+      ],
+      "audience_fit": 5,
+      "audience_fit_why": "我自己消费最多也看得最完的就是这类（B站 职业职场 147 次、69% 看完，全站最高）；同时是现场真有人问的问题",
+      "channel_pull": 5,
+      "channel_pull_why": "小红书同账号求职笔记 493 浏览 vs 技术笔记 118，差 4 倍——这是唯一有数据支撑能在中文平台跑起来的角度",
+      "speaker": {
+        "name": "Gabriel",
+        "status": "confirmed",
+        "note": "一手经验：2024 落地新西兰 → Trimble"
+      },
+      "status": "candidate"
+    },
+    {
+      "track": "personal",
+      "topic": "新晋管理者怎么带团队（我目前只是“看了很多”，没带过）",
+      "angle": "待定——如果要做，只能做“学习笔记/拆解别人”，不能装成经验贴",
+      "format": "talk",
+      "evidence": [
+        "me:top_creators_bilibili.chanpinlaozeng_count",
+        "me:top_creators_bilibili.chanpinlaozeng_finished",
+        "me:consumption_bilibili.career_count"
+      ],
+      "audience_fit": 2,
+      "audience_fit_why": "消费信号极强（产品老曾 96 次看完 90 次，是全部历史里完成率最高的 UP），但我本人没有带团队的一手经验，做出来会是二手转述",
+      "channel_pull": 3,
+      "channel_pull_why": "职场内容在中文平台普遍好跑，但同质化严重，没有一手经验很难有差异",
+      "speaker": {
+        "name": "Gabriel",
+        "status": "idea",
+        "note": "先别做。等真的带了人再说，或者改成“工程师视角看管理”的旁观角度"
+      },
+      "status": "candidate"
+    },
+    {
+      "track": "personal",
+      "topic": "在基督城做工程师：从落地到进 Trimble 的三年",
+      "angle": "具体到数字和时间线的生活/职业纪实，不写成移民中介文",
+      "format": "talk",
+      "evidence": [
+        "me:work.employer",
+        "me:work.city",
+        "2026-09-17-agent-security-ke-he:audience_linkedin.christchurch_pct",
+        "2026-09-17-agent-security-ke-he:benchmark_xiaohongshu.passport_note_views"
+      ],
+      "audience_fit": 4,
+      "audience_fit_why": "领英受众 32% 就在基督城；小红书同账号的签证/护照类笔记 420 浏览，说明这个账号的中文读者要的是“在新西兰生活”而不是技术",
+      "channel_pull": 4,
+      "channel_pull_why": "小红书生活/移民类在同账号已验证（420 浏览），高于技术类 3 倍以上",
+      "speaker": {
+        "name": "Gabriel",
+        "status": "confirmed"
+      },
+      "status": "candidate"
+    }
+  ]
+}

@@ -8,6 +8,8 @@ npm run build events/<event>.json    # THE command. Self-installs deps + Chromiu
 npm run example                      # same on events/example.json (smoke test — must end OK with no TODO list)
 npm run render|validate|copy events/<event>.json   # run one step alone
 npm run report events/<event>.json   # STEP 4, post-event: `results` block → output/<slug>/report/复盘-post-<topic>-<date>.md
+npm run topics                       # STEP 0, before anything: topics/backlog.json + every event's `results` → ranked shortlist in output/topics/
+npm run topics -- --track personal   # same, for my own creator topics (evidence may cite `me:` → topics/profile.json)
 npm test                             # unit + integration + validator tests (~10 s, renders the example)
 docker compose run --rm build events/<event>.json  # same pipeline in the Playwright image
 ```
@@ -22,11 +24,14 @@ docker compose run --rm build events/<event>.json  # same pipeline in the Playwr
 | how to change a template safely | `design/how-the-canva-design-was-measured.md` → edit spec → template → `npm run example` |
 | the click recipe for a platform | `.claude/skills/<platform>-publish/SKILL.md` (index: `.claude/skills/README.md`) |
 | what happened at a past event | `output/<slug>/report/`, `events/<slug>.json` `results` |
-| proof the pipeline still works | `npm test` (19 tests: engine, config, end-to-end build, validator rejections) |
+| proof the pipeline still works | `npm test` (29 tests: engine, config, end-to-end build, validator rejections) |
+| what to run next / why a topic ranks where it does | `topics/backlog.json` (candidates + speakers), `topics/schema.json` (fields), `config/topics.json` (weights) |
 | the launch video / promo animation | `promo/README.md` → `promo/index.html` (storyboard) · `node promo/render.mjs` (MP4/GIF) |
 
 ## Where things are (folder order = data flow)
 ```
+topics/            STEP 0 INPUT. backlog.json = the standing topic pool (+ speaker pipeline), schema.json = field reference.
+                   profile.json + profile/ = my own signals (watch history, projects) — git-ignored, cited as `me:<path>`.
 events/            INPUT. One JSON per event, name = slug = <date>-<topic>-<speaker>. schema.json = field reference, example.json = full sample.
                    Real events + speaker photos are git-ignored; only example.json / assets/speakers/scott.png are public.
 config/citanz.json Org constants: fee, bank, hashtags, house schedule (18:00 doors / 18:30 talk+stream / 20:00), channel owners, copy file naming, WeChat group variants, recap defaults.
@@ -35,6 +40,8 @@ assets/            brand/ (locked) · fonts/ (Arimo + Noto Sans SC, self-hosted)
 templates/posters/ <name>/template.html + meta.json ({{vars}}, absolute px on a fixed canvas; meta.exports = extra platform canvases, e.g. portrait → .xhs.png 3:4) · fit.js
 templates/copy/    linkedin · xiaohongshu · meetup · wechat · teams · linkedin-recap · report .md ({{var}} {{#if}} {{#each}})
 design/            poster_<name>_spec.json (measured from Canva, source of truth) · how-the-canva-design-was-measured.md
+src/steps/0-pick-topics.js    pre-event, run separately: backlog + all events' `results` (+ profile) → output/topics/选题-<track>-<date>.md
+src/lib/topics.js  evidence resolution + grading (A/B/D) + scoring + recency penalty — shared by step 0 and the tests
 src/build.js       entry: env check, then spawns src/steps/1-render-posters.js → 2-validate-posters.js → 3-write-copy.js (stop on first failure)
 src/steps/4-write-report.js   post-event, run separately: events/<slug>.json `results` → 复盘 report (templates/copy/report.md)
 src/lib/event.js   ROOT, loadEvent (enforces slug format + speaker photo), dataUri, esc, readJson
@@ -61,12 +68,13 @@ promo/             launch video: index.html (seekable WAAPI storyboard) + render
 - **Every public post ends with the CTA from `config.cta`** asking what to cover next and who wants to speak. Announcements bring almost no RSVPs (1 click, 2026-09-16); their real job is topic + speaker discovery. Replies go into `results.feedback` and become `next_topics` evidence.
 - **Every pack ships `POST-EVENT.md`** — the organiser's checklist of what to send back after the event (recording/transcript, photos, Notion Q&A, WeChat counts, Teams joined, check-in). Ask for what's missing instead of guessing.
 - **Platform limits are enforced in the copy step** from `config/platforms.json` (title/body/topic counts) — a breach fails the build, same as a missing field.
+- **A topic with no resolvable evidence is never ranked.** Candidate `evidence` refs are `<event-slug>:<path>` or `me:<path>`; `npm run topics` resolves each one and grades it A (block has `checked`+`source`) / B (resolves, no provenance) / D (does not resolve). D-only candidates print in their own section. `audience_fit`/`channel_pull` require a `_why` — the tests enforce it.
 - **Every post-event number carries `checked` + `source`** (results block); the report prints them. No number without provenance.
 - **Every `results.next_topics` candidate carries `evidence`** pointing at a field in `results` or a question in `results.qa_questions`. Collect the announcement post's numbers and an off-topic benchmark from the same account, or channel performance cannot be judged.
 - **Fixed process = code, judgement = skill.** Never re-derive setup/render/validate in prompts.
 
 ## Verify a change
-0. `npm test` must pass (it builds the example and asserts on every hand-off file, the 3:4 export, WeChat variants, limits, and that the validator rejects long/orphan titles).
+0. `npm test` must pass (29 tests; it builds the example and asserts on every hand-off file, the 3:4 export, WeChat variants, limits, and that the validator rejects long/orphan titles).
 1. `npm run example` prints `OK: …` and `wrote output/2026-08-26-blockchain/{…}` with no TODO list.
 2. Compare `output/2026-08-26-blockchain/*.png` with `docs/images/*` (regenerate those previews if the design legitimately changed).
 3. Poster/fit/validator changes: also try an ~85-char title and a 3-line venue — the FAIL message must name the block and say *reword*.

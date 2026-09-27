@@ -1,0 +1,54 @@
+{
+  "$comment": "Topic scoring. Weights are deliberately visible: the shortlist prints the formula and every input, so a ranking can be argued with. Change a weight here, never inside a candidate.",
+
+  "weights": {
+    "$comment": "score = Σ (component × weight). demand/speaker/effort/recency are computed by code; fit/pull are declared on the candidate and must carry their own evidence.",
+    "demand": 3,
+    "audience_fit": 2,
+    "channel_pull": 1,
+    "speaker": 3,
+    "effort": 1,
+    "recency": 2
+  },
+
+  "speaker_points": {
+    "$comment": "The real bottleneck is never ideas, it is a person willing to stand up. status values allowed on candidate.speaker.status.",
+    "confirmed": 5,
+    "asked": 3,
+    "shortlist": 2,
+    "idea": 1,
+    "none": 0
+  },
+
+  "effort_points": {
+    "$comment": "Negative = costs more to run. A workshop needs laptops, a bigger room and a second helper; on 2026-09-17 a plain talk in a library room took one organiser.",
+    "talk": 0,
+    "talk+demo": -1,
+    "panel": -2,
+    "workshop": -3
+  },
+
+  "recency": {
+    "$comment": "A topic too close to one already delivered gets penalised: -5 if a past event's topic/title shares >= min_overlap keywords within window_months, scaled down with age.",
+    "window_months": 12,
+    "min_overlap": 2,
+    "penalty": -5,
+    "stopwords": ["the", "and", "for", "with", "what", "how", "why", "your", "you", "are", "ai", "a", "an", "of", "to", "in", "is", "it", "we", "i"]
+  },
+
+  "evidence": {
+    "$comment": "Same rule as post-event numbers: a claim with no traceable source is not evidence. A ref is '<event-slug>:<path-into-results>', e.g. '2026-09-17-agent-security-ke-he:qa_questions[3].q'. Grade A = resolves and its results block carries checked+source; B = resolves, no provenance metadata on the block (qa_questions, feedback, observations); D = free text that resolves to nothing.",
+    "min_grade_to_rank": "B",
+    "unranked_section_title": "未验证 —— 先去找证据，再谈排序"
+  },
+
+  "shortlist": {
+    "$comment": "How many candidates the generated shortlist recommends before the rest are listed as the long tail.",
+    "top_n": 3
+  },
+
+  "audience_profile_source": {
+    "$comment": "Which results keys describe who actually shows up / reads. The shortlist prints these so a topic is judged against the real audience, not an imagined one.",
+    "keys": ["audience_linkedin", "meetup", "benchmark_xiaohongshu"]
+  }
+}
