@@ -1,0 +1,95 @@
+{
+  "slug": "2026-10-28-ai-careers-jerome-brown",
+  "topic": "ai-careers",
+  "title": "Your IT Career in the AI Era:\nLessons from 20 Years of Tech Change",
+  "speaker": {
+    "name": "Jerome Brown",
+    "org": "Mantel · Microsoft MVP",
+    "photo": "assets/speakers/jerome-brown.jpg",
+    "linkedin": "https://www.linkedin.com/in/owretch/"
+  },
+  "date": "Wednesday, 28 October 2026",
+  "time": "6 PM – 8 PM NZDT",
+  "venue": "EPIC Innovation\n76/106 Manchester St, Christchurch",
+  "venue_short": "EPIC Innovation, 76/106 Manchester St, Christchurch",
+  "venue_full": "EPIC Innovation\n76/106 Manchester Street, Christchurch 8011",
+  "venue_short_en": "EPIC Innovation",
+  "online_url": "https://calendar.app.google/7rtc4CcUdmrzrJa46",
+  "rsvp_url": "https://www.meetup.com/wellington-chinese-it-professionals/events/317058409/",
+  "publish_date": "2026-10-21",
+  "organiser_name": "Gabriel",
+  "agenda": [
+    "18:00 – 18:30 Pizza and networking (in person)",
+    "18:30 – 20:00 Presentation and Q&A (in person and online)"
+  ],
+  "sponsors": [
+    {
+      "name": "Koala Tech",
+      "legal_name": "Koala Technology Ltd",
+      "logo": "assets/sponsors/koala-tech.png",
+      "thank": true
+    },
+    {
+      "name": "JetBrains",
+      "logo": "assets/sponsors/jetbrains.png"
+    }
+  ],
+  "sponsor_tier_zh": "金牌",
+  "qr": "assets/brand/citanz-qr.png",
+  "hashtags_en": [
+    "AI",
+    "CareerDevelopment",
+    "FutureOfWork",
+    "NZTech"
+  ],
+  "hashtags_zh": [
+    "AI时代",
+    "IT职业发展",
+    "海外华人职场",
+    "新西兰IT"
+  ],
+  "zh": {
+    "title": "AI 时代，\nIT 人的路怎么走？",
+    "date_time": "10 月 28 日（周三）18:00 – 20:00",
+    "date_time_short": "10.28（周三）",
+    "venue": "EPIC Innovation\n76/106 Manchester St, Christchurch"
+  },
+  "copy": {
+    "linkedin": {
+      "intro": "Will AI take our IT jobs? How will our roles change, and will we still have jobs in a few years?",
+      "session_line": "a session on the AI era with **Jerome Brown**, Principal Consultant at **Mantel** and Microsoft MVP.",
+      "speaker_para": "No one can see the future, but Jerome believes we can learn a lot from past technology changes. Drawing on 20 years of adapting to new technologies, he will share what those shifts have taught him, then turn to what they mean for IT careers in the AI era.",
+      "bullets": [
+        "What 20 years of technology change can tell us about the AI shift",
+        "How IT roles have changed before, and how they are changing now",
+        "How experienced IT professionals can adapt",
+        "What students and beginners should focus on to build a successful career",
+        "Practical ways to keep your skills relevant as AI tools evolve"
+      ],
+      "closing": "Whether you are an experienced IT professional, a student, someone starting out in tech, or simply wondering what AI means for your job, this session is for you. Pizza from 6:00 pm; the talk is delivered in English."
+    },
+    "xiaohongshu": {
+      "hook": "AI 越来越强，IT 人的工作还会在吗？🤔\n\n这次 CITANZ 基督城活动，请到了 Mantel 的 Principal Consultant、Microsoft MVP —— Jerome Brown。",
+      "body": "过去 20 年，Jerome 经历了一轮又一轮的新技术。他的看法是：没人能预知未来，但过去的每一次技术变革，都能教会我们很多。\n\n这次分享，他会聊聊：\n· 从过去 20 年的技术变迁里，我们能学到什么\n· 已经在 IT 行业的人，该怎么适应这一轮变化\n· 学生和刚入行的人，在 AI 时代应该把精力放在哪\n\n🍕 18:00 起 Pizza + 交流，🗣️ 全程英文分享\n👥 适合谁来：IT 从业者、在读学生、想转行进 IT 的朋友",
+      "signoff": "评论区留下你最想问 Jerome 的问题，我们挑几个带到现场 Q&A 👇"
+    },
+    "meetup": {
+      "abstract": "The growth of AI makes many people wonder about the future of IT jobs. How will our roles change? Will we still have jobs in a few years?\n\nOn Wednesday 28 October, Jerome Brown, a Principal Consultant at Mantel and Microsoft MVP, will share his experience of adapting to new technologies over the past 20 years. While no one can see the future, Jerome believes we can learn a lot from past technology changes.\n\nIn this talk, Jerome will explain how IT professionals can adapt to these changes and what students and beginners should focus on to build a successful career in the AI era.",
+      "cover": [
+        "**Lessons:** what 20 years of technology change can tell us about the AI shift",
+        "**Roles:** how IT roles have changed before, and how they are changing now",
+        "**Adapting:** how experienced IT professionals can adapt",
+        "**Starting out:** what students and beginners should focus on"
+      ],
+      "audience": "IT professionals at any stage, students, career changers, and anyone wondering what AI means for their job. Come early for pizza, and bring your questions.",
+      "bio": "**Jerome Brown** is a Principal Consultant at Mantel and a Microsoft MVP, with 20 years of experience adapting to new technologies."
+    },
+    "wechat": {
+      "headline": "CITANZ 基督城：AI 时代，IT 人的路怎么走？",
+      "body": "嘉宾：Jerome Brown，Mantel Principal Consultant，Microsoft MVP\n\nJerome 会结合自己 20 年适应新技术的经历，聊聊 IT 从业者如何应对 AI 带来的变化，以及学生和新人应该把精力放在哪里。\n\n18:00 起 Pizza + 交流，全程英文分享。欢迎带朋友一起来！"
+    },
+    "teams": {
+      "title": "CITANZ Webinar - Your IT Career in the AI Era (Jerome Brown)"
+    }
+  }
+}
